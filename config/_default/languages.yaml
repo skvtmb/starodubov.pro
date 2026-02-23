@@ -1,0 +1,18 @@
+ru:
+  languageCode: ru-RU
+  languageName: "Русский"
+  weight: 1
+  title: "Блог Стародубова Константина"
+  params:
+    description: "Персональный блог Константина Стародубова о технологиях, разработке и жизни"
+    keywords: ["блог", "технологии", "разработка", "программирование", "IT"]
+
+en:
+  languageCode: en-US
+  languageName: "English"
+  weight: 2
+  title: "Konstantin Starodubov's Blog"
+  params:
+    description: "Personal blog of Konstantin Starodubov about technology, development and life"
+    keywords: ["blog", "technology", "development", "programming", "IT"]
+

@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="personGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#f0f0f0;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#d0d0d0;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background circle -->
+  <circle cx="100" cy="100" r="100" fill="url(#bgGradient)"/>
+  
+  <!-- Person silhouette -->
+  <g transform="translate(100, 100)">
+    <!-- Head -->
+    <circle cx="0" cy="-20" r="30" fill="url(#personGradient)"/>
+    
+    <!-- Body -->
+    <ellipse cx="0" cy="40" rx="45" ry="55" fill="url(#personGradient)"/>
+    
+    <!-- Shoulders highlight -->
+    <path d="M -35 15 Q 0 10 35 15" fill="none" stroke="#ffffff" stroke-width="2" opacity="0.3"/>
+  </g>
+  
+  <!-- Decorative elements - representing security/tech theme -->
+  <g opacity="0.15">
+    <circle cx="30" cy="30" r="8" fill="#ffffff"/>
+    <circle cx="170" cy="40" r="6" fill="#ffffff"/>
+    <circle cx="160" cy="160" r="10" fill="#ffffff"/>
+    <circle cx="40" cy="170" r="7" fill="#ffffff"/>
+  </g>
+</svg>

@@ -1,0 +1,78 @@
+baseURL: https://starodubov.pro/
+languageCode: ru-RU
+defaultContentLanguage: ru
+defaultContentLanguageInSubdir: true
+title: Блог Стародубова Константина
+theme: "hugo-narrow"
+
+# Включаем посты с датой в будущем (иначе статьи 2026 не попадают в сборку)
+buildFuture: true
+
+# URL configuration for Yandex Cloud
+# canonifyURLs: true ensures absolute URLs with baseURL
+canonifyURLs: true
+relativeURLs: false
+
+enableEmoji: true
+
+permalinks:
+  posts: /:slug/
+  projects: /projects/:slug/
+  pages: /:slug/
+
+# pagination
+pagination:
+  pagerSize: 6
+  path: "page"
+
+# Taxonomies configuration
+taxonomies:
+  category: categories
+  tag: tags
+  series: series
+
+markup:
+  tableOfContents:
+    startLevel: 2
+    endLevel: 4
+    ordered: false
+  goldmark:
+    renderer:
+      unsafe: true
+    extensions:
+      extras:
+        delete:
+          enable: true
+        insert:
+          enable: true
+        mark:
+          enable: true
+        subscript:
+          enable: false
+        superscript:
+          enable: false   
+      strikethrough: false 
+  highlight:
+    codeFences: true
+    guessSyntax: false
+    lineNos: false
+    lineNumbersInTable: false # Set to false
+    noClasses: false
+    style: github # No need to change
+    tabWidth: 2
+
+outputs:
+  home: ["HTML", "RSS", "JSON", "WebAppManifest"]
+
+# 自定义输出格式
+outputFormats:
+  WebAppManifest:
+    mediaType: "application/manifest+json"
+    baseName: "site"
+    isPlainText: true
+
+module:
+  hugoVersion:
+    extended: true
+    min: 0.146.0
+
