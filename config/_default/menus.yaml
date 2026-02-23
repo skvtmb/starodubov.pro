@@ -1,0 +1,63 @@
+main:
+  - name: nav.posts
+    pageRef: /posts
+    weight: 20
+    params:
+      icon: posts
+  - name: nav.categories
+    pageRef: /categories
+    weight: 30
+    params:
+      icon: categories
+  - name: nav.tags
+    pageRef: /tags
+    weight: 40
+    params:
+      icon: tags
+  - name: nav.archives
+    pageRef: /archives
+    weight: 50
+    params:
+      icon: archive
+  - name: nav.about
+    pageRef: /about
+    weight: 60
+    params:
+      icon: about
+
+# footer menu
+footer:
+  - name: nav.about
+    pageRef: /about
+    weight: 10
+    params:
+      icon: about
+  - name: nav.contact
+    url: mailto:xaku68@gmail.com
+    weight: 20
+    params:
+      icon: contact
+  - name: footer.rss_feed
+    url: /index.xml
+    weight: 30
+    params:
+      icon: rss
+
+# footer social link
+social:
+  - name: ВКонтакте
+    url: https://vk.com/xakuorg
+    weight: 10
+    params:
+      icon: external-link
+  - name: Телеграм
+    url: https://t.me/SKWTMB
+    weight: 20
+    params:
+      icon: message
+  - name: Email
+    url: mailto:xaku68@gmail.com
+    weight: 30
+    params:
+      icon: message
+

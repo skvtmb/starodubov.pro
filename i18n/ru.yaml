@@ -1,0 +1,11 @@
+nav:
+  posts: "Статьи"
+  projects: "Проекты"
+  categories: "Категории"
+  tags: "Теги"
+  archives: "Архивы"
+  about: "О сайте"
+  contact: "Контакты"
+
+footer:
+  rss_feed: "RSS лента"
