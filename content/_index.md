@@ -2,21 +2,6 @@
 dismissible: true
 date: 2025-01-10
 title: "Главная"
-author:
-  name: "Константин Стародубов"
-  title: "Руководитель комплаенса информационной безопасности в финтехе"
-  description: "Кандидат технических наук. Специализируюсь на информационной безопасности и технологиях идентификации. Работал в Банке России, сейчас в Яндексе."
-  avatar: "/images/avatar.svg"
-  social:
-    - name: "ВКонтакте"
-      url: "https://vk.com/xakuorg"
-      icon: "github"
-    - name: "Телеграм"
-      url: "https://t.me/SKWTMB"
-      icon: "github"
-    - name: "Email"
-      url: "mailto:xaku68@gmail.com"
-      icon: "email"
 ---
 
 **Блог о безопасности, комплаенсе и фотографии**

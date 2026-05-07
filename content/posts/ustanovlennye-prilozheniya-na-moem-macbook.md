@@ -5,9 +5,10 @@ draft: false
 summary: "Список приложений, установленных на моём MacBook, с командами Homebrew для установки, описаниями и ссылками на официальные страницы"
 categories: ["Технологии"]
 tags: ["macos", "приложения", "homebrew", "настройка", "продуктивность", "разработка", "безопасность", "инструменты"]
+cover:
+  image: "/images/macbook-apps-cover.png"
+  alt: "Установленные приложения на моём MacBook"
 ---
-
-![MacBook приложения](https://i.ytimg.com/vi/5X_cAWk4wx0/maxresdefault.jpg "MacBook приложения")
 
 # Установленные приложения на моём MacBook
 

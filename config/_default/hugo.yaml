@@ -1,24 +1,14 @@
 baseURL: https://starodubov.pro/
-languageCode: ru-RU
 defaultContentLanguage: ru
-defaultContentLanguageInSubdir: true
+defaultContentLanguageInSubdir: false
 title: Блог Стародубова Константина
 theme: "hugo-narrow"
-
-# Включаем посты с датой в будущем (иначе статьи 2026 не попадают в сборку)
-buildFuture: true
-
-# URL configuration for Yandex Cloud
-# canonifyURLs: true ensures absolute URLs with baseURL
-canonifyURLs: true
-relativeURLs: false
 
 enableEmoji: true
 
 permalinks:
   posts: /:slug/
   projects: /projects/:slug/
-  pages: /:slug/
 
 # pagination
 pagination:

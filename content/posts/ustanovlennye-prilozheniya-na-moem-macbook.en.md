@@ -5,9 +5,10 @@ draft: false
 summary: "List of applications installed on my MacBook, with Homebrew installation commands, descriptions, and links to official pages"
 categories: ["Technology"]
 tags: ["macos", "applications", "homebrew", "setup", "productivity", "development", "security", "tools"]
+cover:
+  image: "/images/macbook-apps-cover.png"
+  alt: "Applications on my MacBook"
 ---
-
-![MacBook applications](https://i.ytimg.com/vi/5X_cAWk4wx0/maxresdefault.jpg "MacBook applications")
 
 # Installed Applications on My MacBook
 

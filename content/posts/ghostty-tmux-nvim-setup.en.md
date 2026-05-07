@@ -29,7 +29,8 @@ This article covers why this stack, how to set it up, and what settings to use f
 
 Together this gives one environment: one terminal, one theme (Gruvbox), one set of key bindings. Ideal for daily development and DevOps: code in Neovim, logs in a tmux pane, commands in another.
 
-![Code in dark theme — typical Neovim view](https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800 "Code in dark theme")
+![Code in dark theme — typical Neovim view](/images/ghostty-tmux-nvim/code-dark.jpg "Code in dark theme")
+*Photo: [Luca Bravo](https://unsplash.com/photos/text-DnkogahEs1k) / Unsplash*
 
 ## Contents
 

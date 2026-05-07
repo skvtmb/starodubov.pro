@@ -11,7 +11,8 @@ cover:
   caption: "The art of effective communication"
 ---
 
-![Cover of Nina Zvereva's book "The Magic of Communication"](https://content.img-gorod.ru/pim/products/images/b3/e1/018ee57e-3712-7a7d-9938-38358f53b3e1.jpg)
+![Cover of Nina Zvereva's book "The Magic of Communication"](/images/communication-book/cover.jpg)
+*Cover: AST Publishing (source: [Gorod knig](https://www.book-city.ru/))*
 
 📚 Nina Zvereva's book "The Magic of Communication. This Can Be Learned!" is a practical guide to developing communication skills needed for success in personal and professional life. The author, a well-known TV journalist and business coach, argues that effective communication is not an innate talent but a skill that can and should be developed.
 

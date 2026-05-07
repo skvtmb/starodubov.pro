@@ -29,7 +29,8 @@ cover:
 
 Вместе это даёт единое окружение: один терминал, одна тема (Gruvbox), одни сочетания клавиш. Идеально подходит для ежедневной разработки и DevOps: код в Neovim, логи в соседней панели tmux, команды в третьей панели.
 
-![Код в тёмной теме — типичный вид при работе в Neovim](https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800 "Код в тёмной теме")
+![Код в тёмной теме — типичный вид при работе в Neovim](/images/ghostty-tmux-nvim/code-dark.jpg "Код в тёмной теме")
+*Фото: [Luca Bravo](https://unsplash.com/photos/text-DnkogahEs1k) / Unsplash*
 
 ## Содержание
 

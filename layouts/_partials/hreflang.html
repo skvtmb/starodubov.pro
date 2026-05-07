@@ -1,40 +1,37 @@
 {{- if hugo.IsMultilingual -}}
   {{- range site.Languages -}}
     {{- $lang := .Lang -}}
-    {{- $langCode := .LanguageCode | replace "-" "_" -}}
+    {{- $langCode := .Locale -}}
     {{- $targetURL := "" -}}
-    
-    {{- if $.IsTranslated -}}
+
+    {{- if eq .Lang $.Language.Lang -}}
+      {{- $targetURL = $.Permalink -}}
+    {{- else if $.IsTranslated -}}
       {{- range $.Translations -}}
         {{- if eq .Language.Lang $lang -}}
           {{- $targetURL = .Permalink -}}
         {{- end -}}
       {{- end -}}
     {{- end -}}
-    
-    {{- if not $targetURL -}}
-      {{- if $.IsPage -}}
-        {{- $targetURL = printf "%s/%s%s" (strings.TrimSuffix "/" site.BaseURL) $lang $.RelPermalink -}}
-      {{- else -}}
-        {{- $targetURL = printf "%s/%s/" (strings.TrimSuffix "/" site.BaseURL) $lang -}}
-      {{- end -}}
+
+    {{- with $targetURL -}}
+      <link rel="alternate" hreflang="{{ $langCode }}" href="{{ . }}" />
     {{- end -}}
-    
-    <link rel="alternate" hreflang="{{ $langCode }}" href="{{ $targetURL }}" />
   {{- end -}}
-  
-  {{- /* x-default указывает на язык по умолчанию */ -}}
+
+  {{- /* x-default → URL текущей страницы на языке сайта по умолчанию */ -}}
   {{- $defaultLang := site.Language.Lang -}}
   {{- $defaultURL := "" -}}
-  {{- if $.IsTranslated -}}
+  {{- if eq $.Language.Lang $defaultLang -}}
+    {{- $defaultURL = $.Permalink -}}
+  {{- else if $.IsTranslated -}}
     {{- range $.Translations -}}
       {{- if eq .Language.Lang $defaultLang -}}
         {{- $defaultURL = .Permalink -}}
       {{- end -}}
     {{- end -}}
   {{- end -}}
-  {{- if not $defaultURL -}}
-    {{- $defaultURL = $.Permalink -}}
+  {{- with $defaultURL -}}
+    <link rel="alternate" hreflang="x-default" href="{{ . }}" />
   {{- end -}}
-  <link rel="alternate" hreflang="x-default" href="{{ $defaultURL }}" />
 {{- end -}}

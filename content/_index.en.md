@@ -2,21 +2,6 @@
 dismissible: true
 date: 2025-01-10
 title: "Home"
-author:
-  name: "Konstantin Starodubov"
-  title: "Head of Information Security Compliance in Fintech"
-  description: "Ph.D. in Technical Sciences. I specialize in information security and identification technologies. Previously at the Bank of Russia, currently at Yandex."
-  avatar: "/images/avatar.svg"
-  social:
-    - name: "VKontakte"
-      url: "https://vk.com/xakuorg"
-      icon: "github"
-    - name: "Telegram"
-      url: "https://t.me/SKWTMB"
-      icon: "github"
-    - name: "Email"
-      url: "mailto:xaku68@gmail.com"
-      icon: "email"
 ---
 
 **Blog About Security, Compliance, and Photography**

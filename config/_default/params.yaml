@@ -5,7 +5,7 @@ defaultAuthor: "Константин Стародубов"
 language: "ru-RU"
 shortName: "Блог Стародубова"  # PWA
 images:
-  - "/images/tree-logo.png"
+  - "/images/og-banner.jpg"
 
 # Favicon
 favicon:
@@ -20,13 +20,13 @@ author:
   social:
     - name: "ВКонтакте"
       url: "https://vk.com/xakuorg"
-      icon: "external-link"
+      icon: "vk"
     - name: "Телеграм"
       url: "https://t.me/SKWTMB"
-      icon: "message"
+      icon: "telegram"
     - name: "Email"
       url: "mailto:xaku68@gmail.com"
-      icon: "message"
+      icon: "email"
 
 # Header configuration (modularized)
 header:
@@ -110,7 +110,6 @@ home:
     - author-section
     - page-content
     - recent-posts
-    - featured-projects.html
 
 
 
