@@ -1,8 +1,8 @@
 ---
-title: "Anycubic Kobra 3: A 3D Printer That Turned Out More Useful Than I Expected"
+title: "Anycubic Kobra 3: a 3D printer that turned out more useful than I thought"
 date: 2025-02-11T00:00:00+03:00
 draft: false
-summary: "Bought a 3D printer to try — turned out very useful. Lizards for a birthday, filament, sensor failure and repair for 300 rubles."
+summary: "Bought a 3D printer just to try it. Turned out very useful. Birthday lizards, filament, a broken sensor, a 300-ruble fix."
 categories: ["Technology"]
 tags: ["3d-printing", "anycubic", "kobra-3", "filament", "repair", "thermistor", "ntc", "review"]
 cover:
@@ -15,17 +15,17 @@ cover:
 
 > Image of Anycubic Kobra 3 — [store.anycubic.com](https://store.anycubic.com/products/anycubic-kobra-3).
 
-I bought the Anycubic Kobra 3 just to try — to see how useful it really is. Turned out — very useful. I didn't expect to print so much.
+I bought the Anycubic Kobra 3 just to try it. See how useful the thing actually is. Turned out, very useful. I didn't expect to print this much.
 
-For example, for a child's birthday I printed a bunch of lizards. The kids loved it — they grabbed them enthusiastically. Such small things, but so much joy.
+For my kid's birthday I printed a pile of plastic lizards. The kids loved them, grabbed them all in a minute. Tiny thing, lots of joy.
 
-## Where the Money Goes
+## Where the money goes
 
-Then I noticed: like in that funny reel — "money just disappears somewhere." Turned out it all goes to filament. The printer runs, you print constantly, spools run out one after another. So if you think "bought a printer and that's it" — get ready to regularly order plastic.
+Then I noticed: like in that meme, money just disappears somewhere. Turns out it all goes on filament. The printer runs, you print constantly, spools run out one after another. So if you're thinking "bought a printer, done" — get ready to keep ordering plastic.
 
-## Which Filament for What
+## Which filament for what
 
-Quick overview of what works where:
+Quick rundown of what's good for what:
 
 ### PLA
 * **Temperature**: 190–220 °C  
@@ -57,26 +57,26 @@ Quick overview of what works where:
 * **Pros**: withstands weather and UV  
 * **Cons**: like ABS — smell and conditions  
 
-For starters I'd take PLA and PETG — easiest to work with.
+If you're just starting, take PLA and PETG. Least hassle.
 
-## Thermistor Broke
+## The bed thermistor died
 
-After 400 hours of printing, the sensor that measures the bed temperature failed. The printer showed error **"Hotbed NTC abnormal"** (code 10123).
+After about 400 hours of printing, the bed temperature sensor gave up. Printer threw **"Hotbed NTC abnormal"** (code 10123).
 
-### What the Sensor Is
+### What the sensor is
 
-It's called **NTC 100k thermistor** (type B3950). Standard part for the bed on almost any FDM printer, including Kobra 3.
+It's an **NTC 100k thermistor** (type B3950). Standard part on almost any FDM printer's bed, Kobra 3 included.
 
 ![NTC 100k thermistor for 3D printer heated bed](/images/anycubic-kobra-3/ntc-thermistor.jpg "NTC 100k thermistor — replacement for Anycubic Kobra 3 bed sensor")
 
 *Similar sensor (source: [Prusa3D](https://www.prusa3d.com/product/thermistor-ntc-100k-115-mm/))*
 
-### How I Fixed It
+### How I fixed it
 
-Ordered from Ozon for 300 rubles — arrived quickly. Replacement took about 15 minutes: unscrewed the bed, swapped the sensor, screwed it back. Done, printing again.
+Ordered one off Ozon for 300 rubles, arrived fast. Swap took about 15 minutes: unscrew the bed, replace the sensor, screw it back. Printing again.
 
-If you have the same issue — search for "NTC 100k B3950 thermistor for 3D printer." Make sure the connector fits your board.
+If you hit the same thing, search for "NTC 100k B3950 thermistor for 3D printer." Just check that the connector fits your board.
 
-## In Summary
+## Bottom line
 
-Kobra 3 is really useful for everyday use. Main expense — filament. Even with the sensor failure — 300 rubles and a quarter hour, and the printer is like new. Having a spare thermistor just in case doesn't hurt.
+Kobra 3 is genuinely useful around the house. The real cost is filament, not the printer. Even the sensor failure was 300 rubles and 15 minutes. Worth keeping a spare thermistor around.
