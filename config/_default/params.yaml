@@ -4,6 +4,14 @@ shortName: "Блог Стародубова"  # PWA
 images:
   - "/images/og-banner.jpg"
 
+# Webmaster verification codes (получить в панелях Webmaster, вставить значения)
+# Yandex: https://webmaster.yandex.ru/  → добавить сайт → Метатег → скопировать content
+# Google: https://search.google.com/search-console → HTML-тег → скопировать content
+verification:
+  yandex: ""   # пример: "abc123def456ghi789"
+  google: ""   # пример: "abc123-_xyz789"
+  bing: ""
+
 # Favicon
 favicon:
   svg: "/favicon.svg"  # SVG format favicon (recommended)
