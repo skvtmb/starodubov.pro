@@ -8,8 +8,8 @@ images:
 # Yandex: https://webmaster.yandex.ru/  → добавить сайт → Метатег → скопировать content
 # Google: https://search.google.com/search-console → HTML-тег → скопировать content
 verification:
-  yandex: ""   # пример: "abc123def456ghi789"
-  google: ""   # пример: "abc123-_xyz789"
+  yandex: "c00294a2cd61c971"
+  google: ""
   bing: ""
 
 # Favicon
