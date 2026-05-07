@@ -49,15 +49,15 @@ social:
     url: https://vk.com/xakuorg
     weight: 10
     params:
-      icon: external-link
+      icon: vk
   - name: Телеграм
     url: https://t.me/SKWTMB
     weight: 20
     params:
-      icon: message
+      icon: telegram
   - name: Email
     url: mailto:xaku68@gmail.com
     weight: 30
     params:
-      icon: message
+      icon: email
 

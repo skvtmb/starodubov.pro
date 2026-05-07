@@ -6,12 +6,13 @@ summary: "Deploying Frigate NVR on Yandex Cloud: NetBird VPN, Docker, separate d
 categories: ["Technology"]
 tags: ["frigate", "nvr", "video-surveillance", "yandex-cloud", "netbird", "vpn", "docker", "rtsp"]
 cover:
-  image: "https://frigate.video/images/logo.svg"
+  image: "/images/frigate/frigate-logo.svg"
   alt: "Frigate NVR — AI-powered video surveillance system"
-  caption: "Frigate NVR — local video surveillance with object detection"
+  caption: "Frigate NVR — local video surveillance with object detection (logo: [frigate.video](https://frigate.video))"
 ---
 
-![Frigate NVR — AI-powered video surveillance system](https://frigate.video/images/logo.svg "Frigate NVR")
+![Frigate NVR — AI-powered video surveillance system](/images/frigate/frigate-logo.svg "Frigate NVR")
+*Logo: [frigate.video](https://frigate.video)*
 
 # Complete Guide: Installing Frigate on Yandex Cloud with Home Network Access via NetBird
 
@@ -31,7 +32,8 @@ The guide includes:
 
 # Architecture
 
-![Yandex Cloud — cloud platform](https://upload.wikimedia.org/wikipedia/commons/4/40/Yandex_Cloud_logo.svg "Yandex Cloud")
+![Yandex Cloud — cloud platform](/images/frigate/yandex-cloud.svg "Yandex Cloud")
+*Logo: [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Yandex_Cloud_logo.svg)*
 
 How it works: cameras stream RTSP to a device on the home network (router, NAS, or PC). NetBird connects this device to a virtual machine in Yandex Cloud. Frigate in Docker on the VM receives streams via NetBird IP, writes recordings to a separate disk, and serves the Web UI on port 8971.
 
@@ -57,9 +59,7 @@ Yandex Cloud VM
 
 # Part 1. NetBird Setup
 
-![NetBird — Zero Trust VPN based on WireGuard](https://worldvectorlogo.com/download/netbird.svg "NetBird")
-
-NetBird is used to create a secure private network between:
+NetBird ([netbird.io](https://netbird.io)) is used to create a secure private network between:
 
 * the Yandex Cloud server
 * the home network
@@ -321,7 +321,8 @@ sudo chown -R skv:skv /data/frigate
 
 # Part 3. Installing Docker
 
-![Docker — containerization platform](https://upload.wikimedia.org/wikipedia/commons/7/79/Docker_%28container_engine%29_logo.png "Docker")
+![Docker — containerization platform](/images/frigate/docker.png "Docker")
+*Logo: [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Docker_(container_engine)_logo.png)*
 
 **Why Docker:** Frigate is distributed as a ready-made Docker image with all dependencies (Python, FFmpeg, detectors, etc.). Installing via Docker avoids manual environment setup, version conflicts, and simplifies updates — just restart the container with a new image.
 
@@ -379,7 +380,7 @@ docker compose version
 
 # Part 5. Installing Frigate
 
-![Frigate — NVR with AI object detection](https://frigate.video/images/logo.svg "Frigate NVR")
+![Frigate — NVR with AI object detection](/images/frigate/frigate-logo.svg "Frigate NVR")
 
 Create compose file:
 

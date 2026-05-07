@@ -1,7 +1,7 @@
 ---
 title: "About"
 layout: "about"
-summary: "Learn more about the site and technologies used"
+summary: "Konstantin Starodubov: Head of Information Security Compliance, Ph.D., former Bank of Russia"
 date: 2025-01-10T00:00:00+03:00
 links:
   - name: "VKontakte"
@@ -41,5 +41,3 @@ I write about:
 - balancing security and usability.
 
 Occasionally, I'll share notes about photography—my main hobby outside of work.
-
-## Links

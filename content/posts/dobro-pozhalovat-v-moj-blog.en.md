@@ -11,8 +11,6 @@ cover:
   caption: "Oak of knowledge — symbol of growth and new beginnings"
 ---
 
-![Oak of life — symbol of resilience and growth](https://starodubov.pro/images/tree-image-1.jpg "Oak of life — symbol of resilience and growth")
-
 # Welcome to My Blog
 
 My name is **Konstantin Starodubov**. I lead information security compliance in Yandex's fintech division. Previously, I worked at the Bank of Russia.
