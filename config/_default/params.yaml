@@ -1,8 +1,5 @@
-# Basic site info with SEO
-description: "Персональный блог Константина Стародубова о технологиях, разработке и жизни"
-keywords: ["блог", "технологии", "разработка", "программирование", "IT", "Hugo", "Go"]
+# Basic site info (description/keywords живут в languages.yaml per-locale)
 defaultAuthor: "Константин Стародубов"
-language: "ru-RU"
 shortName: "Блог Стародубова"  # PWA
 images:
   - "/images/og-banner.jpg"
