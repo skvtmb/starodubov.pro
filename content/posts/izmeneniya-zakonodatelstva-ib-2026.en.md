@@ -1,8 +1,8 @@
 ---
-title: "Changes in Russian Information Security Legislation in 2026"
+title: "Changes in Russian information security legislation in 2026"
 date: 2026-02-14T00:00:00+03:00
 draft: false
-summary: "Overview of key changes: FSTEC Order No.117 replacing No.17, CII (critical information infrastructure), personal data, licensing. Why costs will rise and how to prepare."
+summary: "What’s changing in 2026: FSTEC Order No.117 replacing No.17, CII (critical information infrastructure), personal data, licensing. Why costs will rise and how to get ready."
 categories: ["Information Security", "Legislation"]
 tags: ["information-security", "FSTEC", "order-117", "CII", "personal-data", "legislation", "2026", "compliance", "russia"]
 cover:
@@ -11,17 +11,17 @@ cover:
   caption: "Regulatory changes in information security (photo: [FLY:D](https://unsplash.com/photos/photo-1563013544-824ae1b704d3) / Unsplash)"
 ---
 
-# Changes in Russian Information Security Legislation in 2026
+# Changes in Russian information security legislation in 2026
 
-Russian regulation in the field of information protection is undergoing a major transformation. This article summarizes key changes from January 2026, provides a detailed comparison of FSTEC Order No.117 with No.17, and outlines practical implications for organizations.
+2026 rewrites the rules for information protection in Russia. Below is a summary of changes from January, a side-by-side look at FSTEC Order No.117 versus No.17, and what it means for organizations in practice.
 
 *Note: This overview covers Russian federal regulations. Acronyms used: CII — Critical Information Infrastructure (КИИ); FSTEC — Federal Service for Technical and Export Control; GIS — State Information System (ГИС); PD — Personal Data (ПДн).*
 
 ---
 
-## Overview of Regulatory Changes in January 2026
+## Overview of regulatory changes in January 2026
 
-### Critical Information Infrastructure (CII)
+### Critical information infrastructure (CII)
 
 **Sector-specific categorization rules for CII objects in nuclear energy**
 
@@ -42,7 +42,7 @@ On February 6, 2026, the Russian Government adopted Decree No.92 "On approval of
 
 **What it is and why it matters**
 
-In simple terms: banks, insurance companies, pension funds, exchanges, payment systems, and other financial market participants must identify their information systems that qualify as critical infrastructure and assign them significance categories. Previously, general rules applied to all sectors. Now the financial sector has its own rules — what counts as significant and how to assess it.
+Short version: banks, insurers, pension funds, exchanges, payment systems and other financial market participants have to find their information systems that count as critical infrastructure and assign significance categories. The rules used to be general across sectors. Now the financial sector has its own — what counts as significant and how to measure it.
 
 **Who is covered**
 
@@ -58,13 +58,13 @@ CII subjects in the banking and financial market sector include:
 - professional financial market service providers;
 - government bodies and their subordinate organizations performing banking and financial market functions.
 
-**How a system is determined to be a CII object**
+**How to tell whether a system is a CII object**
 
-An organization inventories its information systems and checks them against sector-specific lists of typical CII objects. If a system is on the list — it must be categorized. If a system is not on the list but a failure could cause serious consequences (by damage scale) — it must also be categorized and proposed for inclusion in the list.
+An organization inventories its information systems and checks them against sector-specific lists of typical CII objects. On the list — categorize it. Not on the list but a failure could cause serious damage — categorize it anyway and propose adding it to the list.
 
 **Which systems are assessed and by which indicators**
 
-The document specifies which system types correspond to which significance indicators. For example:
+The document spells out which system types map to which significance indicators. For example:
 
 - **Central Bank money transfer systems** — indicators 6 and 10 (volume of operations, functional significance).
 - **Remote banking systems** (internet banking, mobile banking) — indicator 10.
@@ -92,7 +92,7 @@ Annually, by the 10th business day of the year, an updated list of significant C
 
 **Practical implications**
 
-For banks and financial organizations, the document provides a clear algorithm: which systems to treat as critical, how to rank them, and where to report. This forms the basis for applying protection measures under Federal Law 187-FZ and FSTEC Order No.117.
+For banks and financial organizations the document provides an algorithm: which systems to treat as critical, how to rank them, where to report. From there protection measures under Federal Law 187-FZ and FSTEC Order No.117 follow.
 
 **Document links**
 
@@ -110,7 +110,7 @@ On January 24, draft amendments to Federal Law No.572-FZ of 29.12.2022 on the us
 
 **Criminal liability for automated processing of personal data**
 
-On January 27, draft amendments to Article 272.1 of the Criminal Code were published. A new offense is introduced — "automated processing" of personal data obtained unlawfully. This will allow prosecution for illegal processing regardless of subsequent actions. The bill targets the use of deepfakes for fraud, blackmail, and harm.
+On January 27, draft amendments to Article 272.1 of the Criminal Code were published. A new offense appears — "automated processing" of unlawfully obtained personal data. Prosecution becomes possible for the processing itself, regardless of what is done with it next. The target is deepfakes used for fraud and blackmail.
 
 ### Administrative liability in telecommunications
 
@@ -158,47 +158,47 @@ On January 29, draft amendments to the TIP licensing regulation (Decree No.79 of
 
 ---
 
-## FSTEC Order No.117 vs No.17: Key Differences
+## FSTEC Order No.117 vs No.17: what’s different
 
-As of March 1, 2026, Order No.17 loses force and FSTEC Order No.117 takes effect. This is not a minor update but a shift in regulatory logic.
+As of March 1, 2026, Order No.17 is out and No.117 is in. This isn’t a cosmetic update — the underlying regulatory logic changes.
 
-### Shift in approach: from checklist to risk-based model
+### From checklist to risk-based model
 
-**Order No.17** established a fixed set of requirements. Categorization and choice of measures largely depended on system type rather than actual threats and consequences.
+**No.17** set a fixed list of requirements. Categorization and choice of measures came from the system type, not from actual threats and consequences.
 
-**Order No.117** requires building protection based on threat models, risks, and operating conditions. Systems of the same type may require different protection levels depending on incident consequences. The regulator evaluates not only the presence of measures but also their justification and effectiveness.
+**No.117** asks you to build protection from a threat model, risks and operating conditions. Two systems of the same type may need different protection levels depending on what happens during an incident. The regulator looks not only at whether measures are in place, but at how well they’re justified and how effective they are.
 
 ### Terminology and scope
 
-Order No.117 revises the conceptual framework. Terms are aligned with Federal Laws 149-FZ, 187-FZ, and subordinate acts. The understanding of an information security system is expanded: organizational, software, and technical measures are considered as a whole.
+No.117 reworks the terminology. Terms align with Federal Laws 149-FZ, 187-FZ, and subordinate acts. The information security system is now treated as a whole — organizational, software and technical measures together, not separately.
 
 ### Classification and protection levels
 
-**Order No.17:** protection class effectively defined an exhaustive set of measures.
+**No.17:** the protection class effectively defined an exhaustive set of measures.
 
-**Order No.117:** levels are formed based on damage analysis, current threats, and architecture. Information security risks are considered, not just formal criteria.
+**No.117:** levels are derived from damage analysis, current threats and architecture. Information security risks are weighed, not just formal criteria.
 
 ### Threat and attacker model
 
-**Order No.17:** threat models were often formal and used mainly during design and certification.
+**No.17:** threat models were often formal and mainly used during design and certification.
 
-**Order No.117:** special attention to threats related to remote access, supply chains, and human factors. The model must reflect real attack scenarios.
+**No.117:** the focus is on threats from remote access, supply chains and human factors. The model has to reflect real attack scenarios.
 
 ### Organizational measures
 
-**Order No.17:** organizational measures often boiled down to having regulations and orders.
+**No.17:** organizational measures often boiled down to a stack of regulations and orders.
 
-**Order No.117:** the information security policy must be a working document with roles, responsibilities, and decision-making procedures. Requirements for staff training and internal control are strengthened.
+**No.117:** the information security policy is a working document with roles, responsibilities, and decision-making procedures. Requirements for staff training and internal control are stronger.
 
 ### Technical and software measures
 
-**Order No.17:** emphasis on the list of certified protection tools and their presence.
+**No.17:** emphasis on having certified protection tools from a list.
 
-**Order No.117:** focus on outcome — the ability to prevent and detect incidents. Combined solutions are allowed with justification of effectiveness. The role of monitoring and logging increases.
+**No.117:** focus on outcome — the ability to prevent and detect incidents. Combined solutions are allowed if you can justify effectiveness. Monitoring and logging matter much more.
 
 ### New focus areas
 
-Order No.117 separately highlights:
+No.117 calls out separately:
 
 - protection of web applications and APIs;
 - protection of remote access (mandatory strong authentication, VPN, configuration control of remote workstations);
@@ -208,21 +208,21 @@ Order No.117 separately highlights:
 
 ### Infrastructure and contractors
 
-**Order No.17** focused on the GIS perimeter. IT infrastructure components outside the perimeter could remain uncertified.
+**No.17** focused on the GIS perimeter. IT infrastructure components outside the perimeter could stay uncertified.
 
-**Order No.117** extends requirements to the IT infrastructure on which GIS operate. Contractors must provide certification under the same threat model and class as the customer. This fundamentally changes supply chain requirements.
+**No.117** extends requirements to the whole IT infrastructure on which GIS run. Contractors must provide certification under the same threat model and class as the customer. That fundamentally changes supply chain requirements.
 
 ### Incident response
 
-**Order No.117** clarifies processes for detection, analysis, and remediation of incidents. Event correlation and integrity control tools are required.
+**No.117** sharpens the processes for detection, analysis and remediation of incidents. Event correlation and integrity control tools are required.
 
 ---
 
-## Why Costs Will Rise
+## Why costs will rise
 
 ### Expanded scope
 
-Requirements apply not only to GIS but also to information systems of government bodies, state unitary enterprises, state institutions, and municipal bodies. The definition of GIS is broadened — any system of government bodies where state data is processed.
+Requirements now apply not only to GIS but also to information systems of government bodies, state unitary enterprises, state institutions and municipal bodies. The definition of GIS itself is broader — any government system where state data is processed.
 
 ### New mandatory measures
 
@@ -234,23 +234,23 @@ Requirements apply not only to GIS but also to information systems of government
 
 ### Contractors
 
-Contractors must build certified segments and meet the same requirements as the customer. For many, this means new tasks requiring consulting and infrastructure upgrades. The pool of suppliers capable of meeting requirements shrinks, leading to price increases.
+Contractors have to build certified segments and meet the same requirements as the customer. For many that means new work — consulting, infrastructure upgrades. The pool of suppliers who can pull this off shrinks, and prices go up.
 
 ### Market estimates
 
-According to market participants, implementing solutions in 2025 could yield savings of up to 30%. From 2026, the following is expected:
+By market participants’ estimates, implementing solutions in 2025 could save up to 30%. From 2026, expect:
 
-- 25–30% cost increase due to changes in tax and certification regulation;
-- higher certification costs due to new requirements;
+- 25–30% cost increase from changes in tax and certification regulation;
+- higher certification costs under the new requirements;
 - rising license and certification prices.
 
 ### Responsibility
 
-Order No.117 effectively expands management responsibility. Errors in threat assessment may lead not only to regulatory but also to financial risks. Responsibility no longer rests solely with the information security department.
+No.117 effectively expands management responsibility. Errors in threat assessment can lead to regulatory and financial risks. Responsibility no longer sits only with the information security department.
 
 ---
 
-## Additional 2026 Trends
+## Other 2026 trends
 
 ### Federal Law 152-FZ (personal data)
 
@@ -270,20 +270,20 @@ Order No.117 effectively expands management responsibility. Errors in threat ass
 - From March 1, 2026 — launch of GIS to combat cyber fraud (Federal Law 41-FZ).
 - Microfinance organizations must authenticate borrowers by biometrics when concluding consumer loan agreements in electronic form.
 
-### Draft law on fines for CII operation violations
+### Draft law: fines for CII operation violations
 
 Introduction of Art. 13.12.2 of the Administrative Offenses Code is under consideration: fines for individuals 5–10 thousand rubles, for officials 10–50 thousand rubles, for legal entities 100–500 thousand rubles for violation of CII object operation rules.
 
 ---
 
-## Preparation Recommendations
+## What to do
 
-1. **Conduct a legal audit** — compare current measures with Order No.117 requirements, assess the justification of measure selection from the perspective of threats and consequences.
-2. **Update the threat model** — ensure it reflects real attack scenarios, including remote access, supply chains, and human factors.
-3. **Revise local regulations** — information security policies and procedures must align with the new terminology and logic of Order No.117.
-4. **Define responsibility allocation** — roles and authority not only for information security specialists but also for department heads, IT, and top management.
-5. **Check incident readiness** — presence of procedures for detection, recording, analysis, and decision-making.
-6. **Don't delay** — certifications under Order No.17 conducted before March 1, 2026 remain valid; when planning new projects, it is advisable to align with Order No.117 requirements.
+1. **Run a legal audit** — line current measures up against No.117 and check whether they’re justified by threats and consequences.
+2. **Refresh the threat model** — make sure it covers remote access, supply chains and human factors, with realistic attack scenarios.
+3. **Rewrite local regulations** — security policies and procedures need to match the terminology and logic of No.117.
+4. **Pin down responsibility** — roles and authority for security, but also for department heads, IT, and top management.
+5. **Check incident readiness** — procedures for detection, recording, analysis and decision-making.
+6. **Don’t delay** — certifications under No.17 done before March 1, 2026 remain valid. New projects should be planned for No.117 from the start.
 
 ---
 

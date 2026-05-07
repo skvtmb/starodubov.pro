@@ -1,8 +1,8 @@
 ---
-title: "Welcome to My Blog"
+title: "Welcome to my blog"
 date: 2025-01-10T00:00:00+03:00
 draft: false
-summary: "First blog post: what I'll write about and why it might be useful to you"
+summary: "First post: what I'll write about and why it might be useful to you"
 categories: ["About Me"]
 tags: ["blog", "introduction", "information-security", "fintech", "greeting", "about-me"]
 cover:
@@ -11,32 +11,27 @@ cover:
   caption: "Oak of knowledge — symbol of growth and new beginnings"
 ---
 
-# Welcome to My Blog
+# Welcome to my blog
 
-My name is **Konstantin Starodubov**. I lead information security compliance in Yandex's fintech division. Previously, I worked at the Bank of Russia.
+I'm **Konstantin Starodubov**. I run information security compliance at Yandex's fintech. Before that, I worked at the Bank of Russia.
 
-Here I'll share my experience with information security, regulatory requirements, and standards — what I apply in practice and find useful.
+This is where I'll write about what I actually do day to day: infosec, regulation, standards. No academic tone — only the stuff I use in practice and find interesting myself.
 
-## Main Blog Topics
+## What this blog is about
 
-**Fintech Compliance**  
-Regulatory requirements, compliance verification practices, real cases from my experience.
+**Fintech compliance.** Regulatory requirements, how to verify them, real cases.
 
-**Security Standards**  
-ISO 27001, PCI DSS, and other standards: how to implement them so they work, not just decorate reports.
+**Security standards.** ISO 27001, PCI DSS, the rest. How to implement them so they work, not just sit in reports.
 
-**Practical Security**  
-How to embed security requirements into development processes, find the balance between protection and convenience, measure effectiveness.
+**Practical security.** How to fit infosec into development, where to compromise between protection and usability, how to measure the effect.
 
-**Photography**  
-Occasionally — notes about my favorite hobby and shots from personal projects.
+**Photography.** Occasionally — notes about my hobby and a few shots.
 
-## Upcoming Topics
+## What's coming up
 
-In future posts I plan to cover:
-- Fintech compliance: where to start and what to pay attention to
-- Security standards: how to choose and implement the right one
-- Practical cases from my experience at the Bank of Russia and Yandex
+- Fintech compliance: where to start
+- Security standards: how to pick one and not drown
+- Cases from the Bank of Russia and Yandex
 
 ---
 

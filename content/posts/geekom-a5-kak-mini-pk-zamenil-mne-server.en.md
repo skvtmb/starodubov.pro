@@ -2,91 +2,91 @@
 title: "GEEKOM A5: How a Mini PC Replaced My Server"
 date: 2025-01-11T00:00:00+03:00
 draft: false
-summary: "The story of how I replaced a bulky home server with a compact GEEKOM A5 and didn't regret it. Problems, finding a solution, and impressions from use."
+summary: "How I dumped a bulky home server and replaced it with a compact GEEKOM A5. What was wrong with the old build, how I picked a replacement, and how it ended up."
 categories: ["Technology"]
 tags: ["mini-pc", "geekom", "amd", "ryzen", "computers", "review", "specs", "hardware", "server"]
 ---
 
 ![GEEKOM A5 Mini PC](/images/geekom-a5/geekom-1.jpeg "GEEKOM A5 Mini PC")
 
-The story of how I got rid of a bulky server under the desk and found a solution that works quietly, efficiently, and reliably. If you're also tired of noise, excess hardware, and compromises — this story might be useful.
+How I kicked a bulky server out from under my desk and found a box that's quiet, efficient and not annoying. If you're also tired of noise, extra iron and constant trade-offs — this might help.
 
-## How It Started
+## How it started
 
-Until recently I had a full-fledged server at home. On paper it looked impressive: powerful platform, lots of ports, NVMe support, ability to run VMs. Seemed like the ideal solution for a home NAS and hosting services.
+Until recently I had a full-blown server at home. On paper it looked great: a beefy platform, lots of ports, NVMe, room for VMs. Seemed like an ideal home NAS and service host.
 
 ![My old home server](/images/geekom-a5/old-server-1.jpeg "Old server in Ginzzu CL150 case")
 
-The heart of the system was the **HUANANZHI X99 BD4** motherboard on LGA2011-3 socket — a Chinese replica of a server platform. It ran an **Intel Xeon E5-2680 v4** — a fourteen-core monster with 28 threads. RAM was assembled from different modules: 16 GB as two 8 GB sticks and another 32 GB as two 16 GB sticks, totaling **48 GB DDR4**. The system ran on a fast **256 GB** NVMe drive, with an **A04** cooler for cooling.
+At the core: a **HUANANZHI X99 BD4** motherboard on LGA2011-3, a Chinese clone of a server board. On top of it ran an **Intel Xeon E5-2680 v4** — fourteen cores, 28 threads. RAM was a mix: two 8 GB sticks plus two 16 GB sticks, **48 GB DDR4** total. System on a **256 GB** NVMe, cooled by an **A04**.
 
 ![Server internals](/images/geekom-a5/old-server-2.jpeg "HUANANZHI X99 BD4 server platform with Xeon E5-2680 v4")
 
-All this was in a **Ginzzu CL150** case with tempered glass — looked impressive but took up a lot of space. Power came from a **Ginzzu SB500** 500W PSU. For networking — **Intel AX210 Desktop Kit** with Wi-Fi 6. A **GeForce GT 730** 2 GB was needed for video output since the server CPU has no integrated graphics. For storage — **ExeGate HS435-02** drive cage for four hard drives.
+All of this lived in a **Ginzzu CL150** case with tempered glass. Looked serious, ate space. Power came from a **Ginzzu SB500** 500W PSU. Networking via **Intel AX210 Desktop Kit** with Wi-Fi 6. A **GeForce GT 730** 2 GB was there only to push picture, the server CPU has no iGPU. Storage — an **ExeGate HS435-02** four-bay HDD cage.
 
 ![Server configuration](/images/geekom-a5/old-server-3.jpeg "Full old server configuration")
 
-On paper the config looked serious. Six SATA ports for drives, four USB 3.0, quad-channel memory support, M.2 slot for fast storage. In theory this allowed building a powerful home server for VMs, file storage, and various services.
+On paper the config was serious. Six SATA, four USB 3.0, quad-channel memory, an M.2 slot for fast storage. Specs-wise, a great base for VMs, a file dump and various services.
 
-But reality was different.
+In reality it played out differently.
 
-## First Warning Signs
+## First warning signs
 
-The first thing that started bothering me was noise. Even with relatively quiet fans, the server constantly reminded me of itself with a monotonous hum. It didn't scream, but its presence was always felt. Especially at night when I wanted silence.
+The first thing that started getting to me was the noise. Even with quiet fans, the server hummed constantly. It didn't scream, but it was always there. Especially at night.
 
-Then I started noticing the electricity bill. The platform running 24/7 consumed quite a bit. And it heated up. Even in winter the room with the server felt warmer than the rest.
+Then I started watching the electricity bill. A box running 24/7 ate a fair bit. And it heated up. Even in winter, the room with the server felt warmer than the others.
 
-But the main problem was elsewhere — in the software.
+But the main problem wasn't the iron, it was the software.
 
-## Experience with XPEnology: When Pretty Doesn't Mean Reliable
+## XPEnology experience: pretty isn't the same as reliable
 
-Initially I ran **XPEnology** on the server — an unofficial build of Synology firmware. The interface was familiar and convenient, everything looked like real Synology, just without paying for the hardware. Sounded great.
+I started with **XPEnology** on the server — an unofficial build of Synology firmware. Familiar UI, convenient, looks like a real Synology, but without paying for their hardware. Sounded perfect.
 
-In practice, problems started. System updates were forbidden — any update could break everything. Small bugs constantly appeared that had to be fixed manually. Drives periodically "dropped" for no apparent reason. XPEnology would stop seeing them, and I had to reboot hoping everything would return after restart.
+In practice the fun began. Updates — forbidden, any one of them could brick the system. Small bugs popped up constantly, I patched them by hand. Drives would randomly drop. XPEnology would stop seeing them, I'd reboot and hope they came back.
 
-At some point I realized: this setup doesn't deliver what it was all for — reliability. When you have a home server, you want it to just work. No surprises, no workarounds, no constant attention.
+At some point I realized: this setup wasn't giving me what I'd built it for — reliability. From a home server I want one thing: that it just works. No surprises, no rituals, no babysitting.
 
-## The Turning Point
+## The turning point
 
-That's when I decided: enough. Need something different. Not a huge iron monster that demands attention, but something simple, quiet, and stable.
+That's when I called it. I didn't need an iron monster that demanded attention. I needed something simple, quiet and stable.
 
-I started looking for alternatives and came across the **GEEKOM A5** mini PC. Size-wise — a box that fits in your palm. Specs-wise — a serious device with an AMD Ryzen processor.
+I started looking for options and ran into the **GEEKOM A5** mini PC. Palm-sized box. Specs — a real AMD Ryzen device, not a toy.
 
-And it hit me: what if I use the mini PC as the head node and put the drives in a separate device? Thus was born the idea of **GEEKOM A5 + external DAS** (Direct Attached Storage).
+Then it clicked: what if the mini PC handles the brain and the drives go into a separate enclosure? That's how the **GEEKOM A5 + external DAS** (Direct Attached Storage) idea was born.
 
-## The New Solution
+## The new setup
 
-When the GEEKOM A5 arrived, the first thing I noticed was silence. After the constant server hum, this box ran almost silently. Yes, there's a fan, but you barely hear it. That was the first plus.
+When the A5 arrived, the first thing I noticed was silence. After the server's constant hum, this box ran practically without a sound. There's a fan, but you almost don't hear it. First win.
 
 ![GEEKOM A5 - front view](/images/geekom-a5/geekom-1.jpeg "Compact GEEKOM A5")
 
-The second plus appeared after a month — the electricity bill became noticeably lower. The mini PC consumes far less power than a server platform running 24/7.
+Second win showed up about a month in: the electricity bill dropped noticeably. A mini PC pulls a lot less than a server platform sitting on 24/7.
 
 ![GEEKOM A5 - ports and connectors](/images/geekom-a5/geekom-2.jpeg "Rich set of ports on GEEKOM A5")
 
-The third plus — compactness. Instead of a large case under the desk, now there's a neat box on the shelf that's easy to overlook.
+Third — the size. Instead of a big tower under the desk, there's a small box on a shelf you can almost miss.
 
 ![GEEKOM A5 in work environment](/images/geekom-a5/geekom-3.jpeg "GEEKOM A5 at the workstation")
 
-## First Impressions
+## First impressions
 
-The first days I was watching. Is everything stable? Will there be performance issues? Can it handle the tasks I assigned?
+For the first days I watched it. Is it stable? Will it choke on something? Will it handle my workload?
 
-Turned out it can. The system boots fast thanks to the NVMe drive. Docker containers start without issues. File storage connected via DAS works steadily. No more glitches and drive "dropouts" like with XPEnology.
+It handles. Boot is fast thanks to NVMe. Docker containers start without drama. The file dump on DAS works steadily. None of the glitches and drive drops I had on XPEnology.
 
-After a week I'd forgotten there was a server under the desk. The new solution just worked. No extra attention, no problems.
+A week in I'd forgotten there ever was a server under the desk. The new setup just works. No babysitting, no problems.
 
-## What Changed
+## What changed
 
-Sometimes less is indeed more. Instead of a bulky, power-hungry server I got:
+Sometimes less really is more. Instead of a bulky, power-hungry server I got:
 
-* **Quiet system** — can forget about constant humming
-* **Stable operation** — no unexpected failures and "dropouts"
-* **Fewer workarounds** — no need to work around bugs and find workarounds
-* **More control** — understand what's happening and how it works
+* **a quiet system** — no more constant humming
+* **stable operation** — no random failures or drive drops
+* **fewer workarounds** — I'm not patching bugs around the clock
+* **more control** — I actually understand what's running and how
 
 ![GEEKOM A5 - side view](/images/geekom-a5/geekom-4.jpeg "Compact dimensions of GEEKOM A5")
 
-The GEEKOM A5 turned out to be an excellent base not only for office tasks but also for a home server. Especially if you're tired of noise, excess hardware, and endless compromises like I was.
+The GEEKOM A5 turned out to be a solid base — not only for office work but for a home server too. Especially if, like me, you're tired of noise, extra iron and endless compromises.
 
 ## 📋 Full GEEKOM A5 Technical Specifications
 

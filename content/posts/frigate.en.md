@@ -1,8 +1,8 @@
 ---
-title: "Complete Guide: Installing Frigate on Yandex Cloud with NetBird"
+title: "Complete guide: installing Frigate on Yandex Cloud with NetBird"
 date: 2025-02-14T00:00:00+03:00
 draft: false
-summary: "Deploying Frigate NVR on Yandex Cloud: NetBird VPN, Docker, separate disk for recordings, and access to home cameras."
+summary: "Setting up Frigate NVR on Yandex Cloud: NetBird VPN to home cameras, Docker, a separate disk for recordings."
 categories: ["Technology"]
 tags: ["frigate", "nvr", "video-surveillance", "yandex-cloud", "netbird", "vpn", "docker", "rtsp"]
 cover:
@@ -14,19 +14,19 @@ cover:
 ![Frigate NVR — AI-powered video surveillance system](/images/frigate/frigate-logo.svg "Frigate NVR")
 *Logo: [frigate.video](https://frigate.video)*
 
-# Complete Guide: Installing Frigate on Yandex Cloud with Home Network Access via NetBird
+# Complete guide: installing Frigate on Yandex Cloud with home network access via NetBird
 
-This guide describes the full process of deploying the Frigate video surveillance system on a Yandex Cloud server with recordings stored on a separate disk and access to home cameras through the secure NetBird VPN.
+I'm running Frigate on a VM in Yandex Cloud. Recordings go to a separate disk, and the server reaches my home cameras over NetBird VPN. Below is how I did it, step by step.
 
-The guide includes:
+In the guide:
 
 * NetBird setup
 * connecting the server to the home network
-* connecting and mounting the disk
+* mounting the disk
 * installing Docker and Docker Compose
 * installing and configuring Frigate
-* configuring video storage
-* accessing the Web UI
+* recording storage
+* Web UI access
 
 ---
 
@@ -35,7 +35,7 @@ The guide includes:
 ![Yandex Cloud — cloud platform](/images/frigate/yandex-cloud.svg "Yandex Cloud")
 *Logo: [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Yandex_Cloud_logo.svg)*
 
-How it works: cameras stream RTSP to a device on the home network (router, NAS, or PC). NetBird connects this device to a virtual machine in Yandex Cloud. Frigate in Docker on the VM receives streams via NetBird IP, writes recordings to a separate disk, and serves the Web UI on port 8971.
+How it works. Cameras push RTSP to a device on the home network (router, NAS, or PC). NetBird connects that device to a VM in Yandex Cloud. Frigate in Docker pulls streams over the NetBird IP, writes recordings to a separate disk, Web UI sits on port 8971.
 
 ```
 Home cameras
@@ -57,14 +57,14 @@ Yandex Cloud VM
 
 ---
 
-# Part 1. NetBird Setup
+# Part 1. NetBird setup
 
 NetBird ([netbird.io](https://netbird.io)) is used to create a secure private network between:
 
 * the Yandex Cloud server
 * the home network
 
-**Why this is needed:** Cameras are at home, while Frigate is in the cloud. Without a VPN, the Yandex Cloud server cannot reach the RTSP streams from cameras in your local network. NetBird creates an encrypted tunnel between the cloud and home — cameras stay behind NAT, but the server can access them as if they were on the same network. This is safer than port forwarding on the router.
+Why a VPN: cameras are behind home NAT, Frigate is in the cloud. I don't want to forward ports on the router, so I use an encrypted tunnel. The server reaches the cameras as if they were on the same LAN.
 
 Official site:
 
@@ -74,13 +74,11 @@ Official site:
 
 # Step 1. Registration and login
 
-Go to:
+Open:
 
 [https://app.netbird.io/](https://app.netbird.io/)
 
-Create an account or sign in.
-
-**Why:** NetBird Cloud manages all connected devices and access rules. Without an account, you cannot create a Setup Key and connect the server to the home network.
+Create an account or sign in. NetBird Cloud is the control plane for devices and policies. Without an account you can't create a Setup Key.
 
 ---
 
@@ -120,9 +118,9 @@ Example:
 6A40F5F1-777-XXXX
 ```
 
-**Why:** The Setup Key is a one-time token for connecting a device to your NetBird network. It assigns the server to the `remote` group and allows you to configure rules for who can connect to whom. A separate key for the cloud server is needed to distinguish it from home devices in access policies.
+A Setup Key is the join token for a device. It puts the server into the `remote` group. A separate key for the cloud server keeps it distinguishable from home devices in policies.
 
-⚠️ Important: use the Setup Key, otherwise the device may disconnect.
+⚠️ Without a Setup Key, the device may drop off the network.
 
 ---
 
@@ -158,7 +156,7 @@ Should show:
 Connected: yes
 ```
 
-**Why:** The NetBird client on the server connects it to your private network and assigns it a virtual IP (e.g., 100.64.0.x). After that, the server can reach home devices via this IP as if they were on the same local network.
+The server now has a virtual IP in the NetBird network (e.g. `100.64.0.x`) and can reach home devices over it like they're on the same LAN.
 
 ---
 
@@ -180,7 +178,7 @@ Add the device to the group:
 Home
 ```
 
-**Why:** The home device (router, NAS, or PC with cameras) must be on the NetBird network and in the `Home` group. Then, by access rules, the server from the `remote` group can connect to it. Groups are needed for segmentation: you explicitly allow who can access whom.
+The home device (router, NAS, or PC with cameras) goes into the `Home` group. Groups are for segmentation — you explicitly say who can reach whom.
 
 ---
 
@@ -212,7 +210,7 @@ Action:
 Allow
 ```
 
-**Why:** By default, NetBird uses Zero Trust — devices cannot see each other until you allow it. This rule says: "devices from the `remote` group (cloud server) can connect to devices from the `Home` group." Without it, ping and RTSP connections to cameras will fail.
+NetBird defaults to Zero Trust: devices can't see each other until you allow it. Without this rule neither ping nor RTSP will go through.
 
 ---
 
@@ -232,15 +230,13 @@ From the server:
 ping 100.64.0.5
 ```
 
-If it works — the network is configured.
-
-**Why:** This confirms that the VPN works and the cloud server can reach the home network. If ping succeeds, Frigate will also be able to receive RTSP streams from cameras via the NetBird IP.
+If ping works, the network is up and RTSP from the cameras will also flow.
 
 ---
 
 # Part 2. Connecting and mounting the disk
 
-**Why a separate disk:** The system disk (vda) in Yandex Cloud is usually 10–40 GB — not enough for video recordings. Frigate writes 24/7, and space runs out in a few days. A separate disk (vdb) of 256–512 GB provides room for recordings with configurable retention.
+The system disk in Yandex Cloud is usually 10–40 GB — not enough for 24/7 recordings, it'll fill up in a few days. I attached a separate 512 GB disk for `/data/frigate/media`.
 
 Check disks:
 
@@ -263,7 +259,7 @@ vdb 512G
 sudo mkfs.ext4 /dev/vdb
 ```
 
-**Why:** A new disk comes "raw" — without a filesystem. `mkfs.ext4` creates ext4, which works well on Linux: journaling, stability on failure, good support for large video files. Important: formatting erases all data on the disk.
+A new disk comes raw, without a filesystem. ext4 is the default choice — journaling, fine with large video files. The command wipes whatever was on the disk.
 
 ---
 
@@ -274,7 +270,7 @@ sudo mkdir /data
 sudo mount /dev/vdb /data
 ```
 
-**Why:** The disk must be "attached" to a directory so the system can use it. Without mounting, writes to `/data` go to the system disk. After `mount`, everything written to `/data` is stored on the separate disk.
+Without mounting, writes to `/data` go to the system disk. After `mount`, everything in `/data` lands on the separate disk.
 
 Verify:
 
@@ -304,7 +300,7 @@ Add:
 UUID=YOUR_UUID /data ext4 defaults,nofail 0 2
 ```
 
-**Why:** After reboot, the disk would unmount and Frigate would stop writing recordings. The `/etc/fstab` entry makes the system automatically mount the disk on boot. UUID is used instead of `/dev/vdb` because device names can change, while the disk UUID is stable. `nofail` prevents the system from hanging on boot if the disk is temporarily unavailable.
+Without this, the disk unmounts on reboot and Frigate stops writing. I use UUID instead of `/dev/vdb` because device names can change but the UUID doesn't. `nofail` keeps boot from hanging if the disk is temporarily unavailable.
 
 ---
 
@@ -315,7 +311,7 @@ sudo mkdir -p /data/frigate/{config,media,db}
 sudo chown -R skv:skv /data/frigate
 ```
 
-**Why:** Frigate in Docker will run as your user (or root in the container). The `config`, `media`, and `db` directories are for configuration, recordings, and the database. `chown` gives your user write access so you don't need `sudo` when editing configs and so Docker can write to these directories.
+`config`, `media`, `db` hold settings, recordings, and the database. `chown` lets me edit configs without `sudo` and lets Docker write to these directories.
 
 ---
 
@@ -324,7 +320,7 @@ sudo chown -R skv:skv /data/frigate
 ![Docker — containerization platform](/images/frigate/docker.png "Docker")
 *Logo: [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Docker_(container_engine)_logo.png)*
 
-**Why Docker:** Frigate is distributed as a ready-made Docker image with all dependencies (Python, FFmpeg, detectors, etc.). Installing via Docker avoids manual environment setup, version conflicts, and simplifies updates — just restart the container with a new image.
+Frigate ships as a Docker image with all the dependencies bundled (Python, FFmpeg, detectors). With Docker I skip the environment fiddling and version conflicts, and updates are a restart with a new image.
 
 Update system:
 
@@ -345,7 +341,7 @@ sudo systemctl enable docker
 sudo systemctl start docker
 ```
 
-Add user:
+Add my user to the `docker` group so I can run it without `sudo`:
 
 ```bash
 sudo usermod -aG docker skv
@@ -357,8 +353,6 @@ Verify:
 ```bash
 docker ps
 ```
-
-**Why `usermod -aG docker`:** By default, only root can run containers. Adding the user to the `docker` group allows running Docker without `sudo`, which is more convenient and safer for daily use.
 
 ---
 
@@ -374,7 +368,7 @@ Verify:
 docker compose version
 ```
 
-**Why Docker Compose:** Instead of a long `docker run` command with many flags, Compose describes services in a YAML file. Easier to keep configuration in a repo, change parameters, and restart with a single `docker compose up -d` command.
+Compose keeps me from juggling long `docker run` commands. The service is described in YAML, restart is one `docker compose up -d`, and the config can live in git.
 
 ---
 
@@ -413,11 +407,12 @@ services:
       - TZ=Europe/Berlin
 ```
 
-**What each option does:**
-* `shm_size: "512mb"` — Frigate stores frames in shared memory for detection. For 2–4 720p cameras, 256–512 MB is enough; if insufficient, you'll get a "Bus error".
-* `volumes` — directory bindings: `config` for settings and DB, `media` for recordings and clips, `db` for SQLite. `localtime` is needed for correct timestamps in logs and metadata.
-* `8971` — Web UI and API (with auth). `8554` — RTSP restream for cameras. `8555` — WebRTC for two-way communication with cameras.
-* `TZ` — timezone for correct event time display.
+What's what:
+
+* `shm_size: "512mb"` — Frigate keeps frames in shared memory for detection. For 2–4 cameras at 720p, 256–512 MB is enough. Less and you'll hit "Bus error".
+* `volumes` — `config` for settings, `media` for recordings, `db` for SQLite. `localtime` keeps log and metadata timestamps in sync with the system.
+* `8971` — Web UI and API. `8554` — RTSP restream. `8555` — WebRTC for two-way audio.
+* `TZ` — timezone for event timestamps.
 
 ---
 
@@ -440,7 +435,7 @@ record:
 cameras: {}
 ```
 
-**Why this config:** Minimal config for first run. MQTT is disabled — it's only needed for Home Assistant integration. `record` enables recording with 3-day retention in `all` mode (all frames, not just on detection). `cameras: {}` is empty — add cameras later via Web UI or manually in the config, specifying the RTSP path via NetBird IP (e.g., `rtsp://100.64.0.5:554/stream1`).
+Minimum for the first run. MQTT off — that's only useful with Home Assistant. `record` writes in `all` mode (every frame, not just on detection) with 3-day retention. `cameras: {}` is empty for now — cameras get added later via the Web UI or by hand in the config with an RTSP URL through the NetBird IP, e.g. `rtsp://100.64.0.5:554/stream1`.
 
 ---
 
@@ -458,7 +453,7 @@ Verify:
 docker ps
 ```
 
-**Why `-d`:** The `-d` (detached) flag runs the container in the background. Without it, the terminal would be occupied by Frigate logs. The container keeps running after closing SSH.
+`-d` runs the container in the background — the terminal isn't tied up by logs, and the container keeps running after I close SSH.
 
 ---
 
@@ -480,7 +475,7 @@ Login:
 admin
 ```
 
-**Why:** On first run, Frigate generates a random password and prints it in the logs. This protects the Web UI from unauthorized access. You can change the password in settings after logging in.
+On the first run Frigate generates a random password and dumps it in the logs. You can change it in settings after logging in.
 
 ---
 
@@ -490,7 +485,7 @@ admin
 http://SERVER_IP:8971
 ```
 
-**Why:** The Web UI is Frigate's main interface: live camera view, zone and mask configuration, event and recording playback, adding cameras. Make sure port 8971 is open in Yandex Cloud Security Groups for your IP, otherwise external access will be blocked.
+The Web UI is Frigate's main interface: live view, zones, masks, events, recordings, adding cameras. Make sure port 8971 is open in Yandex Cloud Security Groups for your IP, otherwise you won't reach it from outside.
 
 ---
 
@@ -500,7 +495,7 @@ http://SERVER_IP:8971
 ls /data/frigate/media
 ```
 
-**Why:** Verify that Frigate writes to the separate disk. In `media/recordings`, directories will appear by camera and date. If cameras aren't added yet, directories will be empty — that's normal. The main thing is that the path is mounted and writable.
+A check that Frigate is actually writing to the separate disk. `media/recordings` will fill with directories by camera and date. With no cameras yet, the directories stay empty — that's fine, what matters is that the path is mounted and writable.
 
 ---
 
@@ -514,14 +509,10 @@ ls /data/frigate/media
  └── docker-compose.yml
 ```
 
-**Directory purposes:** `config` — config and SQLite with events; `media` — recordings, clips, and exports; `db` — additional Frigate data; `docker-compose.yml` — service description for restart and updates.
+`config` — config and the SQLite with events. `media` — recordings, clips, exports. `db` — extra Frigate data. `docker-compose.yml` — the service description for restarts and updates.
 
 ---
 
 # Done
 
-Frigate is now running on Yandex Cloud with access to home cameras via NetBird.
-
-Video is stored on a separate disk.
-
-The system is ready for production use.
+Frigate is running on Yandex Cloud, reaching home cameras via NetBird, recordings are on the separate disk. From here it's adding cameras and tuning zones and masks in the Web UI.

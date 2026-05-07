@@ -1,5 +1,5 @@
 ---
-title: "macOS defaults: System Tuning with defaults write"
+title: "macOS defaults: system tuning with defaults write"
 date: 2025-02-15T12:00:00+03:00
 draft: false
 summary: "Examples of macOS settings via defaults write: Finder, Dock, screenshots, keyboard, trackpad, and Mission Control. Ready-to-run script included."
@@ -7,9 +7,9 @@ categories: ["Technology"]
 tags: ["macos", "defaults", "finder", "dock", "setup", "script", "terminal", "trackpad", "keyboard"]
 ---
 
-Many macOS settings are not exposed in System Settings but can be changed with the **`defaults write`** command in the terminal. That’s handy when moving to a new Mac or automating setup: one script and Finder, Dock, screenshots, and keyboard behave the way you want.
+Half of the macOS settings I want aren’t in System Settings — but they’re there, behind `defaults write` in the terminal. Handy when setting up a new Mac: one script and Finder, Dock, screenshots, and the keyboard behave the way I want.
 
-This post is a ready-made script with short explanations of what each option does. Full reference: [macos-defaults.com](https://macos-defaults.com/).
+Below is my script with short comments. Full key reference: [macos-defaults.com](https://macos-defaults.com/).
 
 ## Contents
 
@@ -145,7 +145,7 @@ defaults write -g NSAutomaticPeriodSubstitutionEnabled -bool false
 
 ## Trackpad
 
-**Three-finger drag** — drag windows or selected text with three fingers without enabling “Drag Lock”. Handy if you prefer not to “click and drag”.
+**Three-finger drag** — drag a window or selected text with three fingers, no drag lock. Without this you have to click first and then drag, which always annoyed me.
 
 ```bash
 # Three-finger drag (no drag lock)
@@ -192,7 +192,7 @@ defaults write -g NSQuitAlwaysKeepsWindows -bool false
 
 ## Full script and how to apply
 
-The script below combines all the settings above. Run: `./macos-defaults-examples.sh` (make it executable first: `chmod +x macos-defaults-examples.sh`). Or copy the blocks you need into your own script.
+The script below collects all the settings above. Run: `./macos-defaults-examples.sh` (`chmod +x` it first). Or copy the blocks you need into your own script.
 
 ```bash
 #!/usr/bin/env bash
@@ -250,10 +250,10 @@ defaults write -g NSQuitAlwaysKeepsWindows -bool false
 echo "Done. Restart Finder and Dock: killall Finder Dock"
 ```
 
-After running the script, restart Finder and Dock so changes take effect:
+After that, restart Finder and Dock:
 
 ```bash
 killall Finder Dock
 ```
 
-Some options (e.g. trackpad) may require logging out or rebooting. Full reference for keys and values: [macos-defaults.com](https://macos-defaults.com/).
+Some options (trackpad, for one) only kick in after a logout or reboot. Full key reference: [macos-defaults.com](https://macos-defaults.com/).
