@@ -1,5 +1,6 @@
 ---
 title: "Changes in Russian information security legislation in 2026"
+slug: "izmeneniya-zakonodatelstva-ib-2026"
 date: 2026-02-14T00:00:00+03:00
 draft: false
 summary: "What’s changing in 2026: FSTEC Order No.117 replacing No.17, CII (critical information infrastructure), personal data, licensing. Why costs will rise and how to get ready."

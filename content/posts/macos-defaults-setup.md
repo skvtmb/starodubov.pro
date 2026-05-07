@@ -1,5 +1,6 @@
 ---
 title: "macOS defaults: настройка системы через defaults write"
+slug: "macos-defaults-setup"
 date: 2025-02-15T12:00:00+03:00
 draft: false
 summary: "Примеры настроек macOS через команды defaults write: Finder, Dock, скриншоты, клавиатура, трекпад и Mission Control. Готовый скрипт для применения."

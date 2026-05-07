@@ -1,5 +1,6 @@
 ---
 title: "Ghostty + tmux + Neovim: полная настройка окружения (Gruvbox)"
+slug: "ghostty-tmux-nvim-setup"
 date: 2025-02-14T12:00:00+03:00
 draft: false
 summary: "Как я собрал DevOps-окружение на Ghostty, tmux, zsh и Neovim с темой Gruvbox: конфиги, плагины, шорткаты."

@@ -1,5 +1,6 @@
 ---
 title: "Fintech Compliance: My Experience with Regulations"
+slug: "komplaens-v-fintehe-moj-opyt-raboty-s-normativkoj"
 date: 2025-01-11T00:00:00+03:00
 draft: false
 summary: "How I worked through Bank of Russia requirements, GOST standards and PCI DSS, and what came out of it."

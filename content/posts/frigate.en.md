@@ -1,5 +1,6 @@
 ---
 title: "Complete guide: installing Frigate on Yandex Cloud with NetBird"
+slug: "frigate"
 date: 2025-02-14T00:00:00+03:00
 draft: false
 summary: "Setting up Frigate NVR on Yandex Cloud: NetBird VPN to home cameras, Docker, a separate disk for recordings."

@@ -1,5 +1,6 @@
 ---
 title: "Установленные приложения на моём MacBook"
+slug: "ustanovlennye-prilozheniya-na-moem-macbook"
 date: 2025-01-11T00:00:00+03:00
 draft: false
 summary: "Список приложений на моём MacBook: команды Homebrew, краткие описания, ссылки на официальные сайты."

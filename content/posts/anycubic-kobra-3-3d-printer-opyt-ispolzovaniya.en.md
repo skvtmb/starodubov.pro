@@ -1,5 +1,6 @@
 ---
 title: "Anycubic Kobra 3: a 3D printer that turned out more useful than I thought"
+slug: "anycubic-kobra-3-3d-printer-opyt-ispolzovaniya"
 date: 2025-02-11T00:00:00+03:00
 draft: false
 summary: "Bought a 3D printer just to try it. Turned out very useful. Birthday lizards, filament, a broken sensor, a 300-ruble fix."
