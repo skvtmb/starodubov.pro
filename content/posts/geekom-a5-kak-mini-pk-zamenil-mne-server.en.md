@@ -1,5 +1,6 @@
 ---
 title: "GEEKOM A5: How a Mini PC Replaced My Server"
+slug: "geekom-a5-kak-mini-pk-zamenil-mne-server"
 date: 2025-01-11T00:00:00+03:00
 draft: false
 summary: "How I dumped a bulky home server and replaced it with a compact GEEKOM A5. What was wrong with the old build, how I picked a replacement, and how it ended up."

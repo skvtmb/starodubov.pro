@@ -1,5 +1,6 @@
 ---
 title: "Yekaterinburg in February: Winter Photography with Canon EOS R8 and RF 28mm"
+slug: "ekaterinburg-fevral-2026-foto"
 date: 2026-02-15T12:00:00+05:00
 draft: false
 summary: "A winter walk through Yekaterinburg with the Canon EOS R8 and RF 28mm — Church on the Blood, Plotinka dam, street art, Yeltsin Center, and the embankment. The city’s contrasts and my shooting experience."

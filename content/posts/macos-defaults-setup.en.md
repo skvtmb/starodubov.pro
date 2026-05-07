@@ -1,5 +1,6 @@
 ---
 title: "macOS defaults: system tuning with defaults write"
+slug: "macos-defaults-setup"
 date: 2025-02-15T12:00:00+03:00
 draft: false
 summary: "Examples of macOS settings via defaults write: Finder, Dock, screenshots, keyboard, trackpad, and Mission Control. Ready-to-run script included."

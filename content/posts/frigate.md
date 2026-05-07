@@ -1,5 +1,6 @@
 ---
 title: "Полный гайд: установка Frigate на Yandex Cloud с NetBird"
+slug: "frigate"
 date: 2025-02-14T00:00:00+03:00
 draft: false
 summary: "Поднимаю Frigate NVR на Yandex Cloud: NetBird VPN до домашних камер, Docker, отдельный диск под записи."

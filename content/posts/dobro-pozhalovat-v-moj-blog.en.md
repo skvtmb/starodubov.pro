@@ -1,5 +1,6 @@
 ---
 title: "Welcome to my blog"
+slug: "dobro-pozhalovat-v-moj-blog"
 date: 2025-01-10T00:00:00+03:00
 draft: false
 summary: "First post: what I'll write about and why it might be useful to you"

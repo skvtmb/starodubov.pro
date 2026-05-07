@@ -1,5 +1,6 @@
 ---
 title: "Nina Zvereva's book: The Magic of Communication"
+slug: "kniga-niny-zverevoj-magiya-obshcheniya"
 date: 2025-01-11T00:00:00+03:00
 draft: false
 summary: "Notes on Nina Zvereva's book 'The Magic of Communication. This Can Be Learned!' — what I took from it and which techniques I actually use."

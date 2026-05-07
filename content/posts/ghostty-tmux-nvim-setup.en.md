@@ -1,5 +1,6 @@
 ---
 title: "Ghostty + tmux + Neovim: full environment setup (Gruvbox)"
+slug: "ghostty-tmux-nvim-setup"
 date: 2025-02-14T12:00:00+03:00
 draft: false
 summary: "Building a DevOps setup on Ghostty, tmux, zsh, and Neovim with the Gruvbox theme: configs, plugins, hotkeys."
