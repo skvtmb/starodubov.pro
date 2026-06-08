@@ -1,23 +1,21 @@
 ---
 dismissible: true
-date: 2025-01-10
+date: 2026-05-17
 title: "Home"
+aliases:
+  - /about/
 ---
 
-**Blog About Security, Compliance, and Photography**
+## About me
 
-I write about building information security in fintech that works in practice, not just on paper.
+I'm **Konstantin Starodubov**. Based in Moscow. PhD in technical sciences.
 
-## Main Topics
+I work professionally in information security and identification technologies. Previously at the Information Security Department of the Bank of Russia, currently leading the InfoSec compliance team at **Yandex's fintech**.
 
-**Information Security**  
-Practical approaches to protecting products and systems. How to implement security requirements without slowing down development.
+Published research on biometrics, gave talks on Open API security.
 
-**Fintech Compliance**  
-Standards and regulatory requirements: how to apply them to genuinely improve security levels.
+I teach at **HSE — MIEM (Tikhonov Moscow Institute of Electronics and Mathematics)**, associate professor at the Department of Information Security of Cyber-Physical Systems. Master's-level courses in the 10.04.01 "Information Security" programme: *"Securing Banking Information Systems"* and *"Regulatory Framework for Information Security"*. I also supervise graduate research [(HSE profile)](https://www.hse.ru/en/staff/STARODUBOV/).
 
-**Experience and Case Studies**  
-Stories from working at the Bank of Russia and Yandex. What works and what doesn't.
+My position is simple: security should work in practice, not just on paper. I help companies build requirements and processes that **actually reduce risk without slowing the product down**.
 
-**Photography**  
-Occasionally—notes about my favorite hobby and shots from personal projects.
+Outside of work: photography (Canon EOS R8), 3D printing, and running a small "home tech lab".

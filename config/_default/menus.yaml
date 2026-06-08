@@ -1,9 +1,19 @@
 main:
+  - name: nav.home
+    pageRef: /
+    weight: 10
+    params:
+      icon: home
   - name: nav.posts
     pageRef: /posts
     weight: 20
     params:
       icon: posts
+  - name: nav.now
+    pageRef: /now
+    weight: 25
+    params:
+      icon: book-open
   - name: nav.categories
     pageRef: /categories
     weight: 30
@@ -14,24 +24,14 @@ main:
     weight: 40
     params:
       icon: tags
-  - name: nav.archives
-    pageRef: /archives
-    weight: 50
-    params:
-      icon: archive
-  - name: nav.about
-    pageRef: /about
+  - name: nav.contact
+    url: mailto:xaku68@gmail.com
     weight: 60
     params:
-      icon: about
+      icon: contact
 
 # footer menu
 footer:
-  - name: nav.about
-    pageRef: /about
-    weight: 10
-    params:
-      icon: about
   - name: nav.contact
     url: mailto:xaku68@gmail.com
     weight: 20
@@ -60,4 +60,9 @@ social:
     weight: 30
     params:
       icon: email
+  - name: НИУ ВШЭ
+    url: https://www.hse.ru/staff/STARODUBOV/
+    weight: 40
+    params:
+      icon: library
 

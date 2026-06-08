@@ -1,4 +1,5 @@
 nav:
+  home: "Главная"
   posts: "Статьи"
   projects: "Проекты"
   categories: "Категории"
@@ -6,6 +7,25 @@ nav:
   archives: "Архивы"
   about: "О сайте"
   contact: "Контакты"
+  now: "Сейчас"
 
 footer:
   rss_feed: "RSS лента"
+
+a11y:
+  skip_to_content: "Перейти к содержимому"
+
+search:
+  label: "Поиск по статьям"
+  placeholder: "Поиск статей..."
+
+home:
+  now_title: "now"
+  now_title_long: "Сейчас"
+  now_more: "подробнее →"
+  now_updated: "Обновлено"
+  topics_title: "О чём этот блог"
+  recent_posts: "Свежие статьи"
+  services_title: "Мои сильные стороны"
+  services_cta: "Обсудить задачу"
+  sections_title: "Разделы сайта"

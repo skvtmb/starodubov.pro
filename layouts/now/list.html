@@ -1,0 +1,19 @@
+{{ define "main" }}
+<article class="mx-auto max-w-3xl px-4 py-12">
+  <header class="mb-8">
+    <p class="text-muted-foreground text-sm mb-2">
+      <span class="text-primary">/</span>now
+    </p>
+    <h1 class="text-foreground text-4xl font-bold tracking-tight mb-3">{{ .Title }}</h1>
+    {{- with .Date }}
+    <p class="text-muted-foreground text-sm">
+      {{ i18n "home.now_updated" | default "Обновлено" }}:
+      <time datetime="{{ .Format "2006-01-02" }}">{{ .Format "2 January 2006" }}</time>
+    </p>
+    {{- end }}
+  </header>
+  <div class="prose dark:prose-invert max-w-none prose-headings:font-semibold prose-h2:text-xl prose-h2:mt-8 prose-h2:mb-3 prose-a:text-primary prose-a:no-underline hover:prose-a:underline">
+    {{ .Content }}
+  </div>
+</article>
+{{ end }}

@@ -69,7 +69,8 @@
 {{- $publisher := dict "@type" "Organization" "name" site.Title "logo" (dict "@type" "ImageObject" "url" $logo) -}}
 {{- $ld := dict -}}
 {{- if .IsPage -}}
-  {{- $author := dict "@type" "Person" "name" site.Params.defaultAuthor "url" (printf "%s/about/" $baseURL) -}}
+  {{- /* Posts → BlogPosting */ -}}
+  {{- $authorObj := dict "@type" "Person" "name" site.Params.defaultAuthor "url" $baseURL -}}
   {{- $mainEntity := dict "@type" "WebPage" "@id" .Permalink -}}
   {{- $ld = dict
     "@context" "https://schema.org"
@@ -79,13 +80,41 @@
     "datePublished" (.PublishDate.Format "2006-01-02T15:04:05Z07:00")
     "dateModified" (.Lastmod.Format "2006-01-02T15:04:05Z07:00")
     "mainEntityOfPage" $mainEntity
-    "author" $author
+    "author" $authorObj
     "publisher" $publisher
   -}}
   {{- if $image -}}
     {{- $ld = merge $ld (dict "image" $image) -}}
   {{- end -}}
+{{- else if .IsHome -}}
+  {{- /* Home → Person (vcard) для Knowledge Panel */ -}}
+  {{- $sameAs := slice -}}
+  {{- with site.Params.author.social -}}
+    {{- range . -}}
+      {{- if hasPrefix .url "http" -}}
+        {{- $sameAs = $sameAs | append .url -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+  {{- $personImg := printf "%s/images/portrait.jpg" $baseURL -}}
+  {{- $authorName := site.Params.author.name | default site.Params.defaultAuthor -}}
+  {{- $ld = dict
+    "@context" "https://schema.org"
+    "@type" "Person"
+    "name" $authorName
+    "url" site.BaseURL
+    "image" $personImg
+    "description" (site.Params.author.description | default $description)
+    "jobTitle" (site.Params.author.title | default "")
+    "worksFor" (dict "@type" "Organization" "name" "Яндекс" "url" "https://yandex.ru/")
+    "memberOf" (dict "@type" "EducationalOrganization" "name" "НИУ ВШЭ, МИЭМ им. А. Н. Тихонова" "url" "https://miem.hse.ru/")
+    "alumniOf" (dict "@type" "EducationalOrganization" "name" "Банк России")
+    "knowsAbout" (slice "Информационная безопасность" "Комплаенс" "Финтех" "Биометрия" "PCI DSS" "ГОСТ 57580" "ISO 27001")
+    "sameAs" $sameAs
+    "publisher" $publisher
+  -}}
 {{- else -}}
+  {{- /* Section/list pages → WebSite */ -}}
   {{- $ld = dict
     "@context" "https://schema.org"
     "@type" "WebSite"

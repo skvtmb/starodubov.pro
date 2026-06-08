@@ -1,4 +1,5 @@
 nav:
+  home: "Home"
   posts: "Posts"
   projects: "Projects"
   categories: "Categories"
@@ -6,6 +7,25 @@ nav:
   archives: "Archives"
   about: "About"
   contact: "Contact"
+  now: "Now"
 
 footer:
   rss_feed: "RSS Feed"
+
+a11y:
+  skip_to_content: "Skip to content"
+
+search:
+  label: "Search posts"
+  placeholder: "Search posts..."
+
+home:
+  now_title: "now"
+  now_title_long: "Now"
+  now_more: "more →"
+  now_updated: "Updated"
+  topics_title: "What this blog is about"
+  recent_posts: "Recent posts"
+  services_title: "What I'm good at"
+  services_cta: "Get in touch"
+  sections_title: "Site sections"

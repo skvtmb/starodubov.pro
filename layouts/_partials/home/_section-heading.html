@@ -1,0 +1,23 @@
+{{/* Универсальный заголовок секции на главной.
+     Params:
+       title    — заголовок
+       eyebrow  — мелкая надпись над заголовком (опционально)
+       cta      — { text, url } справа (опционально)
+*/}}
+{{- $title := .title -}}
+{{- $eyebrow := .eyebrow -}}
+{{- $cta := .cta -}}
+<header class="mb-8 flex items-end justify-between gap-4">
+  <div class="min-w-0">
+    {{- with $eyebrow }}
+    <p class="text-primary text-xs font-medium uppercase tracking-wider mb-1">{{ . }}</p>
+    {{- end }}
+    <h2 class="text-foreground text-2xl md:text-3xl font-bold tracking-tight">{{ $title }}</h2>
+  </div>
+  {{- with $cta }}
+  <a href="{{ .url }}"
+     class="text-muted-foreground hover:text-primary text-sm font-medium whitespace-nowrap transition-colors hidden md:inline">
+    {{ .text }} →
+  </a>
+  {{- end }}
+</header>

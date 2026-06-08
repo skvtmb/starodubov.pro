@@ -32,6 +32,9 @@ author:
     - name: "Email"
       url: "mailto:xaku68@gmail.com"
       icon: "email"
+    - name: "НИУ ВШЭ"
+      url: "https://www.hse.ru/staff/STARODUBOV/"
+      icon: "library"
 
 # Header configuration (modularized)
 header:
@@ -106,14 +109,19 @@ themes:
 
 # Home page configuration
 home:
-  recentPostsCount: 5  # Number of recent posts to show on the home page
+  recentPostsCount: 3  # На главной показываем 3 свежих, остальное на /posts/
 
-  # Content order configuration - customize the order of home page sections
-  # Available sections: author-section, recent-posts, featured-projects, page-content
-  # You can add your custom content by creating files in `layouts/_partials/home/` folder, then add it to the list
+  # Vcard-структура главной:
+  #   vcard-hero    — портрет + имя + роль + CTA
+  #   page-content  — описание из content/_index.md
+  #   services      — 5 карточек "Чем могу помочь"
+  #   section-tiles — быстрый доступ к /posts /now /categories /tags
+  #   recent-posts  — 3 последних поста
   contentOrder:
-    - author-section
+    - vcard-hero
     - page-content
+    - services
+    - section-tiles
     - recent-posts
 
 
@@ -173,7 +181,7 @@ comments:
 
 # Analytics
 analytics:
-  enabled: false
+  enabled: true
   baidu:
     enabled: false
     id: "your-baidu-analytics-id"
@@ -188,10 +196,25 @@ analytics:
     id: "your-umami-website-id"
     src: "https://umami.com/myscript.js"
     domains: "example.domain.com"
+  yandex:
+    enabled: true
+    id: 109105668
+    ssr: true
+    accurateTrackBounce: true
+    clickmap: true
+    trackLinks: true
+    webvisor: true
+    ecommerce: true
+    informer:
+      enabled: true          # видимый счётчик в футере
+      type: "pageviews"      # pageviews | visits | visitors
+      lang: "ru"
 
 # KaTeX
+# Глобально выключен — грузил 280 KB render-blocking на каждой странице.
+# Чтобы включить в конкретном посте, добавь в frontmatter: `katex: true`
 katex:
-  enabled: true
+  enabled: false
   delimiters:
     - left: "$$"
       right: "$$"

@@ -1,0 +1,94 @@
+{{/* Vcard hero: фокус — портрет и identity. Description вынесен в about-section. */}}
+{{- $author := site.Params.author -}}
+{{- $portrait := "/images/portrait.jpg" -}}
+{{- $hasPortrait := fileExists "static/images/portrait.jpg" -}}
+{{- $initials := substr ($author.name | default site.Title) 0 1 | upper -}}
+{{- $isRu := eq site.Language.Lang "ru" -}}
+{{- $badges := slice -}}
+{{- if $isRu -}}
+  {{- $badges = slice
+    (dict "icon" "💼" "text" "Финтех Яндекса")
+    (dict "icon" "🎓" "text" "Доцент НИУ ВШЭ")
+    (dict "icon" "📍" "text" "Москва")
+  -}}
+{{- else -}}
+  {{- $badges = slice
+    (dict "icon" "💼" "text" "Yandex fintech")
+    (dict "icon" "🎓" "text" "HSE associate professor")
+    (dict "icon" "📍" "text" "Moscow")
+  -}}
+{{- end -}}
+<section class="vcard-hero mb-16 pt-2 md:pt-6">
+  <div class="grid grid-cols-1 md:grid-cols-[auto_1fr] gap-8 md:gap-12 items-center">
+    <!-- Портрет -->
+    <div class="shrink-0 mx-auto md:mx-0">
+      {{- if $hasPortrait }}
+      {{- $hasAvif := fileExists "static/images/portrait.avif" -}}
+      <div class="relative w-48 h-60 md:w-64 md:h-80 overflow-hidden rounded-2xl ring-1 ring-border shadow-xl bg-muted">
+        <picture>
+          {{- if $hasAvif }}
+          <source srcset="/images/portrait.avif" type="image/avif" />
+          {{- end }}
+          <img
+            src="{{ $portrait }}"
+            alt="{{ $author.name | default site.Title }}"
+            width="512" height="640"
+            loading="eager"
+            decoding="async"
+            fetchpriority="high"
+            class="w-full h-full object-cover" />
+        </picture>
+      </div>
+      {{- else }}
+      <div class="relative w-48 h-60 md:w-64 md:h-80 rounded-2xl ring-1 ring-border shadow-xl bg-gradient-to-br from-primary/30 via-primary/10 to-muted flex items-center justify-center">
+        <div class="text-center px-4">
+          <div class="text-7xl md:text-8xl font-bold text-primary/50 mb-2 leading-none">{{ $initials }}</div>
+          <p class="text-muted-foreground text-xs">
+            put <code class="text-foreground bg-muted px-1 rounded">static/images/portrait.jpg</code>
+          </p>
+        </div>
+      </div>
+      {{- end }}
+    </div>
+
+    <!-- Identity -->
+    <div class="flex flex-col text-center md:text-left">
+      <h1 class="text-foreground text-4xl md:text-5xl font-bold tracking-tight mb-2 leading-[1.1]">
+        {{- $author.name | default site.Title -}}
+      </h1>
+      {{- with $author.title }}
+      <p class="text-muted-foreground text-lg md:text-xl mb-5 leading-snug">{{ . }}</p>
+      {{- end }}
+
+      <!-- Метаданные -->
+      <div class="flex flex-wrap justify-center md:justify-start gap-2 mb-6">
+        {{- range $badges }}
+        <span class="bg-muted text-muted-foreground inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium">
+          <span aria-hidden="true">{{ .icon }}</span>
+          <span>{{ .text }}</span>
+        </span>
+        {{- end }}
+      </div>
+
+      <!-- CTA -->
+      {{- with $author.social }}
+      <div class="flex flex-wrap justify-center md:justify-start gap-2.5">
+        {{- range . }}
+        {{- $sName := .name -}}
+        {{- $sUrl := .url -}}
+        {{- $sIcon := .icon -}}
+        {{- $isPrimary := eq $sName "Email" -}}
+        <a
+          href="{{ $sUrl }}"
+          {{ if hasPrefix $sUrl "http" }}target="_blank" rel="noopener noreferrer"{{ end }}
+          class="{{ if $isPrimary }}bg-foreground text-background hover:bg-foreground/90{{ else }}bg-card border border-border text-foreground hover:bg-muted hover:border-foreground/40{{ end }} inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium transition-all duration-200 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:ring-offset-2 focus:ring-offset-background"
+          title="{{ $sName }}">
+          {{- with $sIcon }}{{ partial "features/icon.html" (dict "name" . "size" "sm" "ariaLabel" "") }}{{ end }}
+          <span>{{ $sName }}</span>
+        </a>
+        {{- end }}
+      </div>
+      {{- end }}
+    </div>
+  </div>
+</section>
