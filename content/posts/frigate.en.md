@@ -15,7 +15,7 @@ cover:
 ![Frigate NVR — AI-powered video surveillance system](/images/frigate/frigate-logo.svg "Frigate NVR")
 *Logo: [frigate.video](https://frigate.video)*
 
-# Complete guide: installing Frigate on Yandex Cloud with home network access via NetBird
+## Complete guide: installing Frigate on Yandex Cloud with home network access via NetBird
 
 I'm running Frigate on a VM in Yandex Cloud. Recordings go to a separate disk, and the server reaches my home cameras over NetBird VPN. Below is how I did it, step by step.
 
@@ -31,7 +31,7 @@ In the guide:
 
 ---
 
-# Architecture
+## Architecture
 
 ![Yandex Cloud — cloud platform](/images/frigate/yandex-cloud.svg "Yandex Cloud")
 *Logo: [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Yandex_Cloud_logo.svg)*
@@ -58,7 +58,7 @@ Yandex Cloud VM
 
 ---
 
-# Part 1. NetBird setup
+## Part 1. NetBird setup
 
 NetBird ([netbird.io](https://netbird.io)) is used to create a secure private network between:
 
@@ -73,7 +73,7 @@ Official site:
 
 ---
 
-# Step 1. Registration and login
+## Step 1. Registration and login
 
 Open:
 
@@ -83,7 +83,7 @@ Create an account or sign in. NetBird Cloud is the control plane for devices and
 
 ---
 
-# Step 2. Creating a Setup Key for the server
+## Step 2. Creating a Setup Key for the server
 
 Go to:
 
@@ -125,7 +125,7 @@ A Setup Key is the join token for a device. It puts the server into the `remote`
 
 ---
 
-# Step 3. Installing NetBird on the Yandex Cloud server
+## Step 3. Installing NetBird on the Yandex Cloud server
 
 Connect to the server:
 
@@ -161,7 +161,7 @@ The server now has a virtual IP in the NetBird network (e.g. `100.64.0.x`) and c
 
 ---
 
-# Step 4. Installing NetBird at home
+## Step 4. Installing NetBird at home
 
 On the home server or computer:
 
@@ -183,7 +183,7 @@ The home device (router, NAS, or PC with cameras) goes into the `Home` group. Gr
 
 ---
 
-# Step 5. Configuring access rules
+## Step 5. Configuring access rules
 
 Go to:
 
@@ -215,7 +215,7 @@ NetBird defaults to Zero Trust: devices can't see each other until you allow it.
 
 ---
 
-# Step 6. Verifying the connection
+## Step 6. Verifying the connection
 
 Get the NetBird IP of the home device:
 
@@ -235,7 +235,7 @@ If ping works, the network is up and RTSP from the cameras will also flow.
 
 ---
 
-# Part 2. Connecting and mounting the disk
+## Part 2. Connecting and mounting the disk
 
 The system disk in Yandex Cloud is usually 10–40 GB — not enough for 24/7 recordings, it'll fill up in a few days. I attached a separate 512 GB disk for `/data/frigate/media`.
 
@@ -254,7 +254,7 @@ vdb 512G
 
 ---
 
-# Step 7. Formatting the disk
+## Step 7. Formatting the disk
 
 ```bash
 sudo mkfs.ext4 /dev/vdb
@@ -264,7 +264,7 @@ A new disk comes raw, without a filesystem. ext4 is the default choice — journ
 
 ---
 
-# Step 8. Mounting
+## Step 8. Mounting
 
 ```bash
 sudo mkdir /data
@@ -281,7 +281,7 @@ df -h
 
 ---
 
-# Step 9. Auto-mounting
+## Step 9. Auto-mounting
 
 Get UUID:
 
@@ -305,7 +305,7 @@ Without this, the disk unmounts on reboot and Frigate stops writing. I use UUID 
 
 ---
 
-# Step 10. Setting permissions
+## Step 10. Setting permissions
 
 ```bash
 sudo mkdir -p /data/frigate/{config,media,db}
@@ -316,7 +316,7 @@ sudo chown -R skv:skv /data/frigate
 
 ---
 
-# Part 3. Installing Docker
+## Part 3. Installing Docker
 
 ![Docker — containerization platform](/images/frigate/docker.png "Docker")
 *Logo: [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Docker_(container_engine)_logo.png)*
@@ -357,7 +357,7 @@ docker ps
 
 ---
 
-# Part 4. Installing Docker Compose
+## Part 4. Installing Docker Compose
 
 ```bash
 sudo apt install docker-compose -y
@@ -373,7 +373,7 @@ Compose keeps me from juggling long `docker run` commands. The service is descri
 
 ---
 
-# Part 5. Installing Frigate
+## Part 5. Installing Frigate
 
 ![Frigate — NVR with AI object detection](/images/frigate/frigate-logo.svg "Frigate NVR")
 
@@ -417,7 +417,7 @@ What's what:
 
 ---
 
-# Part 6. Creating Frigate configuration
+## Part 6. Creating Frigate configuration
 
 ```bash
 nano /data/frigate/config/config.yml
@@ -440,7 +440,7 @@ Minimum for the first run. MQTT off — that's only useful with Home Assistant. 
 
 ---
 
-# Part 7. Starting
+## Part 7. Starting
 
 ```bash
 cd /data/frigate
@@ -458,7 +458,7 @@ docker ps
 
 ---
 
-# Part 8. Getting the password
+## Part 8. Getting the password
 
 ```bash
 docker logs frigate
@@ -480,7 +480,7 @@ On the first run Frigate generates a random password and dumps it in the logs. Y
 
 ---
 
-# Part 9. Accessing the Web UI
+## Part 9. Accessing the Web UI
 
 ```
 http://SERVER_IP:8971
@@ -490,7 +490,7 @@ The Web UI is Frigate's main interface: live view, zones, masks, events, recordi
 
 ---
 
-# Part 10. Verifying recording
+## Part 10. Verifying recording
 
 ```bash
 ls /data/frigate/media
@@ -500,7 +500,7 @@ A check that Frigate is actually writing to the separate disk. `media/recordings
 
 ---
 
-# Structure
+## Structure
 
 ```
 /data/frigate
@@ -514,6 +514,6 @@ A check that Frigate is actually writing to the separate disk. `media/recordings
 
 ---
 
-# Done
+## Done
 
 Frigate is running on Yandex Cloud, reaching home cameras via NetBird, recordings are on the separate disk. From here it's adding cameras and tuning zones and masks in the Web UI.

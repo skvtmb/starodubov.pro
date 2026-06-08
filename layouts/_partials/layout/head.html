@@ -52,6 +52,20 @@
 
 
 <link rel="manifest" href="{{ "site.webmanifest" | absURL }}" />
+
+{{- /* theme-color для мобильной браузерной chrome */}}
+<meta name="theme-color" content="#fafaf9" media="(prefers-color-scheme: light)" />
+<meta name="theme-color" content="#0c0a09" media="(prefers-color-scheme: dark)" />
+
+{{- /* LCP preload: на главной — портрет (AVIF для современных браузеров, JPG fallback) */}}
+{{- if .IsHome }}
+{{- if fileExists "static/images/portrait.avif" }}
+<link rel="preload" as="image" href="/images/portrait.avif" type="image/avif" fetchpriority="high" />
+{{- else }}
+<link rel="preload" as="image" href="/images/portrait.jpg" type="image/jpeg" fetchpriority="high" />
+{{- end }}
+{{- end }}
+
 {{ partial "layout/head/seo.html" . }}
 
 

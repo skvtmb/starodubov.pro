@@ -1,0 +1,55 @@
+{{/* Topic clusters: карточки по основным темам.
+     term — lowercased category name (как ключ в site.Taxonomies.categories) */}}
+{{- $clusters := slice -}}
+{{- if eq site.Language.Lang "ru" -}}
+  {{- $clusters = slice
+    (dict "name" "Информационная безопасность" "term" "информационная безопасность" "icon" "🔒" "tagline" "Практический комплаенс и стандарты")
+    (dict "name" "Финтех" "term" "финтех" "icon" "💳" "tagline" "Регуляторика и опыт Банка России / Яндекса")
+    (dict "name" "Технологии" "term" "технологии" "icon" "🛠" "tagline" "Терминал, серверы, mini-PC, 3D-печать")
+    (dict "name" "Фотография" "term" "фотография" "icon" "📷" "tagline" "Canon EOS R8 и заметки о съёмке")
+  -}}
+{{- else -}}
+  {{- $clusters = slice
+    (dict "name" "Information Security" "term" "information security" "icon" "🔒" "tagline" "Practical compliance and standards")
+    (dict "name" "Fintech" "term" "fintech" "icon" "💳" "tagline" "Regulation and experience from Bank of Russia / Yandex")
+    (dict "name" "Technology" "term" "technology" "icon" "🛠" "tagline" "Terminal, servers, mini-PCs, 3D printing")
+    (dict "name" "Photography" "term" "photography" "icon" "📷" "tagline" "Canon EOS R8 and field notes")
+  -}}
+{{- end -}}
+{{- $cats := index site.Taxonomies "categories" -}}
+<section class="topic-clusters mb-16">
+  {{ partial "home/_section-heading.html" (dict
+    "title" (i18n "home.topics_title" | default "О чём этот блог"))
+  }}
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    {{- range $clusters }}
+      {{- $entry := index $cats .term -}}
+      {{- $count := 0 -}}
+      {{- with $entry }}{{ $count = len .Pages }}{{ end -}}
+      {{- $url := "" -}}
+      {{- with site.GetPage (printf "/categories/%s" .term) }}{{ $url = .RelPermalink }}{{ end -}}
+      {{- if and (gt $count 0) $url }}
+      <a href="{{ $url }}"
+         class="card-interactive group rounded-xl p-5 flex items-start gap-3">
+        <span class="text-2xl shrink-0" aria-hidden="true">{{ .icon }}</span>
+        <div class="flex-1 min-w-0">
+          <h3 class="text-foreground group-hover:text-primary font-semibold transition-colors">{{ .name }}</h3>
+          <p class="text-muted-foreground text-sm mt-1">{{ .tagline }}</p>
+          <p class="text-muted-foreground/70 text-xs mt-2">
+            {{ $count }}
+            {{- if eq site.Language.Lang "ru" -}}
+              {{- if eq $count 1 }} пост
+              {{- else if and (ge $count 2) (le $count 4) }} поста
+              {{- else }} постов
+              {{- end -}}
+            {{- else -}}
+              {{ if eq $count 1 }} post{{ else }} posts{{ end }}
+            {{- end -}}
+          </p>
+        </div>
+        <span class="text-muted-foreground/40 group-hover:text-primary transition-colors self-center">→</span>
+      </a>
+      {{- end }}
+    {{- end }}
+  </div>
+</section>

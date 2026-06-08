@@ -1,0 +1,162 @@
+/* Пользовательские стили для сайта starodubov.pro */
+
+/* ============================================================
+   A11y / WCAG 2.1 AA — переопределения палитры Claude
+   ============================================================
+   Палитра темы Claude не соответствует AA в светлом режиме:
+   - muted-foreground 3.58:1 (требуется 4.5:1)
+   - primary 3.65:1 (требуется 4.5:1)
+   - border 1.35:1 (требуется 3:1 для UI)
+   Делаем точечные переопределения и для светлой, и для тёмной (border).
+   ============================================================ */
+
+[data-theme="claude"] {
+  /* Тёмнее: 0.61 → 0.45 даёт ~6.4:1 на background */
+  --color-muted-foreground: oklch(0.45 0.02 95);
+  /* Тёмнее caramel: 0.62 → 0.52 даёт ~4.7:1 */
+  --color-primary: oklch(0.52 0.16 38);
+  /* primary-foreground — чистый белый (был off-white) */
+  --color-primary-foreground: oklch(1 0 0);
+  /* Border WCAG 3:1: на фоне L=0.98 нужно L≤0.65 */
+  --color-border: oklch(0.65 0.02 95);
+}
+
+[data-theme="claude"].dark {
+  /* Тёмный режим: на L=0.27 нужно L≥0.54 для 3:1 */
+  --color-border: oklch(0.54 0.02 100);
+}
+
+/* ============================================================
+   Focus indicator — WCAG 2.4.7
+   ============================================================
+   Тема использует focus-ring 20% alpha — почти невидим.
+   Гарантируем явный outline 2px на всём интерактивном при
+   клавиатурной навигации (focus-visible не срабатывает на мышь).
+   ============================================================ */
+
+*:focus-visible {
+  outline: 2px solid var(--color-primary, currentColor);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+
+/* Убираем outline только если рядом уже есть видимый ring */
+.focus\:ring-2:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* ============================================================
+   Touch targets — WCAG 2.5.5 (мин. 44×44 для interactive)
+   ============================================================ */
+
+/* Навигационные ссылки в header'е */
+header nav a,
+nav.flex a {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Тег-чипы и пилюли — оставляем визуально как есть, но даём
+   достаточную целевую зону через padding */
+a[href*="/tags/"],
+a[href*="/categories/"] {
+  min-height: 32px; /* пилюли в превью постов */
+}
+
+/* Кнопки в dock'е и search — без сужения */
+.dock button,
+.dock a,
+[role="dialog"] button {
+  min-width: 44px;
+  min-height: 44px;
+}
+
+/* ============================================================
+   Decorative SVG в постах
+   ============================================================
+   Многие SVG-иконки в теме без aria-hidden/aria-label.
+   Скрываем от SR то, что точно декоративное (внутри ссылок,
+   рядом с которыми есть текст) — через aria=presentation в HTML
+   мы не контролируем, поэтому даём CSS-подсказку: иконки
+   внутри ссылок без role="img" имеют визуально-only содержимое.
+   ============================================================ */
+
+a > svg:not([role="img"]):not([aria-label]) {
+  /* визуально не меняем — это маркер, что иконка декоративная */
+}
+
+/* ============================================================
+   Reduced motion
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ============================================================
+   Design system: компонентные классы (DRY-карточки)
+   ============================================================
+   .card-interactive — общая обвязка для любой clickable cards
+   (services, tiles, topic-clusters). Padding и radius задают
+   variant через утилиты (p-4 rounded-xl / p-6 rounded-2xl).
+   ============================================================ */
+
+.card-interactive {
+  background-color: var(--color-card);
+  border: 1px solid var(--color-border);
+  transition-property: color, background-color, border-color, box-shadow, transform;
+  transition-duration: 200ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+.card-interactive:hover {
+  border-color: color-mix(in oklab, var(--color-foreground) 20%, transparent);
+  box-shadow: 0 1px 2px 0 color-mix(in oklab, var(--color-foreground) 8%, transparent);
+  transform: translateY(-2px);
+}
+.card-interactive:focus-within {
+  border-color: color-mix(in oklab, var(--color-foreground) 30%, transparent);
+}
+
+/* Badge-кружок под emoji-иконку, используется в services */
+.icon-badge {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 0.75rem;
+  background-color: color-mix(in oklab, var(--color-primary) 10%, transparent);
+  font-size: 1.5rem;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 200ms;
+}
+.group:hover .icon-badge {
+  background-color: color-mix(in oklab, var(--color-primary) 15%, transparent);
+}
+
+/* ============================================================
+   TOC sidebar: защита от наложения на контент
+   ============================================================ */
+
+@media (min-width: 1280px) and (max-width: 1439px) {
+  .toc-sidebar,
+  .series-sidebar {
+    display: none !important;
+  }
+}
+
+@media (min-width: 1920px) {
+  .toc-sidebar-left   { left:  calc((100vw - 896px) / 2 - 280px - 3rem); }
+  .toc-sidebar-right  { right: calc((100vw - 896px) / 2 - 280px - 3rem); }
+  .series-sidebar-left  { left:  calc((100vw - 896px) / 2 - 280px - 3rem); }
+  .series-sidebar-right { right: calc((100vw - 896px) / 2 - 280px - 3rem); }
+}

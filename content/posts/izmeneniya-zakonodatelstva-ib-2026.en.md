@@ -12,7 +12,7 @@ cover:
   caption: "Regulatory changes in information security (photo: [FLY:D](https://unsplash.com/photos/photo-1563013544-824ae1b704d3) / Unsplash)"
 ---
 
-# Changes in Russian information security legislation in 2026
+## Changes in Russian information security legislation in 2026
 
 2026 rewrites the rules for information protection in Russia. Below is a summary of changes from January, a side-by-side look at FSTEC Order No.117 versus No.17, and what it means for organizations in practice.
 
@@ -20,9 +20,9 @@ cover:
 
 ---
 
-## Overview of regulatory changes in January 2026
+### Overview of regulatory changes in January 2026
 
-### Critical information infrastructure (CII)
+#### Critical information infrastructure (CII)
 
 **Sector-specific categorization rules for CII objects in nuclear energy**
 
@@ -100,7 +100,7 @@ For banks and financial organizations the document provides an algorithm: which 
 - [Government Decree No.92 of 06.02.2026](https://normativ.kontur.ru/document?moduleId=1&documentId=504397) — full text on Kontur.Normativ
 - [Official publication](http://publication.pravo.gov.ru/document/0001202602070010) — Official internet portal of legal information (published 07.02.2026)
 
-### Personal Data
+#### Personal Data
 
 **Biometrics in access control systems**
 
@@ -113,7 +113,7 @@ On January 24, draft amendments to Federal Law No.572-FZ of 29.12.2022 on the us
 
 On January 27, draft amendments to Article 272.1 of the Criminal Code were published. A new offense appears — "automated processing" of unlawfully obtained personal data. Prosecution becomes possible for the processing itself, regardless of what is done with it next. The target is deepfakes used for fraud and blackmail.
 
-### Administrative liability in telecommunications
+#### Administrative liability in telecommunications
 
 On January 15, draft amendments to the Administrative Offenses Code were published:
 
@@ -124,7 +124,7 @@ On January 15, draft amendments to the Administrative Offenses Code were publish
 
 The bill may enter into force on September 1, 2026.
 
-### FSTEC Russia
+#### FSTEC Russia
 
 **Certification of informatization objects**
 
@@ -159,45 +159,45 @@ On January 29, draft amendments to the TIP licensing regulation (Decree No.79 of
 
 ---
 
-## FSTEC Order No.117 vs No.17: what’s different
+### FSTEC Order No.117 vs No.17: what’s different
 
 As of March 1, 2026, Order No.17 is out and No.117 is in. This isn’t a cosmetic update — the underlying regulatory logic changes.
 
-### From checklist to risk-based model
+#### From checklist to risk-based model
 
 **No.17** set a fixed list of requirements. Categorization and choice of measures came from the system type, not from actual threats and consequences.
 
 **No.117** asks you to build protection from a threat model, risks and operating conditions. Two systems of the same type may need different protection levels depending on what happens during an incident. The regulator looks not only at whether measures are in place, but at how well they’re justified and how effective they are.
 
-### Terminology and scope
+#### Terminology and scope
 
 No.117 reworks the terminology. Terms align with Federal Laws 149-FZ, 187-FZ, and subordinate acts. The information security system is now treated as a whole — organizational, software and technical measures together, not separately.
 
-### Classification and protection levels
+#### Classification and protection levels
 
 **No.17:** the protection class effectively defined an exhaustive set of measures.
 
 **No.117:** levels are derived from damage analysis, current threats and architecture. Information security risks are weighed, not just formal criteria.
 
-### Threat and attacker model
+#### Threat and attacker model
 
 **No.17:** threat models were often formal and mainly used during design and certification.
 
 **No.117:** the focus is on threats from remote access, supply chains and human factors. The model has to reflect real attack scenarios.
 
-### Organizational measures
+#### Organizational measures
 
 **No.17:** organizational measures often boiled down to a stack of regulations and orders.
 
 **No.117:** the information security policy is a working document with roles, responsibilities, and decision-making procedures. Requirements for staff training and internal control are stronger.
 
-### Technical and software measures
+#### Technical and software measures
 
 **No.17:** emphasis on having certified protection tools from a list.
 
 **No.117:** focus on outcome — the ability to prevent and detect incidents. Combined solutions are allowed if you can justify effectiveness. Monitoring and logging matter much more.
 
-### New focus areas
+#### New focus areas
 
 No.117 calls out separately:
 
@@ -207,25 +207,25 @@ No.117 calls out separately:
 - protection of virtualization and cloud environments;
 - IoT, container, and orchestration technologies.
 
-### Infrastructure and contractors
+#### Infrastructure and contractors
 
 **No.17** focused on the GIS perimeter. IT infrastructure components outside the perimeter could stay uncertified.
 
 **No.117** extends requirements to the whole IT infrastructure on which GIS run. Contractors must provide certification under the same threat model and class as the customer. That fundamentally changes supply chain requirements.
 
-### Incident response
+#### Incident response
 
 **No.117** sharpens the processes for detection, analysis and remediation of incidents. Event correlation and integrity control tools are required.
 
 ---
 
-## Why costs will rise
+### Why costs will rise
 
-### Expanded scope
+#### Expanded scope
 
 Requirements now apply not only to GIS but also to information systems of government bodies, state unitary enterprises, state institutions and municipal bodies. The definition of GIS itself is broader — any government system where state data is processed.
 
-### New mandatory measures
+#### New mandatory measures
 
 - Mandatory penetration testing for GIS of classes 1 and 2 with internet access.
 - Remote access protection with configuration control, VPN, antivirus, and additional tools.
@@ -233,11 +233,11 @@ Requirements now apply not only to GIS but also to information systems of govern
 - Virtualization requirements: certified solutions or overlay protection tools.
 - Mandatory certification of data center infrastructure for digital transformation of public administration.
 
-### Contractors
+#### Contractors
 
 Contractors have to build certified segments and meet the same requirements as the customer. For many that means new work — consulting, infrastructure upgrades. The pool of suppliers who can pull this off shrinks, and prices go up.
 
-### Market estimates
+#### Market estimates
 
 By market participants’ estimates, implementing solutions in 2025 could save up to 30%. From 2026, expect:
 
@@ -245,39 +245,39 @@ By market participants’ estimates, implementing solutions in 2025 could save u
 - higher certification costs under the new requirements;
 - rising license and certification prices.
 
-### Responsibility
+#### Responsibility
 
 No.117 effectively expands management responsibility. Errors in threat assessment can lead to regulatory and financial risks. Responsibility no longer sits only with the information security department.
 
 ---
 
-## Other 2026 trends
+### Other 2026 trends
 
-### Federal Law 152-FZ (personal data)
+#### Federal Law 152-FZ (personal data)
 
 - Stricter fines (up to millions of rubles).
 - Stronger localization requirements for Russian citizens' personal data.
 - New consent and notification rules for data subjects (from September 1, 2025).
 
-### Federal Law 187-FZ (CII)
+#### Federal Law 187-FZ (CII)
 
 - Exclusion of sole proprietors from CII subjects.
 - Expanded powers of the Russian Government.
 - Requirements for use of domestic software on significant objects.
 - Extension of requirements to contractors and suppliers.
 
-### Antifraud platform and biometrics
+#### Antifraud platform and biometrics
 
 - From March 1, 2026 — launch of GIS to combat cyber fraud (Federal Law 41-FZ).
 - Microfinance organizations must authenticate borrowers by biometrics when concluding consumer loan agreements in electronic form.
 
-### Draft law: fines for CII operation violations
+#### Draft law: fines for CII operation violations
 
 Introduction of Art. 13.12.2 of the Administrative Offenses Code is under consideration: fines for individuals 5–10 thousand rubles, for officials 10–50 thousand rubles, for legal entities 100–500 thousand rubles for violation of CII object operation rules.
 
 ---
 
-## What to do
+### What to do
 
 1. **Run a legal audit** — line current measures up against No.117 and check whether they’re justified by threats and consequences.
 2. **Refresh the threat model** — make sure it covers remote access, supply chains and human factors, with realistic attack scenarios.

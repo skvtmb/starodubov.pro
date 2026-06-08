@@ -12,7 +12,7 @@ Half of the macOS settings I want aren’t in System Settings — but they’re 
 
 Below is my script with short comments. Full key reference: [macos-defaults.com](https://macos-defaults.com/).
 
-## Contents
+### Contents
 
 - Finder
 - Dock
@@ -25,7 +25,7 @@ Below is my script with short comments. Full key reference: [macos-defaults.com]
 
 ---
 
-## Finder
+### Finder
 
 - **Hidden files** — show dotfiles and system files.
 - **File extensions** — show suffix (e.g. `.md`, `.png`).
@@ -60,7 +60,7 @@ defaults write com.apple.finder FXEnableExtensionChangeWarning -bool true
 
 ---
 
-## Dock
+### Dock
 
 - **Auto-hide** — Dock hides off-screen and shows on hover.
 - **Delay** — `0` means no delay when showing/hiding.
@@ -95,7 +95,7 @@ defaults write com.apple.dock show-recents -bool false
 
 ---
 
-## Screenshots
+### Screenshots
 
 - **Format** — `png`, `jpg`, or `pdf`.
 - **Location** — where to save screenshots (e.g. a folder on the Desktop).
@@ -120,7 +120,7 @@ Create the folder if it doesn’t exist: `mkdir -p ~/Desktop/screenshots`.
 
 ---
 
-## Keyboard and global settings (NSGlobalDomain)
+### Keyboard and global settings (NSGlobalDomain)
 
 - **KeyRepeat** — repeat rate when holding a key (lower = faster). Typical values 1–2 for fast repeat.
 - **InitialKeyRepeat** — delay before repeat starts, in milliseconds (15 = short delay).
@@ -144,7 +144,7 @@ defaults write -g NSAutomaticPeriodSubstitutionEnabled -bool false
 
 ---
 
-## Trackpad
+### Trackpad
 
 **Three-finger drag** — drag a window or selected text with three fingers, no drag lock. Without this you have to click first and then drag, which always annoyed me.
 
@@ -156,7 +156,7 @@ defaults write com.apple.AppleMultitouchTrackpad TrackpadThreeFingerDrag -bool t
 
 ---
 
-## Mission Control
+### Mission Control
 
 - **Group by application** — in Mission Control, windows are grouped by app.
 - **Don’t switch Space** — when activating an app, don’t switch to the Space where its window is open.
@@ -171,7 +171,7 @@ defaults write com.apple.dock AppleSpacesSwitchOnActivate -bool false
 
 ---
 
-## Miscellaneous
+### Miscellaneous
 
 - **Restore windows on quit** — `false` means don’t restore windows on next launch (classic behavior).
 - **Quarantine downloaded apps** — disabled in the script (commented out): without quarantine macOS won’t warn about unverified apps (use with care).
@@ -191,7 +191,7 @@ defaults write -g NSQuitAlwaysKeepsWindows -bool false
 
 ---
 
-## Full script and how to apply
+### Full script and how to apply
 
 The script below collects all the settings above. Run: `./macos-defaults-examples.sh` (`chmod +x` it first). Or copy the blocks you need into your own script.
 

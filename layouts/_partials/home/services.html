@@ -1,0 +1,46 @@
+{{/* Сильные стороны: карточки. На lg — 3 колонки, последний ряд центрирован */}}
+{{- $services := slice -}}
+{{- $title := "Мои сильные стороны" -}}
+{{- $ctaText := "Обсудить задачу" -}}
+{{- if eq site.Language.Lang "ru" -}}
+  {{- $services = slice
+    (dict "icon" "💼" "title" "Консалтинг" "body" "Стратегия ИБ и комплаенса. Помогу выстроить требования так, чтобы они работали на практике, а не лежали в отчётах. Дорожная карта по регуляторике, разбор спорных мест.")
+    (dict "icon" "🚀" "title" "Внедрение проектов и стартапов" "body" "ИБ-сопровождение запуска: от первой архитектуры до выхода на регуляторные процедуры. Фокус на финтех и продукты с PII и платёжными данными.")
+    (dict "icon" "🔍" "title" "Аудит и подготовка к аудиту" "body" "Pre-audit по ГОСТ 57580.1, PCI DSS, ISO 27001, требованиям Банка России. Прохожу через процессы и контроли, нахожу узкие места до прихода внешнего аудитора.")
+    (dict "icon" "🛡" "title" "Безопасная разработка" "body" "Постановка SSDLC: SAST, DAST, SCA, threat modeling, security review кода и архитектуры. Безопасность встраивается в процесс разработки, а не тормозит его.")
+    (dict "icon" "🎓" "title" "Преподавание и научное руководство" "body" "Доцент кафедры ИБ киберфизических систем МИЭМ НИУ ВШЭ. Веду магистерские курсы и научное руководство кандидатскими по информационной безопасности и идентификации.")
+  -}}
+{{- else -}}
+  {{- $services = slice
+    (dict "icon" "💼" "title" "Consulting" "body" "Information security and compliance strategy. Building requirements that work in practice rather than sit in reports. Regulatory roadmaps and untangling grey areas.")
+    (dict "icon" "🚀" "title" "Projects and startups" "body" "Security guidance from initial architecture through regulatory procedures. Special focus on fintech and products handling PII or payment data.")
+    (dict "icon" "🔍" "title" "Audit and audit prep" "body" "Pre-audit for GOST 57580.1, PCI DSS, ISO 27001, and Bank of Russia requirements. Walking through your processes and controls, surfacing gaps before an external auditor arrives.")
+    (dict "icon" "🛡" "title" "Secure development" "body" "Setting up SSDLC: SAST, DAST, SCA, threat modeling, code and architecture security reviews. Embedding security into the development process without slowing it down.")
+    (dict "icon" "🎓" "title" "Teaching and academic supervision" "body" "Associate professor at HSE MIEM, Department of Information Security of Cyber-Physical Systems. Master's courses and PhD-level supervision in information security and identification technologies.")
+  -}}
+  {{- $title = "What I'm good at" -}}
+  {{- $ctaText = "Get in touch" -}}
+{{- end -}}
+<section class="services-section mb-16">
+  {{ partial "home/_section-heading.html" (dict
+    "title" (i18n "home.services_title" | default $title)
+    "cta" (dict "text" (i18n "home.services_cta" | default $ctaText) "url" "mailto:xaku68@gmail.com"))
+  }}
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    {{- range $services }}
+    <div class="card-interactive rounded-2xl p-6 flex flex-col">
+      <div class="icon-badge mb-4" aria-hidden="true">
+        {{ .icon }}
+      </div>
+      <h3 class="text-foreground font-semibold text-lg leading-snug mb-2">{{ .title }}</h3>
+      <p class="text-muted-foreground text-sm leading-relaxed">{{ .body }}</p>
+    </div>
+    {{- end }}
+  </div>
+  <div class="mt-6 md:hidden text-center">
+    <a href="mailto:xaku68@gmail.com"
+       class="bg-foreground text-background hover:bg-foreground/90 inline-flex items-center gap-2 rounded-lg px-5 py-2.5 text-sm font-medium transition-colors">
+      {{ i18n "home.services_cta" | default $ctaText }} →
+    </a>
+  </div>
+</section>

@@ -1,0 +1,24 @@
+{{/* Now-блок: тизер /now с парой пунктов. H2 — через общий _section-heading. */}}
+{{- $nowPage := site.GetPage "now" -}}
+{{- if $nowPage -}}
+<section class="now-section mb-16">
+  {{ partial "home/_section-heading.html" (dict
+    "eyebrow" "/now"
+    "title" (i18n "home.now_title_long" | default "Сейчас")
+    "cta" (dict "text" (i18n "home.now_more" | default "подробнее →") "url" $nowPage.RelPermalink))
+  }}
+  <div class="bg-card border border-border rounded-2xl p-6 md:p-8 transition-all duration-200 hover:shadow-sm">
+    <p class="text-muted-foreground text-sm mb-3">
+      {{ i18n "home.now_updated" | default "Обновлено" }}:
+      <time datetime="{{ $nowPage.Date.Format "2006-01-02" }}">{{ $nowPage.Date.Format "2 January 2006" }}</time>
+    </p>
+    <div class="prose dark:prose-invert max-w-none
+                prose-headings:text-foreground prose-headings:font-semibold
+                prose-h2:text-lg prose-h2:mb-2 prose-h2:mt-4
+                prose-p:my-2 prose-p:text-foreground
+                prose-a:text-primary prose-a:no-underline hover:prose-a:underline">
+      {{ $nowPage.Summary | safeHTML }}
+    </div>
+  </div>
+</section>
+{{- end -}}
