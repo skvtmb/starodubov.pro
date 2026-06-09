@@ -2,13 +2,11 @@ baseURL: https://starodubov.pro/
 defaultContentLanguage: ru
 defaultContentLanguageInSubdir: false
 title: Блог Стародубова Константина
-theme: "hugo-narrow"
 
 enableEmoji: true
 
 permalinks:
   posts: /:slug/
-  projects: /projects/:slug/
 
 # pagination
 pagination:
