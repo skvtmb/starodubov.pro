@@ -1,0 +1,12 @@
+name = "Signal"
+license = "MIT"
+licenselink = "https://github.com/"
+description = "Тёмная, смелая тема для личного сайта эксперта: ИБ, комплаенс, блог. Моноширинные акценты, неоновый зелёный, аккуратная типографика."
+homepage = "https://starodubov.pro/"
+demosite = "https://starodubov.pro/"
+tags = ["dark", "personal", "blog", "minimal", "security", "ru"]
+features = ["blog", "taxonomies", "responsive", "rss", "table-of-contents", "reading-time"]
+min_version = "0.128.0"
+
+[author]
+  name = "Signal theme"

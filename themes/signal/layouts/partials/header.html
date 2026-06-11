@@ -1,0 +1,18 @@
+{{- $brandName := site.Params.brandName | default site.Title -}}
+{{- $mark := site.Params.brandMark | default (substr site.Title 0 2) -}}
+<header class="site">
+  <div class="wrap nav">
+    <a class="brand" href="{{ "/" | relLangURL }}"><span class="mark">{{ $mark }}</span><span>{{ $brandName }}</span></a>
+    <nav class="navlinks">
+      {{- range site.Menus.main -}}
+        {{ $active := or ($.IsMenuCurrent "main" .) ($.HasMenuCurrent "main" .) }}
+        <a href="{{ .URL | relLangURL }}"{{ if $active }} class="active"{{ end }}>{{ .Name }}</a>
+      {{- end -}}
+    </nav>
+    <div class="nav-r">
+      {{ if site.Params.showSearchHint }}<div class="kbd"><kbd>⌘</kbd><kbd>K</kbd>Поиск</div>{{ end }}
+      {{ with site.Params.contactEmail }}<a class="cta-sm" href="mailto:{{ . }}">{{ site.Params.contactLabel | default "Написать мне" }}</a>{{ end }}
+    </div>
+    <button class="menu-btn" aria-label="Меню" type="button"><span></span></button>
+  </div>
+</header>

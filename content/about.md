@@ -1,20 +1,8 @@
 ---
 title: "О сайте"
-layout: "about"
-summary: "Узнайте больше о сайте и используемых технологиях"
+description: "Кто я, чем занимаюсь и о чём этот блог."
+eyebrow: "о сайте"
 date: 2025-01-10T00:00:00+03:00
-links:
-  - name: "ВКонтакте"
-    url: "https://vk.com/xakuorg"
-    icon: "https://vk.com/favicon.ico"
-    description: "Мой профиль в ВКонтакте"
-  - name: "Телеграм"
-    url: "https://t.me/SKWTMB"
-    icon: "https://telegram.org/favicon.ico"
-    description: "Связь со мной в Telegram"
-  - name: "Email"
-    url: "mailto:xaku68@gmail.com"
-    description: "Электронная почта: xaku68@gmail.com"
 ---
 
 ## Обо мне
@@ -25,7 +13,7 @@ links:
 
 ### Опыт работы
 
-Работал в Департаменте информационной безопасности Банка России. 
+Работал в Департаменте информационной безопасности Банка России.
 
 Сейчас руковожу группой комплаенса информационной безопасности в финтехе Яндекса.
 
@@ -45,3 +33,7 @@ links:
 Иногда будут появляться заметки о фотографии — это моё главное хобби вне работы.
 
 ## Ссылки
+
+- [ВКонтакте](https://vk.com/xakuorg) — мой профиль
+- [Телеграм](https://t.me/SKWTMB) — связь со мной
+- [Email](mailto:xaku68@gmail.com) — xaku68@gmail.com

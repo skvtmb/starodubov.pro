@@ -15,6 +15,12 @@ NC='\033[0m' # No Color
 # Конфигурация
 BUCKET="starodubov.pro"
 
+# macOS хранит имена файлов в NFD (й = и + ◌̆), а Hugo генерирует ссылки в NFC —
+# без нормализации ключей кириллические URL с «й»/«ё» отдают 404
+nfc_key() {
+    printf '%s' "$1" | /usr/bin/python3 -c 'import sys,unicodedata;sys.stdout.write(unicodedata.normalize("NFC",sys.stdin.read()))'
+}
+
 echo -e "${BLUE}🚀 Деплой сайта starodubov.pro${NC}"
 echo "=================================="
 
@@ -68,7 +74,7 @@ upload_files() {
     if [ "$count" -gt 0 ]; then
         echo "   Найдено файлов: $count"
         find public -name "$pattern" -type f | while read file; do
-            key="${file#public/}"
+            key=$(nfc_key "${file#public/}")
             if yc storage s3api put-object \
                 --bucket "$BUCKET" \
                 --key "$key" \
@@ -95,7 +101,7 @@ upload_files "*.webmanifest" "application/manifest+json" "Загрузка WebMa
 # Загрузка HTML файлов
 echo -e "\n${BLUE}Загрузка HTML файлов${NC}"
 find public -name "*.html" -type f | while read file; do
-    key="${file#public/}"
+    key=$(nfc_key "${file#public/}")
     yc storage s3api put-object \
         --bucket "$BUCKET" \
         --key "$key" \
@@ -108,7 +114,7 @@ echo -e "${GREEN}   ✅ HTML файлы загружены${NC}"
 # Загрузка изображений и других файлов
 echo -e "\n${BLUE}Загрузка остальных файлов${NC}"
 find public -type f ! -name "*.css" ! -name "*.js" ! -name "*.json" ! -name "*.svg" ! -name "*.xml" ! -name "*.webmanifest" ! -name "*.html" | while read file; do
-    key="${file#public/}"
+    key=$(nfc_key "${file#public/}")
     # Определяем MIME-тип по расширению
     case "$file" in
         *.png) content_type="image/png" ;;
@@ -131,6 +137,27 @@ find public -type f ! -name "*.css" ! -name "*.js" ! -name "*.json" ! -name "*.s
 done
 echo ""
 echo -e "${GREEN}   ✅ Остальные файлы загружены${NC}"
+
+# Редиректы со старых адресов /ru/<путь>/ и /en/ (до смены темы сайт жил в подкаталогах языков)
+echo -e "\n${BLUE}Загрузка редиректов /ru/ и /en/${NC}"
+STUBS_DIR=$(mktemp -d)
+find public -name index.html | sed 's|^public/||; s|index.html$||' | while read p; do
+    p_nfc=$(nfc_key "$p")
+    mkdir -p "$STUBS_DIR/ru/$p"
+    printf '<!DOCTYPE html><html lang="ru"><head><meta charset="utf-8"><meta http-equiv="refresh" content="0; url=https://starodubov.pro/%s"><link rel="canonical" href="https://starodubov.pro/%s"><title>Перенаправление</title></head><body><a href="https://starodubov.pro/%s">Страница переехала</a></body></html>' "$p_nfc" "$p_nfc" "$p_nfc" > "$STUBS_DIR/ru/${p}index.html"
+done
+mkdir -p "$STUBS_DIR/en" && cp "$STUBS_DIR/ru/index.html" "$STUBS_DIR/en/index.html"
+find "$STUBS_DIR" -name index.html | while read f; do
+    key=$(nfc_key "${f#$STUBS_DIR/}")
+    yc storage s3api put-object \
+        --bucket "$BUCKET" \
+        --key "$key" \
+        --body "$f" \
+        --content-type "text/html; charset=utf-8" &> /dev/null && echo -n "." || echo -n "!"
+done
+echo ""
+echo -e "${GREEN}   ✅ Редиректы загружены${NC}"
+rm -rf "$STUBS_DIR"
 
 # Проверка MIME-типов критичных файлов
 echo -e "\n${YELLOW}🔍 Проверка MIME-типов...${NC}"

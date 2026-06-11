@@ -1,0 +1,101 @@
+{{ define "progress" }}<div class="progress" id="progress"></div>{{ end }}
+{{ define "main" }}
+{{ $author := site.Params.author }}
+{{ $blog := site.Params.blogSection | default "posts" }}
+{{ $cats := .GetTerms "categories" }}
+{{ $cat := "" }}{{ with $cats }}{{ $cat = index . 0 }}{{ end }}
+
+<div class="art-hero">
+  <div class="wrap">
+    <div class="crumbs">
+      <a href="{{ "/" | relLangURL }}">Главная</a><span class="sep">/</span>
+      <a href="{{ (printf "/%s/" $blog) | relLangURL }}">Статьи</a>
+      {{ with $cat }}<span class="sep">/</span><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a>{{ end }}
+    </div>
+    <div class="art-head">
+      {{ with $cat }}<span class="cat-pill"><span class="dot"></span>{{ .LinkTitle }}</span>{{ end }}
+      <h1 class="title">{{ .Title }}</h1>
+      {{ with .Description }}<p class="dek">{{ . }}</p>{{ end }}
+      <div class="art-meta">
+        <div class="au">
+          <span class="av">{{ with $author.photo }}<img src="{{ . | relURL }}" alt="" onerror="this.remove()">{{ else }}<span>{{ $author.avatarText | default "АА" }}</span>{{ end }}</span>
+          <div>
+            <div class="nm">{{ $author.name | default site.Title }}</div>
+            {{ with $author.role }}<div class="rl">{{ . }}</div>{{ end }}
+          </div>
+        </div>
+        <span class="mdot"></span>
+        <span class="mi">{{ .Date | time.Format ":date_long" }}</span>
+        <span class="mdot"></span>
+        <span class="mi">{{ .ReadingTime }} мин чтения</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="art-wrap">
+    <article class="art-body">
+      {{ if .Fragments.Headings }}
+      <details class="toc-inline" open>
+        <summary>Содержание</summary>
+        <nav>
+          <ul>
+          {{ range .Fragments.Headings }}
+            <li><a href="#{{ .ID }}">{{ .Title }}</a></li>
+          {{ end }}
+          </ul>
+        </nav>
+      </details>
+      {{ end }}
+      {{ .Content }}
+      {{ with .GetTerms "tags" }}
+      <hr>
+      <div class="art-tags">
+        {{ range . }}<a href="{{ .RelPermalink }}">#{{ .LinkTitle }}</a>{{ end }}
+      </div>
+      {{ end }}
+    </article>
+
+    {{/* оглавление показывается в начале статьи (toc-inline);
+         в сайдбаре остаются только кнопки «поделиться» */}}
+    <aside class="toc">
+      <div class="share">
+        {{ with site.Params.shareTelegram }}<a href="{{ . }}" title="Телеграм" target="_blank" rel="noopener">TG</a>{{ end }}
+        {{ with site.Params.shareVK }}<a href="{{ . }}" title="ВКонтакте" target="_blank" rel="noopener">VK</a>{{ end }}
+        <a href="#" title="Скопировать ссылку" onclick="navigator.clipboard&&navigator.clipboard.writeText(location.href);return false;">↗</a>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<section class="author">
+  <div class="wrap">
+    <div class="author-in">
+      <span class="big-av">{{ with $author.photo }}<img src="{{ . | relURL }}" alt="" onerror="this.remove()">{{ else }}<span>{{ $author.avatarText | default "АА" }}</span>{{ end }}</span>
+      <div>
+        <div class="nm">{{ $author.name | default site.Title }}</div>
+        {{ with $author.bio }}<p class="bio">{{ . | markdownify }}</p>{{ end }}
+      </div>
+      {{ with site.Params.contactEmail }}<a class="cta-sm" href="mailto:{{ . }}">Обсудить задачу</a>{{ end }}
+    </div>
+  </div>
+</section>
+
+{{ $related := first 3 (where (where site.RegularPages "Type" $blog) "Permalink" "!=" .Permalink) }}
+{{ with .Site.RegularPages.Related . }}{{ $related = first 3 . }}{{ end }}
+{{ with $related }}
+<section class="related">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">→</span>
+      <span class="sec-title">Читать дальше</span>
+      <a class="all" href="{{ (printf "/%s/" $blog) | relLangURL }}">Все статьи →</a>
+    </div>
+    <div class="post-grid">
+      {{ range . }}{{ partial "post-card.html" . }}{{ end }}
+    </div>
+  </div>
+</section>
+{{ end }}
+{{ end }}

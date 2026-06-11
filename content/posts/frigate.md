@@ -13,7 +13,6 @@ cover:
 
 ![Frigate NVR — система видеонаблюдения с AI](https://frigate.video/images/logo.svg "Frigate NVR")
 
-# Полный гайд: Установка Frigate на Yandex Cloud с подключением к домашней сети через NetBird
 
 Этот гайд описывает полный процесс развертывания системы видеонаблюдения Frigate на сервере в Yandex Cloud с хранением записей на отдельном диске и доступом к домашним камерам через защищённый VPN NetBird.
 
@@ -29,7 +28,7 @@ cover:
 
 ---
 
-# Архитектура
+## Архитектура
 
 ![Yandex Cloud — облачная платформа](https://upload.wikimedia.org/wikipedia/commons/4/40/Yandex_Cloud_logo.svg "Yandex Cloud")
 
@@ -55,7 +54,7 @@ Yandex Cloud VM
 
 ---
 
-# Часть 1. Настройка NetBird
+## Часть 1. Настройка NetBird
 
 ![NetBird — Zero Trust VPN на базе WireGuard](https://worldvectorlogo.com/download/netbird.svg "NetBird")
 
@@ -72,7 +71,7 @@ NetBird используется для создания защищённой п
 
 ---
 
-# Шаг 1. Регистрация и вход
+## Шаг 1. Регистрация и вход
 
 Перейдите:
 
@@ -84,7 +83,7 @@ NetBird используется для создания защищённой п
 
 ---
 
-# Шаг 2. Создание Setup Key для сервера
+## Шаг 2. Создание Setup Key для сервера
 
 Перейдите:
 
@@ -126,7 +125,7 @@ remote
 
 ---
 
-# Шаг 3. Установка NetBird на сервер Yandex Cloud
+## Шаг 3. Установка NetBird на сервер Yandex Cloud
 
 Подключитесь к серверу:
 
@@ -162,7 +161,7 @@ Connected: yes
 
 ---
 
-# Шаг 4. Установка NetBird дома
+## Шаг 4. Установка NetBird дома
 
 На домашнем сервере или компьютере:
 
@@ -184,7 +183,7 @@ Home
 
 ---
 
-# Шаг 5. Настройка правил доступа
+## Шаг 5. Настройка правил доступа
 
 Перейдите:
 
@@ -216,7 +215,7 @@ Allow
 
 ---
 
-# Шаг 6. Проверка соединения
+## Шаг 6. Проверка соединения
 
 Получите NetBird IP домашнего устройства:
 
@@ -238,7 +237,7 @@ ping 100.64.0.5
 
 ---
 
-# Часть 2. Подключение и монтирование диска
+## Часть 2. Подключение и монтирование диска
 
 **Зачем отдельный диск:** Системный диск (vda) в Yandex Cloud обычно 10–40 ГБ — этого мало для видеозаписей. Frigate пишет круглосуточно, и за несколько дней место закончится. Отдельный диск (vdb) на 256–512 ГБ даёт место для хранения записей с настраиваемым сроком хранения.
 
@@ -257,7 +256,7 @@ vdb 512G
 
 ---
 
-# Шаг 7. Форматирование диска
+## Шаг 7. Форматирование диска
 
 ```bash
 sudo mkfs.ext4 /dev/vdb
@@ -267,7 +266,7 @@ sudo mkfs.ext4 /dev/vdb
 
 ---
 
-# Шаг 8. Монтирование
+## Шаг 8. Монтирование
 
 ```bash
 sudo mkdir /data
@@ -284,7 +283,7 @@ df -h
 
 ---
 
-# Шаг 9. Автомонтирование
+## Шаг 9. Автомонтирование
 
 Получаем UUID:
 
@@ -308,7 +307,7 @@ UUID=YOUR_UUID /data ext4 defaults,nofail 0 2
 
 ---
 
-# Шаг 10. Настройка прав
+## Шаг 10. Настройка прав
 
 ```bash
 sudo mkdir -p /data/frigate/{config,media,db}
@@ -319,7 +318,7 @@ sudo chown -R skv:skv /data/frigate
 
 ---
 
-# Часть 3. Установка Docker
+## Часть 3. Установка Docker
 
 ![Docker — платформа контейнеризации](https://upload.wikimedia.org/wikipedia/commons/7/79/Docker_%28container_engine%29_logo.png "Docker")
 
@@ -361,7 +360,7 @@ docker ps
 
 ---
 
-# Часть 4. Установка Docker Compose
+## Часть 4. Установка Docker Compose
 
 ```bash
 sudo apt install docker-compose -y
@@ -377,7 +376,7 @@ docker compose version
 
 ---
 
-# Часть 5. Установка Frigate
+## Часть 5. Установка Frigate
 
 ![Frigate — NVR с AI-детекцией объектов](https://frigate.video/images/logo.svg "Frigate NVR")
 
@@ -420,7 +419,7 @@ services:
 
 ---
 
-# Часть 6. Создание конфигурации Frigate
+## Часть 6. Создание конфигурации Frigate
 
 ```bash
 nano /data/frigate/config/config.yml
@@ -443,7 +442,7 @@ cameras: {}
 
 ---
 
-# Часть 7. Запуск
+## Часть 7. Запуск
 
 ```bash
 cd /data/frigate
@@ -461,7 +460,7 @@ docker ps
 
 ---
 
-# Часть 8. Получение пароля
+## Часть 8. Получение пароля
 
 ```bash
 docker logs frigate
@@ -483,7 +482,7 @@ admin
 
 ---
 
-# Часть 9. Доступ к Web UI
+## Часть 9. Доступ к Web UI
 
 ```
 http://SERVER_IP:8971
@@ -493,7 +492,7 @@ http://SERVER_IP:8971
 
 ---
 
-# Часть 10. Проверка записи
+## Часть 10. Проверка записи
 
 ```bash
 ls /data/frigate/media
@@ -503,7 +502,7 @@ ls /data/frigate/media
 
 ---
 
-# Структура
+## Структура
 
 ```
 /data/frigate
@@ -517,7 +516,7 @@ ls /data/frigate/media
 
 ---
 
-# Готово
+## Готово
 
 Теперь Frigate работает на Yandex Cloud и имеет доступ к домашним камерам через NetBird.
 
