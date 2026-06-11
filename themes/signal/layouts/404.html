@@ -1,0 +1,20 @@
+{{ define "main" }}
+<div class="page-hero">
+  <div class="wrap">
+    <div class="inner">
+      <span class="eyebrow">ошибка 404</span>
+      <h1>Страница не найдена</h1>
+      <div class="lede">Такой страницы нет — возможно, адрес изменился после обновления сайта. Попробуйте начать с главной или списка статей.</div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="list-wrap" style="padding-bottom:90px">
+    <div class="hero-cta">
+      <a class="btn-pri" href="{{ "/" | relLangURL }}">На главную <span>→</span></a>
+      <a class="btn-sec" href="{{ "/posts/" | relLangURL }}">Все статьи</a>
+    </div>
+  </div>
+</div>
+{{ end }}

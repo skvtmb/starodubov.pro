@@ -1,0 +1,20 @@
+{{- /* Post card — expects a Page as context (.) */ -}}
+{{- $cat := "" -}}
+{{- with .Params.categories -}}{{ $cat = index . 0 }}{{- end -}}
+{{- if not $cat -}}{{ $cat = .Type }}{{- end -}}
+{{- $cover := .Params.cover | default .Params.thumbnail -}}
+{{- /* cover может быть объектом (image/alt/caption) из старого формата front matter */ -}}
+{{- if reflect.IsMap $cover }}{{ $cover = $cover.image }}{{ end -}}
+<a class="post" href="{{ .RelPermalink }}">
+  <div class="thumb{{ if $cover }} has-img{{ end }}"{{ with $cover }} style="background-image:url('{{ . | relURL }}')"{{ end }}>
+    <span class="cat">{{ $cat }}</span>
+  </div>
+  <div class="body">
+    <h3>{{ .Title }}</h3>
+    <p>{{ .Description | default .Summary | plainify | truncate 120 }}</p>
+    <div class="pmeta">
+      <span>{{ .Date.Format "02.01.2006" }}</span>
+      <span>{{ .ReadingTime }} мин</span>
+    </div>
+  </div>
+</a>

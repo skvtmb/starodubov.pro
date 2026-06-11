@@ -1,0 +1,132 @@
+{{ define "main" }}
+{{ $p := .Params }}
+{{ $hero := $p.hero }}
+{{ $about := $p.about }}
+{{ $svc := $p.services }}
+{{/* сквозная нумерация секций — корректна при скрытии любой из них */}}
+{{ $secNum := 0 }}
+
+<section class="hero">
+  <div class="wrap hero-in">
+    <div>
+      {{ with $hero.tagline }}<span class="tagline"><span class="dot"></span>{{ . }}</span>{{ end }}
+      <h1 class="name">{{ range $i, $line := $hero.nameLines }}{{ if $i }}<br>{{ end }}{{ $line }}{{ end }}</h1>
+      {{ with $hero.roleHTML }}<p class="role">{{ . | safeHTML }}</p>{{ end }}
+      {{ with $hero.chips }}
+      <div class="meta-row">
+        {{ range $i, $c := . }}<span class="chip"><span class="mono acc">{{ printf "%02d" (add $i 1) }}</span> {{ $c }}</span>{{ end }}
+      </div>
+      {{ end }}
+      {{ with $hero.topics }}
+      <div class="topic-row">
+        {{ range . }}<span class="topic">{{ . }}</span>{{ end }}
+      </div>
+      {{ end }}
+      <div class="hero-cta">
+        {{ with $hero.primaryCta }}<a class="btn-pri" href="{{ .url }}">{{ .label }} <span>→</span></a>{{ end }}
+        {{ with $hero.secondaryCta }}<a class="btn-sec" href="{{ .url }}">{{ .label }}</a>{{ end }}
+      </div>
+      {{ with site.Params.socials }}
+      <div class="socials">
+        {{ range . }}<a href="{{ .url }}"{{ if .external | default true }} target="_blank" rel="me noopener"{{ end }}>{{ .name }}{{ if .external | default true }} ↗{{ end }}</a>{{ end }}
+        {{ with site.Params.contactEmail }}<a href="mailto:{{ . }}">Email</a>{{ end }}
+      </div>
+      {{ end }}
+    </div>
+    <div class="portrait-card">
+      <div class="frame">
+        <span class="corner tl"></span><span class="corner br"></span>
+        <span class="ph"><span class="mono">[ портрет ]</span></span>
+        {{ with $hero.portrait }}<img src="{{ . | relURL }}" alt="{{ site.Params.author.name | default site.Title }}" onerror="this.style.display='none'">{{ end }}
+        {{ with $hero.portraitTag }}<span class="pc-tag">{{ . }}</span>{{ end }}
+      </div>
+    </div>
+  </div>
+</section>
+
+{{ if $about }}
+<section class="about">
+  <div class="wrap">
+    <div class="sec-head">
+      {{ $secNum = add $secNum 1 }}<span class="sec-num">{{ printf "%02d" $secNum }}</span>
+      <span class="sec-title">{{ $about.title | default "Обо мне" }}</span>
+      {{ with $about.subtitle }}<span class="sec-sub">{{ . }}</span>{{ end }}
+    </div>
+    <div class="about-grid">
+      <div>{{ $about.body | markdownify }}</div>
+      {{ with $about.facts }}
+      <div class="factbox">
+        <h4>{{ $about.factsTitle | default "Коротко" }}</h4>
+        {{ range . }}<div class="fact"><span>{{ .k }}</span><b>{{ .v }}</b></div>{{ end }}
+      </div>
+      {{ end }}
+    </div>
+  </div>
+</section>
+{{ end }}
+
+{{ with $svc }}
+<section class="svc">
+  <div class="wrap">
+    <div class="sec-head">
+      {{ $secNum = add $secNum 1 }}<span class="sec-num">{{ printf "%02d" $secNum }}</span>
+      <span class="sec-title">{{ .title | default "Сильные стороны" }}</span>
+      {{ with .subtitle }}<span class="sec-sub">{{ . }}</span>{{ end }}
+    </div>
+    <div class="svc-grid">
+      {{ range $i, $s := .items }}
+      <div class="svc-card">
+        <span class="svc-n">/ {{ printf "%02d" (add $i 1) }}</span>
+        <h3>{{ $s.title }}</h3>
+        <p>{{ $s.body }}</p>
+        {{ with $s.tags }}<div class="svc-tags">{{ range . }}<span>{{ . }}</span>{{ end }}</div>{{ end }}
+      </div>
+      {{ end }}
+    </div>
+    {{ with .cta }}
+    <div class="svc-foot">
+      {{ with .note }}<p>{{ . | markdownify }}</p>{{ end }}
+      <a class="btn-pri" href="{{ .url }}">{{ .label | default "Обсудить задачу" }} →</a>
+    </div>
+    {{ end }}
+  </div>
+</section>
+{{ end }}
+
+{{ with $p.rooms }}
+<section class="rooms">
+  <div class="wrap">
+    <div class="sec-head">
+      {{ $secNum = add $secNum 1 }}<span class="sec-num">{{ printf "%02d" $secNum }}</span>
+      <span class="sec-title">Разделы сайта</span>
+    </div>
+    <div class="room-grid">
+      {{ range . }}
+      <a class="room" href="{{ .url | relLangURL }}">
+        <span class="rn">{{ .slug }}</span>
+        <h4>{{ .title }}</h4>
+        <p>{{ .desc }}</p>
+        <div class="arrow">→</div>
+      </a>
+      {{ end }}
+    </div>
+  </div>
+</section>
+{{ end }}
+
+{{ $posts := where site.RegularPages "Type" (site.Params.blogSection | default "posts") }}
+{{ with $posts }}
+<section class="posts" id="posts">
+  <div class="wrap">
+    <div class="sec-head">
+      {{ $secNum = add $secNum 1 }}<span class="sec-num">{{ printf "%02d" $secNum }}</span>
+      <span class="sec-title">Свежие статьи</span>
+      <a class="sec-sub" href="{{ (printf "/%s/" (site.Params.blogSection | default "posts")) | relLangURL }}">Все статьи →</a>
+    </div>
+    <div class="post-grid">
+      {{ range first 3 . }}{{ partial "post-card.html" . }}{{ end }}
+    </div>
+  </div>
+</section>
+{{ end }}
+{{ end }}

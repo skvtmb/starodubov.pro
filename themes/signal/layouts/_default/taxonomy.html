@@ -1,0 +1,54 @@
+{{ define "main" }}
+{{- /* Hugo 0.146+ может выбрать этот шаблон и для страниц терминов (kind=term),
+       поэтому ветвимся по .Kind: термин рендерим как подборку постов */ -}}
+{{ if eq .Kind "term" }}
+<div class="page-hero">
+  <div class="wrap">
+    <div class="inner">
+      <span class="eyebrow">{{ if eq .Data.Singular "category" }}Категория{{ else }}Тег{{ end }}</span>
+      <h1>{{ if eq .Data.Singular "tag" }}#{{ end }}{{ .Title }}</h1>
+      <div class="lede">{{ len .Pages }} материал(ов) по теме.</div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="list-wrap">
+    {{ $paginator := .Paginate .Pages }}
+    <div class="post-grid">
+      {{ range $paginator.Pages }}{{ partial "post-card.html" . }}{{ end }}
+    </div>
+
+    {{ if gt $paginator.TotalPages 1 }}
+    <nav class="pager">
+      {{ if $paginator.HasPrev }}<a href="{{ $paginator.Prev.URL }}">←</a>{{ end }}
+      {{ range $paginator.Pagers }}
+        {{ if eq . $paginator }}<span class="cur">{{ .PageNumber }}</span>{{ else }}<a href="{{ .URL }}">{{ .PageNumber }}</a>{{ end }}
+      {{ end }}
+      {{ if $paginator.HasNext }}<a href="{{ $paginator.Next.URL }}">→</a>{{ end }}
+    </nav>
+    {{ end }}
+  </div>
+</div>
+{{ else }}
+<div class="page-hero">
+  <div class="wrap">
+    <div class="inner">
+      <span class="eyebrow">{{ .Title }}</span>
+      <h1>{{ if eq .Data.Plural "categories" }}Категории{{ else if eq .Data.Plural "tags" }}Теги{{ else }}{{ .Title }}{{ end }}</h1>
+      <div class="lede">{{ len .Data.Terms }} {{ if eq .Data.Plural "tags" }}тегов{{ else }}разделов{{ end }} · выберите тему, чтобы открыть подборку материалов.</div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="list-wrap">
+    <div class="term-cloud">
+      {{ range .Data.Terms.Alphabetical }}
+        <a href="{{ .Page.RelPermalink }}">{{ .Page.Title }}<span class="ct">{{ .Count }}</span></a>
+      {{ end }}
+    </div>
+  </div>
+</div>
+{{ end }}
+{{ end }}

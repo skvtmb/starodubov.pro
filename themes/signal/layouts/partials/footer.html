@@ -1,0 +1,30 @@
+{{- $brandName := site.Params.brandName | default site.Title -}}
+{{- $mark := site.Params.brandMark | default (substr site.Title 0 2) -}}
+<footer class="site">
+  <div class="wrap">
+    <div class="foot">
+      <div>
+        <a class="brand" href="{{ "/" | relLangURL }}"><span class="mark">{{ $mark }}</span><span>{{ $brandName }}</span></a>
+        {{ with site.Params.footerNote }}<p>{{ . }}</p>{{ end }}
+      </div>
+      <div>
+        <h5>Навигация</h5>
+        {{- range site.Menus.main -}}
+          <a href="{{ .URL | relLangURL }}">{{ .Name }}</a>
+        {{- end -}}
+      </div>
+      <div>
+        <h5>Контакты</h5>
+        {{- range site.Params.socials -}}
+          <a href="{{ .url }}"{{ if .external | default true }} target="_blank" rel="me noopener"{{ end }}>{{ .name }}</a>
+        {{- end -}}
+        {{ with site.Params.contactEmail }}<a href="mailto:{{ . }}">Email</a>{{ end }}
+        {{ with site.Home.OutputFormats.Get "rss" }}<a href="{{ .RelPermalink }}">RSS лента</a>{{ end }}
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>{{ site.Params.copyright | default (printf "© %d %s" now.Year site.Title) }}</span>
+      {{ with site.Params.footerTag }}<span class="mono">{{ . }}</span>{{ end }}
+    </div>
+  </div>
+</footer>
