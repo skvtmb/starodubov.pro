@@ -5,6 +5,7 @@ draft: false
 summary: "Список приложений, установленных на моём MacBook, с командами Homebrew для установки, описаниями и ссылками на официальные страницы"
 categories: ["Технологии"]
 tags: ["macos", "настройка", "разработка"]
+cover: "/images/macbook-apps-cover.jpg"
 ---
 
 ![MacBook приложения](/images/external/frigate-demo.jpg "MacBook приложения")
