@@ -108,4 +108,4 @@ cover: "/images/posts/cover.jpg"   # необязательно — обложк
 
 ## Лицензия
 
-MIT. Шрифты подключаются с Google Fonts.
+MIT. Шрифты self-hosted (woff2 в static/fonts/, @font-face в signal.css).
