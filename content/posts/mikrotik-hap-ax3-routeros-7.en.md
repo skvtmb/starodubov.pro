@@ -6,7 +6,7 @@ summary: "A practical walkthrough of a working MikroTik hAP ax3 setup on RouterO
 categories: ["Technology"]
 tags: ["mikrotik", "routeros", "hap-ax3", "wireguard", "doh", "bgp", "networking", "home-router"]
 cover:
-  image: "https://cdn.mikrotik.com/web-assets/product_files/C53UiG5HPaxD2HPaxD_240530.png"
+  image: "/images/external/mikrotik-hap-ax3-diagram.png"
   alt: "MikroTik hAP ax³ — device block diagram (official)"
   caption: "Official hAP ax³ block diagram (source: MikroTik)"
 ---
@@ -17,7 +17,7 @@ When you get your hands on a device with Wi‑Fi 6 (802.11ax), it’s tempting n
 
 ## 0. Brief overview of the hAP ax3 and RouterOS 7
 
-![MikroTik hAP ax³ block diagram — chip and interface layout](https://cdn.mikrotik.com/web-assets/product_files/C53UiG5HPaxD2HPaxD_240530.png "Official hAP ax³ Block Diagram, source: MikroTik")
+![MikroTik hAP ax³ block diagram — chip and interface layout](/images/external/mikrotik-hap-ax3-diagram.png "Official hAP ax³ Block Diagram, source: MikroTik")
 
 The **hAP ax³** isn’t just “a box with antennas” — it’s a proper router with Wi‑Fi 6. Externally it follows the usual MikroTik style: black case, soft-touch finish, no frills. The image above is the official block diagram from the manufacturer (processor, radios, ports, USB). Product page with case photos and full specs: [mikrotik.com/product/hap_ax3](https://mikrotik.com/product/hap%5Fax3).
 

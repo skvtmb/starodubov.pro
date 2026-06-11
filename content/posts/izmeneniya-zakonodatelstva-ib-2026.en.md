@@ -6,7 +6,7 @@ summary: "Overview of key changes: FSTEC Order No.117 replacing No.17, CII (crit
 categories: ["Information Security", "Legislation"]
 tags: ["information-security", "FSTEC", "order-117", "CII", "personal-data", "legislation", "2026", "compliance", "russia"]
 cover:
-  image: "https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=800"
+  image: "/images/izmeneniya-ib-2026-cover.jpg"
   alt: "Cybersecurity and data protection"
   caption: "Regulatory changes in information security"
 ---

@@ -6,12 +6,11 @@ summary: "How I navigated Bank of Russia requirements, GOST standards, and PCI D
 categories: ["Fintech", "Compliance"]
 tags: ["compliance", "fintech", "information-security", "regulations", "bank-of-russia", "pci-dss", "152-fz", "security", "gost-57580"]
 cover:
-  image: "https://qyzylorda-csb.edu.kz/uploads/posts/2024-07/img_2392.webp"
+  image: "/images/fintech-compliance-cover.jpg"
   alt: "Fintech compliance"
   caption: "Working with regulatory requirements"
 ---
 
-![Oak of life — foundation and resilience](https://starodubov.pro/images/tree-image-2.jpg "Oak of life — foundation and resilience")
 
 # Fintech Compliance: My Experience with Regulations
 

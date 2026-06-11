@@ -322,3 +322,7 @@ footer.site{border-top:1px solid var(--line);margin-top:64px;padding:54px 0 40px
 .toc-inline nav a.active{color:var(--acc)}
 /* сайдбар статьи теперь содержит только кнопки «поделиться» */
 .toc .share{margin-top:0;padding-top:0;border-top:0}
+
+/* блок «обсудить статью» под текстом */
+.art-discuss{margin-top:40px;padding:24px 28px;border:1px solid var(--line);border-radius:14px;background:var(--bg-2);display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;max-width:68ch}
+.art-discuss p{margin:0;color:var(--muted);font-size:16px}

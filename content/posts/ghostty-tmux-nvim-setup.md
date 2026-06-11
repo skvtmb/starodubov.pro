@@ -4,9 +4,9 @@ date: 2025-02-14T12:00:00+03:00
 draft: false
 summary: "Как собрать удобное DevOps-окружение на базе Ghostty, tmux, zsh и Neovim с темой Gruvbox — от выбора инструментов до готового workflow."
 categories: ["Технологии"]
-tags: ["ghostty", "tmux", "neovim", "gruvbox", "терминал", "разработка", "настройка", "cli", "zsh", "powerlevel10k"]
+tags: ["настройка", "терминал", "разработка"]
 cover:
-  image: "/images/ghostty-tmux-nvim-cover.png"
+  image: "/images/ghostty-tmux-nvim-cover.jpg"
   alt: "Окружение Ghostty + tmux + Neovim с темой Gruvbox"
   caption: "Терминал Ghostty, мультиплексор tmux и редактор Neovim — единая связка для разработки"
 ---
@@ -15,7 +15,7 @@ cover:
 
 В этой статье — зачем такая связка, как её собрать и какие настройки использовать, чтобы получить готовое окружение для разработки и DevOps.
 
-![Окружение Ghostty с tmux и Neovim в тёмной теме](/images/ghostty-tmux-nvim-cover.png "Окружение Ghostty с tmux и Neovim")
+![Окружение Ghostty с tmux и Neovim в тёмной теме](/images/ghostty-tmux-nvim-cover.jpg "Окружение Ghostty с tmux и Neovim")
 
 ## Зачем эта связка
 
@@ -29,7 +29,6 @@ cover:
 
 Вместе это даёт единое окружение: один терминал, одна тема (Gruvbox), одни сочетания клавиш. Идеально подходит для ежедневной разработки и DevOps: код в Neovim, логи в соседней панели tmux, команды в третьей панели.
 
-![Код в тёмной теме — типичный вид при работе в Neovim](https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800 "Код в тёмной теме")
 
 ## Установка зависимостей
 

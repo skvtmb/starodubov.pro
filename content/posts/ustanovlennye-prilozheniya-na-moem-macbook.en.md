@@ -7,7 +7,7 @@ categories: ["Technology"]
 tags: ["macos", "applications", "homebrew", "setup", "productivity", "development", "security", "tools"]
 ---
 
-![MacBook applications](https://i.ytimg.com/vi/5X_cAWk4wx0/maxresdefault.jpg "MacBook applications")
+![MacBook applications](/images/external/frigate-demo.jpg "MacBook applications")
 
 # Installed Applications on My MacBook
 

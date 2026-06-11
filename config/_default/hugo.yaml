@@ -7,6 +7,9 @@ enableEmoji: true
 # Посты датированы 2026 годом — без этого они не попадут в сборку
 buildFuture: true
 
+# Честный lastmod из истории git (для sitemap и RSS)
+enableGitInfo: true
+
 # Абсолютные URL для Yandex Object Storage
 canonifyURLs: true
 relativeURLs: false

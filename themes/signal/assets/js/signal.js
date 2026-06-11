@@ -63,3 +63,11 @@
     onScroll();
   })();
 })();
+
+/* ---- email-ссылки: адрес собирается на клиенте (защита от спам-ботов) ---- */
+(function () {
+  document.querySelectorAll('a.js-mail').forEach(function (a) {
+    var u = a.getAttribute('data-user'), h = a.getAttribute('data-host');
+    if (u && h) a.setAttribute('href', 'mailto:' + u + '@' + h);
+  });
+})();

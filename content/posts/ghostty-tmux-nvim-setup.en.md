@@ -6,7 +6,7 @@ summary: "How to build a comfortable DevOps environment with Ghostty, tmux, zsh,
 categories: ["Technology"]
 tags: ["ghostty", "tmux", "neovim", "gruvbox", "terminal", "development", "setup", "cli", "zsh", "powerlevel10k"]
 cover:
-  image: "/images/ghostty-tmux-nvim-cover.png"
+  image: "/images/ghostty-tmux-nvim-cover.jpg"
   alt: "Ghostty + tmux + Neovim environment with Gruvbox theme"
   caption: "Ghostty terminal, tmux multiplexer, and Neovim — one stack for development"
 ---
@@ -15,7 +15,7 @@ Once again, after resetting my laptop, I decided to set everything up properly a
 
 This article covers why this stack, how to set it up, and what settings to use for a ready-made development and DevOps environment.
 
-![Ghostty with tmux and Neovim in dark theme](/images/ghostty-tmux-nvim-cover.png "Ghostty with tmux and Neovim")
+![Ghostty with tmux and Neovim in dark theme](/images/ghostty-tmux-nvim-cover.jpg "Ghostty with tmux and Neovim")
 
 ## Why This Stack
 
@@ -29,7 +29,6 @@ This article covers why this stack, how to set it up, and what settings to use f
 
 Together this gives one environment: one terminal, one theme (Gruvbox), one set of key bindings. Ideal for daily development and DevOps: code in Neovim, logs in a tmux pane, commands in another.
 
-![Code in dark theme — typical Neovim view](https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800 "Code in dark theme")
 
 ## Contents
 

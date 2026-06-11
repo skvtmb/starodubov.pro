@@ -6,12 +6,11 @@ summary: "First blog post: what I'll write about and why it might be useful to y
 categories: ["About Me"]
 tags: ["blog", "introduction", "information-security", "fintech", "greeting", "about-me"]
 cover:
-  image: "/images/welcome-blog-cover.png"
+  image: "/images/welcome-blog-cover.jpg"
   alt: "Welcome to my blog"
   caption: "Oak of knowledge — symbol of growth and new beginnings"
 ---
 
-![Oak of life — symbol of resilience and growth](https://starodubov.pro/images/tree-image-1.jpg "Oak of life — symbol of resilience and growth")
 
 # Welcome to My Blog
 

@@ -4,9 +4,9 @@ date: 2026-03-07T00:00:00+03:00
 draft: false
 summary: "Разбор рабочей конфигурации роутера MikroTik hAP ax3 на RouterOS 7: Wi‑Fi 6, DHCP, DoH, WireGuard, split-tunnel для AI и YouTube, BGP, firewall, скрипты и обслуживание."
 categories: ["Технологии"]
-tags: ["mikrotik", "routeros", "hap-ax3", "wireguard", "doh", "bgp", "сеть", "домашний-роутер"]
+tags: ["сеть", "железо"]
 cover:
-  image: "https://cdn.mikrotik.com/web-assets/product_files/C53UiG5HPaxD2HPaxD_240530.png"
+  image: "/images/external/mikrotik-hap-ax3-diagram.png"
   alt: "MikroTik hAP ax³ — блок-схема устройства (Block Diagram)"
   caption: "Официальная блок-схема hAP ax³ (источник: MikroTik)"
 ---
@@ -17,7 +17,7 @@ cover:
 
 ## 0. Кратко об устройстве hAP ax3 и RouterOS 7
 
-![Блок-схема MikroTik hAP ax³ — расположение чипов и интерфейсов](https://cdn.mikrotik.com/web-assets/product_files/C53UiG5HPaxD2HPaxD_240530.png "Официальный Block Diagram hAP ax³, источник: MikroTik")
+![Блок-схема MikroTik hAP ax³ — расположение чипов и интерфейсов](/images/external/mikrotik-hap-ax3-diagram.png "Официальный Block Diagram hAP ax³, источник: MikroTik")
 
 **hAP ax³** — это уже не «коробочка с антеннами», а полноценный роутер с Wi‑Fi 6. Внешне он продолжает линейку MikroTik: чёрный корпус, приятная soft-touch поверхность, ничего лишнего. На схеме выше — официальная блок-схема платы (Block Diagram) с сайта производителя: расположение процессора IPQ-6010, радиомодулей, портов и USB. Страница продукта с фотографиями корпуса и спецификацией: [mikrotik.com/product/hap_ax3](https://mikrotik.com/product/hap%5Fax3).
 
