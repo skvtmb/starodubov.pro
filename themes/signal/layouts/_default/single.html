@@ -55,6 +55,12 @@
         {{ range . }}<a href="{{ .RelPermalink }}">#{{ .LinkTitle }}</a>{{ end }}
       </div>
       {{ end }}
+      {{ with site.Params.shareTelegram }}
+      <div class="art-discuss">
+        <p>Есть вопрос или хотите обсудить статью?</p>
+        <a class="btn-sec" href="{{ . }}" target="_blank" rel="noopener">Написать в Telegram →</a>
+      </div>
+      {{ end }}
     </article>
 
     {{/* оглавление показывается в начале статьи (toc-inline);
@@ -77,7 +83,7 @@
         <div class="nm">{{ $author.name | default site.Title }}</div>
         {{ with $author.bio }}<p class="bio">{{ . | markdownify }}</p>{{ end }}
       </div>
-      {{ with site.Params.contactEmail }}<a class="cta-sm" href="mailto:{{ . }}">Обсудить задачу</a>{{ end }}
+      {{ with site.Params.contactEmail }}{{ $p := split . "@" }}<a class="cta-sm js-mail" href="#" data-user="{{ index $p 0 }}" data-host="{{ index $p 1 }}">Обсудить задачу</a>{{ end }}
     </div>
   </div>
 </section>

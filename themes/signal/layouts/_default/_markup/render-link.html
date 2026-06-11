@@ -1,0 +1,8 @@
+{{- /* mailto-ссылки в контенте собираются на клиенте — адрес не попадает в HTML */ -}}
+{{- if hasPrefix .Destination "mailto:" -}}
+  {{- $addr := strings.TrimPrefix "mailto:" .Destination -}}
+  {{- $p := split $addr "@" -}}
+  <a href="#" class="js-mail" data-user="{{ index $p 0 }}" data-host="{{ index $p 1 }}">{{ .Text }}</a>
+{{- else -}}
+  <a href="{{ .Destination | safeURL }}"{{ if hasPrefix .Destination "http" }} target="_blank" rel="noopener"{{ end }}>{{ .Text }}</a>
+{{- end -}}

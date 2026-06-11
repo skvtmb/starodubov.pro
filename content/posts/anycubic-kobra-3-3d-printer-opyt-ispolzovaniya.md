@@ -4,14 +4,14 @@ date: 2025-02-11T00:00:00+03:00
 draft: false
 summary: "Купил 3D‑принтер попробовать — оказался очень полезным. Ящерки на день рождения, филамент, поломка датчика и ремонт за 300 рублей."
 categories: ["Технологии"]
-tags: ["3d-печать", "anycubic", "kobra-3", "филамент", "ремонт", "термодатчик", "ntc", "обзор"]
+tags: ["железо", "обзор"]
 cover:
-  image: "https://store.anycubic.com/cdn/shop/files/K3-1_9c932907-0d07-4e05-ab4e-8a0359c1499f.jpg?v=1760526479&width=1500"
+  image: "/images/external/anycubic-kobra-3.jpg"
   alt: "Anycubic Kobra 3 — 3D‑принтер"
   caption: "Anycubic Kobra 3 — быстрый и полезный в быту"
 ---
 
-[![Anycubic Kobra 3](https://store.anycubic.com/cdn/shop/files/K3-1_9c932907-0d07-4e05-ab4e-8a0359c1499f.jpg?v=1760526479&width=1500 "Anycubic Kobra 3")](https://store.anycubic.com/products/anycubic-kobra-3)
+[![Anycubic Kobra 3](/images/external/anycubic-kobra-3.jpg "Anycubic Kobra 3")](https://store.anycubic.com/products/anycubic-kobra-3)
 
 Купил Anycubic Kobra 3 просто попробовать — насколько вообще полезная штука. А оказалась — очень полезная. Я даже не думал, что напечатаю столько всего.
 
@@ -65,7 +65,7 @@ cover:
 
 Называется **термистор NTC 100k** (тип B3950). Стандартная штука для стола почти любых FDM‑принтеров, Kobra 3 в том числе.
 
-![Термодатчик NTC 100k для нагревательного стола 3D‑принтера](https://www.prusa3d.com/cdn-cgi/image/width=1024,format=auto,quality=85/content/images/product/9e4ee773-c070-4777-821c-dc3866a2a049.jpg "Термистор NTC 100k — замена термодатчика стола Anycubic Kobra 3")
+![Термодатчик NTC 100k для нагревательного стола 3D‑принтера](/images/external/prusa-thermistor.jpg "Термистор NTC 100k — замена термодатчика стола Anycubic Kobra 3")
 
 *Аналогичный датчик (источник: [Prusa3D](https://www.prusa3d.com/product/thermistor-ntc-100k-115-mm/))*
 

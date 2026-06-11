@@ -23,13 +23,13 @@
       </div>
       {{ end }}
       <div class="hero-cta">
-        {{ with $hero.primaryCta }}<a class="btn-pri" href="{{ .url }}">{{ .label }} <span>→</span></a>{{ end }}
+        {{ with $hero.primaryCta }}{{ if hasPrefix .url "mailto:" }}{{ $p := split (strings.TrimPrefix "mailto:" .url) "@" }}<a class="btn-pri js-mail" href="#" data-user="{{ index $p 0 }}" data-host="{{ index $p 1 }}">{{ .label }} <span>→</span></a>{{ else }}<a class="btn-pri" href="{{ .url }}">{{ .label }} <span>→</span></a>{{ end }}{{ end }}
         {{ with $hero.secondaryCta }}<a class="btn-sec" href="{{ .url }}">{{ .label }}</a>{{ end }}
       </div>
       {{ with site.Params.socials }}
       <div class="socials">
         {{ range . }}<a href="{{ .url }}"{{ if .external | default true }} target="_blank" rel="me noopener"{{ end }}>{{ .name }}{{ if .external | default true }} ↗{{ end }}</a>{{ end }}
-        {{ with site.Params.contactEmail }}<a href="mailto:{{ . }}">Email</a>{{ end }}
+        {{ with site.Params.contactEmail }}{{ $p := split . "@" }}<a href="#" class="js-mail" data-user="{{ index $p 0 }}" data-host="{{ index $p 1 }}">Email</a>{{ end }}
       </div>
       {{ end }}
     </div>

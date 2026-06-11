@@ -11,7 +11,7 @@
     </nav>
     <div class="nav-r">
       {{ if site.Params.showSearchHint }}<div class="kbd"><kbd>⌘</kbd><kbd>K</kbd>Поиск</div>{{ end }}
-      {{ with site.Params.contactEmail }}<a class="cta-sm" href="mailto:{{ . }}">{{ site.Params.contactLabel | default "Написать мне" }}</a>{{ end }}
+      {{ with site.Params.contactEmail }}{{ $p := split . "@" }}<a class="cta-sm js-mail" href="#" data-user="{{ index $p 0 }}" data-host="{{ index $p 1 }}">{{ site.Params.contactLabel | default "Написать мне" }}</a>{{ end }}
     </div>
     <button class="menu-btn" aria-label="Меню" type="button"><span></span></button>
   </div>

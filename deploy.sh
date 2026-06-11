@@ -1,54 +1,41 @@
 #!/bin/bash
-# Скрипт деплоя сайта starodubov.pro в Yandex Object Storage
-# с правильными MIME-типами
-# Использует Yandex CLI (yc)
+# Деплой сайта starodubov.pro в Yandex Object Storage.
+# - корректные MIME-типы и Cache-Control по типам файлов
+# - NFC-нормализация ключей (macOS хранит имена в NFD — иначе кириллические
+#   URL с «й»/«ё» отдают 404)
+# - инкрементальность: неизменённые объекты (md5 == ETag) не перезаливаются
+# - редиректы со старых адресов /ru/<путь>/ и /en/
+# Использует Yandex CLI (yc).
 
-set -e  # Остановка при ошибке
+set -e
 
-# Цвета для вывода
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
-NC='\033[0m' # No Color
+NC='\033[0m'
 
-# Конфигурация
 BUCKET="starodubov.pro"
-
-# macOS хранит имена файлов в NFD (й = и + ◌̆), а Hugo генерирует ссылки в NFC —
-# без нормализации ключей кириллические URL с «й»/«ё» отдают 404
-nfc_key() {
-    printf '%s' "$1" | /usr/bin/python3 -c 'import sys,unicodedata;sys.stdout.write(unicodedata.normalize("NFC",sys.stdin.read()))'
-}
 
 echo -e "${BLUE}🚀 Деплой сайта starodubov.pro${NC}"
 echo "=================================="
 
-# Проверка наличия Hugo
 if ! command -v hugo &> /dev/null; then
     echo -e "${RED}❌ Hugo не установлен!${NC}"
-    echo "Установите Hugo: https://gohugo.io/installation/"
     exit 1
 fi
 
-# Проверка наличия yc
 if ! command -v yc &> /dev/null; then
     echo -e "${RED}❌ Yandex CLI (yc) не найден!${NC}"
-    echo "Установите Yandex CLI:"
     echo "  curl https://storage.yandexcloud.net/yandexcloud-yc/install.sh | bash"
-    echo "Или добавьте в PATH, если уже установлен"
     exit 1
 fi
 
-# Проверка конфигурации yc
 if ! yc config list &> /dev/null; then
-    echo -e "${RED}❌ Yandex CLI не настроен!${NC}"
-    echo "Настройте CLI:"
-    echo "  yc init"
+    echo -e "${RED}❌ Yandex CLI не настроен! Выполните: yc init${NC}"
     exit 1
 fi
 
-# Сборка сайта
 echo -e "\n${YELLOW}🔨 Сборка сайта...${NC}"
 hugo --minify
 
@@ -56,117 +43,136 @@ if [ ! -d "public" ]; then
     echo -e "${RED}❌ Папка public/ не создана!${NC}"
     exit 1
 fi
-
 echo -e "${GREEN}✅ Сайт собран${NC}"
 
-# Загрузка в Object Storage
-echo -e "\n${YELLOW}📤 Загрузка файлов в Yandex Object Storage...${NC}"
+echo -e "\n${YELLOW}📤 Загрузка в Object Storage (инкрементально)...${NC}"
 
-# Функция для загрузки файлов с правильным MIME-типом
-upload_files() {
-    local pattern=$1
-    local content_type=$2
-    local description=$3
-    
-    echo -e "\n${BLUE}${description}${NC}"
-    local count=$(find public -name "$pattern" -type f 2>/dev/null | wc -l | tr -d ' ')
-    
-    if [ "$count" -gt 0 ]; then
-        echo "   Найдено файлов: $count"
-        find public -name "$pattern" -type f | while read file; do
-            key=$(nfc_key "${file#public/}")
-            if yc storage s3api put-object \
-                --bucket "$BUCKET" \
-                --key "$key" \
-                --body "$file" \
-                --content-type "$content_type" &> /dev/null; then
-                echo -n "."
-            else
-                echo -n "!"
-            fi
-        done
-        echo ""
-        echo -e "${GREEN}   ✅ Загружено${NC}"
-    fi
+BUCKET="$BUCKET" python3 - <<'PYEOF'
+import hashlib, html, json, os, subprocess, sys, tempfile, unicodedata
+from concurrent.futures import ThreadPoolExecutor
+
+BUCKET = os.environ['BUCKET']
+SITE = 'https://starodubov.pro'
+
+CONTENT_TYPES = {
+    '.html': 'text/html; charset=utf-8', '.css': 'text/css',
+    '.js': 'application/javascript', '.json': 'application/json',
+    '.svg': 'image/svg+xml', '.xml': 'application/xml',
+    '.webmanifest': 'application/manifest+json', '.txt': 'text/plain; charset=utf-8',
+    '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg',
+    '.gif': 'image/gif', '.webp': 'image/webp', '.avif': 'image/avif',
+    '.ico': 'image/x-icon', '.woff': 'font/woff', '.woff2': 'font/woff2',
+    '.ttf': 'font/ttf', '.eot': 'application/vnd.ms-fontobject',
 }
 
-# Загрузка файлов по типам с правильными MIME-типами
-upload_files "*.css" "text/css" "Загрузка CSS файлов"
-upload_files "*.js" "application/javascript" "Загрузка JS файлов"
-upload_files "*.json" "application/json" "Загрузка JSON файлов"
-upload_files "*.svg" "image/svg+xml" "Загрузка SVG файлов"
-upload_files "*.xml" "application/xml" "Загрузка XML файлов"
-upload_files "*.webmanifest" "application/manifest+json" "Загрузка WebManifest файлов"
+def content_type(path):
+    return CONTENT_TYPES.get(os.path.splitext(path)[1].lower(), 'application/octet-stream')
 
-# Загрузка HTML файлов
-echo -e "\n${BLUE}Загрузка HTML файлов${NC}"
-find public -name "*.html" -type f | while read file; do
-    key=$(nfc_key "${file#public/}")
-    yc storage s3api put-object \
-        --bucket "$BUCKET" \
-        --key "$key" \
-        --body "$file" \
-        --content-type "text/html; charset=utf-8" &> /dev/null && echo -n "." || echo -n "!"
-done
-echo ""
-echo -e "${GREEN}   ✅ HTML файлы загружены${NC}"
+def cache_control(path):
+    ext = os.path.splitext(path)[1].lower()
+    # CSS/JS фингерпринтятся Hugo — можно кэшировать навсегда
+    if ext in ('.css', '.js'):
+        return 'public, max-age=31536000, immutable'
+    if ext in ('.png', '.jpg', '.jpeg', '.gif', '.webp', '.avif', '.ico',
+               '.svg', '.woff', '.woff2', '.ttf', '.eot'):
+        return 'public, max-age=2592000'
+    if ext == '.html':
+        return 'no-cache'
+    return 'public, max-age=3600'
 
-# Загрузка изображений и других файлов
-echo -e "\n${BLUE}Загрузка остальных файлов${NC}"
-find public -type f ! -name "*.css" ! -name "*.js" ! -name "*.json" ! -name "*.svg" ! -name "*.xml" ! -name "*.webmanifest" ! -name "*.html" | while read file; do
-    key=$(nfc_key "${file#public/}")
-    # Определяем MIME-тип по расширению
-    case "$file" in
-        *.png) content_type="image/png" ;;
-        *.jpg|*.jpeg) content_type="image/jpeg" ;;
-        *.gif) content_type="image/gif" ;;
-        *.webp) content_type="image/webp" ;;
-        *.avif) content_type="image/avif" ;;
-        *.ico) content_type="image/x-icon" ;;
-        *.woff) content_type="font/woff" ;;
-        *.woff2) content_type="font/woff2" ;;
-        *.ttf) content_type="font/ttf" ;;
-        *.eot) content_type="application/vnd.ms-fontobject" ;;
-        *) content_type="application/octet-stream" ;;
-    esac
-    yc storage s3api put-object \
-        --bucket "$BUCKET" \
-        --key "$key" \
-        --body "$file" \
-        --content-type "$content_type" &> /dev/null && echo -n "." || echo -n "!"
-done
-echo ""
-echo -e "${GREEN}   ✅ Остальные файлы загружены${NC}"
+def nfc(s):
+    return unicodedata.normalize('NFC', s)
 
-# Редиректы со старых адресов /ru/<путь>/ и /en/ (до смены темы сайт жил в подкаталогах языков)
-echo -e "\n${BLUE}Загрузка редиректов /ru/ и /en/${NC}"
-STUBS_DIR=$(mktemp -d)
-find public -name index.html | sed 's|^public/||; s|index.html$||' | while read p; do
-    p_nfc=$(nfc_key "$p")
-    mkdir -p "$STUBS_DIR/ru/$p"
-    printf '<!DOCTYPE html><html lang="ru"><head><meta charset="utf-8"><meta http-equiv="refresh" content="0; url=https://starodubov.pro/%s"><link rel="canonical" href="https://starodubov.pro/%s"><title>Перенаправление</title></head><body><a href="https://starodubov.pro/%s">Страница переехала</a></body></html>' "$p_nfc" "$p_nfc" "$p_nfc" > "$STUBS_DIR/ru/${p}index.html"
-done
-mkdir -p "$STUBS_DIR/en" && cp "$STUBS_DIR/ru/index.html" "$STUBS_DIR/en/index.html"
-find "$STUBS_DIR" -name index.html | while read f; do
-    key=$(nfc_key "${f#$STUBS_DIR/}")
-    yc storage s3api put-object \
-        --bucket "$BUCKET" \
-        --key "$key" \
-        --body "$f" \
-        --content-type "text/html; charset=utf-8" &> /dev/null && echo -n "." || echo -n "!"
-done
-echo ""
-echo -e "${GREEN}   ✅ Редиректы загружены${NC}"
-rm -rf "$STUBS_DIR"
+def md5_file(path):
+    h = hashlib.md5()
+    with open(path, 'rb') as f:
+        for chunk in iter(lambda: f.read(1 << 20), b''):
+            h.update(chunk)
+    return h.hexdigest()
 
-# Проверка MIME-типов критичных файлов
+def list_remote():
+    """key -> etag (md5 для немногочастных загрузок)"""
+    remote, marker = {}, None
+    while True:
+        cmd = ['yc', 'storage', 's3api', 'list-objects', '--bucket', BUCKET,
+               '--max-keys', '1000', '--format', 'json']
+        if marker:
+            cmd += ['--marker', marker]
+        out = json.loads(subprocess.run(cmd, capture_output=True, text=True, check=True).stdout or '{}')
+        contents = out.get('contents') or []
+        for obj in contents:
+            remote[obj['key']] = (obj.get('etag') or '').strip('"')
+        if out.get('is_truncated') and contents:
+            marker = contents[-1]['key']
+        else:
+            return remote
+
+def put(args):
+    key, body = args
+    cmd = ['yc', 'storage', 's3api', 'put-object', '--bucket', BUCKET,
+           '--key', key, '--body', body,
+           '--content-type', content_type(key),
+           '--cache-control', cache_control(key)]
+    r = subprocess.run(cmd, capture_output=True)
+    return key, r.returncode == 0
+
+print('Получаю список объектов бакета...')
+remote = list_remote()
+print(f'В бакете объектов: {len(remote)}')
+
+# 1) файлы сайта из public/
+jobs, skipped = [], 0
+for root, _, files in os.walk('public'):
+    for name in files:
+        path = os.path.join(root, name)
+        key = nfc(os.path.relpath(path, 'public'))
+        if remote.get(key) == md5_file(path):
+            skipped += 1
+        else:
+            jobs.append((key, path))
+
+# 2) редиректы /ru/<путь>/ и /en/ со старой структуры
+stub_dir = tempfile.mkdtemp()
+stub_tpl = ('<!DOCTYPE html><html lang="ru"><head><meta charset="utf-8">'
+            '<meta http-equiv="refresh" content="0; url={u}">'
+            '<link rel="canonical" href="{u}"><title>Перенаправление</title></head>'
+            '<body><a href="{u}">Страница переехала</a></body></html>')
+stub_keys = ['en/index.html']
+for root, _, files in os.walk('public'):
+    if 'index.html' in files:
+        rel = nfc(os.path.relpath(root, 'public'))
+        stub_keys.append('ru/index.html' if rel == '.' else f'ru/{rel}/index.html')
+for i, key in enumerate(stub_keys):
+    target = key[3:-len('index.html')].lstrip('/')
+    body = stub_tpl.format(u=html.escape(f'{SITE}/{target}', quote=True))
+    if remote.get(key) == hashlib.md5(body.encode()).hexdigest():
+        skipped += 1
+        continue
+    path = os.path.join(stub_dir, f'stub{i}.html')
+    open(path, 'w', encoding='utf-8').write(body)
+    jobs.append((key, path))
+
+print(f'К загрузке: {len(jobs)}, без изменений (пропущено): {skipped}')
+failed = []
+with ThreadPoolExecutor(max_workers=8) as ex:
+    for key, ok in ex.map(put, jobs):
+        sys.stdout.write('.' if ok else '!')
+        sys.stdout.flush()
+        if not ok:
+            failed.append(key)
+print()
+if failed:
+    print('ОШИБКИ загрузки:')
+    for k in failed:
+        print(' -', k)
+    sys.exit(1)
+print(f'Загружено: {len(jobs) - len(failed)}')
+PYEOF
+
 echo -e "\n${YELLOW}🔍 Проверка MIME-типов...${NC}"
-
-# Находим первый CSS файл
 CSS_FILE=$(find public -name "*.css" -type f | head -1)
 if [ -n "$CSS_FILE" ]; then
     CSS_KEY="${CSS_FILE#public/}"
-    echo -e "Проверка CSS: $CSS_KEY"
     CONTENT_TYPE=$(curl -sI "https://$BUCKET/$CSS_KEY" 2>/dev/null | grep -i "content-type:" | cut -d' ' -f2 | tr -d '\r')
     if [[ "$CONTENT_TYPE" == "text/css"* ]]; then
         echo -e "${GREEN}  ✅ CSS: $CONTENT_TYPE${NC}"
@@ -175,27 +181,7 @@ if [ -n "$CSS_FILE" ]; then
     fi
 fi
 
-# Находим первый JS файл
-JS_FILE=$(find public -name "*.js" -type f | head -1)
-if [ -n "$JS_FILE" ]; then
-    JS_KEY="${JS_FILE#public/}"
-    echo -e "Проверка JS: $JS_KEY"
-    CONTENT_TYPE=$(curl -sI "https://$BUCKET/$JS_KEY" 2>/dev/null | grep -i "content-type:" | cut -d' ' -f2 | tr -d '\r')
-    if [[ "$CONTENT_TYPE" == "application/javascript"* ]] || [[ "$CONTENT_TYPE" == "text/javascript"* ]]; then
-        echo -e "${GREEN}  ✅ JS: $CONTENT_TYPE${NC}"
-    else
-        echo -e "${RED}  ❌ JS: $CONTENT_TYPE (ожидается application/javascript)${NC}"
-    fi
-fi
-
-# Итоговое сообщение
 echo -e "\n${GREEN}=================================="
-echo -e "✅ Деплой завершен успешно!"
+echo -e "✅ Деплой завершен!"
 echo -e "==================================${NC}"
-echo -e "\n${BLUE}🌐 Сайт доступен по адресу:${NC}"
-echo -e "   https://$BUCKET"
-echo -e "\n${YELLOW}💡 Рекомендации:${NC}"
-echo -e "   1. Откройте сайт в браузере с Disable Cache (Cmd+Shift+R / Ctrl+Shift+R)"
-echo -e "   2. Проверьте DevTools → Network → Content-Type для CSS/JS"
-echo -e "   3. Убедитесь, что стили применяются корректно"
-echo ""
+echo -e "${BLUE}🌐 https://$BUCKET${NC}"
