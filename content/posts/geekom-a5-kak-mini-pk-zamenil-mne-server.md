@@ -5,6 +5,7 @@ draft: false
 summary: "История о том, как я заменил громоздкий домашний сервер на компактный GEEKOM A5 и не прогадал. Рассказ о проблемах, поиске решения и впечатлениях от использования."
 categories: ["Технологии"]
 tags: ["железо", "обзор", "self-hosted"]
+cover: "/images/geekom-a5-cover.jpg"
 ---
 
 ![GEEKOM A5 МиниПК](/images/geekom-a5/geekom-1.jpeg "GEEKOM A5 МиниПК")

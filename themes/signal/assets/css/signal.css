@@ -36,8 +36,6 @@ header.site{position:sticky;top:0;z-index:50;background:rgba(10,10,11,.78);backd
 .navlinks a{font-size:14px;color:var(--muted);font-weight:500;transition:color .15s}
 .navlinks a:hover,.navlinks a.active{color:var(--ink)}
 .nav-r{margin-left:auto;display:flex;align-items:center;gap:14px}
-.kbd{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:8px;padding:7px 11px;color:var(--faint);font-family:var(--mono);font-size:12px}
-.kbd kbd{background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:1px 5px;font-size:11px}
 .cta-sm{background:var(--acc);color:#06140a;font-weight:700;font-size:14px;padding:9px 16px;border-radius:8px;transition:transform .15s;white-space:nowrap}
 .cta-sm:hover{transform:translateY(-1px)}
 .menu-btn{display:none;margin-left:auto;width:42px;height:42px;border:1px solid var(--line);border-radius:9px;background:var(--bg-2);color:var(--ink);align-items:center;justify-content:center;cursor:pointer}
@@ -282,7 +280,7 @@ footer.site{border-top:1px solid var(--line);margin-top:64px;padding:54px 0 40px
 }
 @media (max-width:640px){
   .wrap{padding:0 20px}
-  .navlinks,.kbd{display:none}
+  .navlinks{display:none}
   .menu-btn{display:flex}
   .nav{height:62px;gap:14px}
   .nav-r{gap:10px}
