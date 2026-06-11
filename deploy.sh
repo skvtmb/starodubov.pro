@@ -167,6 +167,30 @@ if failed:
         print(' -', k)
     sys.exit(1)
 print(f'Загружено: {len(jobs) - len(failed)}')
+
+# IndexNow: сообщаем поисковикам об изменённых страницах (Яндекс, Bing и др.)
+key_line = [l for l in open('config/_default/params.yaml', encoding='utf-8')
+            if l.startswith('indexNowKey:')]
+changed = [f'{SITE}/' + k[:-len('index.html')]
+           for k, _ in jobs
+           if k.endswith('index.html') and k != '404.html'
+           and not k.startswith(('ru/', 'en/'))]
+if key_line and changed:
+    import urllib.request
+    inkey = key_line[0].split(':', 1)[1].strip().strip('"')
+    payload = json.dumps({
+        'host': 'starodubov.pro',
+        'key': inkey,
+        'keyLocation': f'{SITE}/{inkey}.txt',
+        'urlList': changed[:10000],
+    }).encode()
+    req = urllib.request.Request('https://api.indexnow.org/indexnow', data=payload,
+                                 headers={'Content-Type': 'application/json; charset=utf-8'})
+    try:
+        with urllib.request.urlopen(req, timeout=20) as resp:
+            print(f'IndexNow: отправлено {len(changed)} URL (HTTP {resp.status})')
+    except Exception as e:
+        print(f'IndexNow: не удалось отправить ({e}) — не критично')
 PYEOF
 
 echo -e "\n${YELLOW}🔍 Проверка MIME-типов...${NC}"

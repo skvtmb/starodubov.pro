@@ -10,6 +10,10 @@
 {{ $desc := .Description | default .Summary | default site.Params.description }}
 <meta name="description" content="{{ $desc | plainify | truncate 180 }}">
 <meta name="author" content="{{ site.Params.author.name | default site.Title }}">
+
+{{- /* Подтверждение прав в панелях вебмастеров */ -}}
+{{ with site.Params.yandexVerification }}<meta name="yandex-verification" content="{{ . }}">{{ end }}
+{{ with site.Params.googleVerification }}<meta name="google-site-verification" content="{{ . }}">{{ end }}
 <link rel="canonical" href="{{ .Permalink }}">
 
 {{- /* Open Graph */ -}}

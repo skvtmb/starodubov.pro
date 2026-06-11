@@ -32,3 +32,12 @@ socials:
     url: "https://t.me/SKWTMB"
   - name: "НИУ ВШЭ"
     url: "https://www.hse.ru/staff/STARODUBOV/"
+
+# Подтверждение прав в вебмастерских (вставьте коды после добавления сайта):
+# Яндекс.Вебмастер: https://webmaster.yandex.ru → мета-тег yandex-verification
+# yandexVerification: "xxxxxxxxxxxxxxxx"
+# Google Search Console: https://search.google.com/search-console → HTML-тег
+# googleVerification: "xxxxxxxxxxxxxxxx"
+
+# Ключ IndexNow (файл static/<ключ>.txt) — деплой сам пингует поисковики
+indexNowKey: "43749e8f0f9f4b1db714c57794edf3c7"
