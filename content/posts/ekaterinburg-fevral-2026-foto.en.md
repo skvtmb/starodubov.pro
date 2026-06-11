@@ -6,7 +6,7 @@ summary: "A winter walk through Yekaterinburg with the Canon EOS R8 and RF 28mm 
 categories: ["Travel", "Photography"]
 tags: ["Yekaterinburg", "photography", "Canon EOS R8", "RF 28mm", "winter", "urban photography", "travel"]
 cover:
-  image: "/images/ekb-2026/00.jpg"
+  image: "/images/ekb-2026-cover.jpg"
   alt: "Winter Yekaterinburg — city view"
   caption: "Yekaterinburg in February — graphic light and contrasts"
 ---

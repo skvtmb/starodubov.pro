@@ -37,7 +37,7 @@
       <div class="frame">
         <span class="corner tl"></span><span class="corner br"></span>
         <span class="ph"><span class="mono">[ портрет ]</span></span>
-        {{ with $hero.portrait }}<img src="{{ . | relURL }}" alt="{{ site.Params.author.name | default site.Title }}" onerror="this.style.display='none'">{{ end }}
+        {{ with $hero.portrait }}<img src="{{ . | relURL }}" alt="{{ site.Params.author.name | default site.Title }}" fetchpriority="high" onerror="this.style.display='none'">{{ end }}
         {{ with $hero.portraitTag }}<span class="pc-tag">{{ . }}</span>{{ end }}
       </div>
     </div>

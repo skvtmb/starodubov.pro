@@ -28,9 +28,9 @@
 <meta name="twitter:card" content="summary_large_image">
 
 {{- /* Fonts */ -}}
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+{{- /* Шрифты self-hosted (см. @font-face в signal.css) — без Google Fonts */ -}}
+<link rel="preload" href="{{ "fonts/manrope-cyrillic-wght-normal.woff2" | relURL }}" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="{{ "fonts/manrope-latin-wght-normal.woff2" | relURL }}" as="font" type="font/woff2" crossorigin>
 
 {{- /* Styles */ -}}
 {{ $css := resources.Get "css/signal.css" | minify | fingerprint }}

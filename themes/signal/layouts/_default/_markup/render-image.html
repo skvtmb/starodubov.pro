@@ -1,0 +1,30 @@
+{{- /* Картинки в статьях: lazy-loading всегда; для локальных JPEG/PNG из assets
+       генерируются WebP-варианты с srcset (оригиналы лежат в assets/images/) */ -}}
+{{- $dest := .Destination -}}
+{{- $alt := .Text | plainify -}}
+{{- $img := "" -}}
+{{- if hasPrefix $dest "/images/" -}}
+  {{- $img = resources.Get (strings.TrimPrefix "/" $dest) -}}
+{{- end -}}
+{{- if and $img (in (slice "jpeg" "png") $img.MediaType.SubType) -}}
+  {{- $large := $img -}}
+  {{- if gt $img.Width 1400 -}}
+    {{- $large = $img.Process "resize 1400x webp q80" -}}
+  {{- else -}}
+    {{- $large = $img.Process "webp q82" -}}
+  {{- end -}}
+  {{- $small := $large -}}
+  {{- if gt $img.Width 800 -}}
+    {{- $small = $img.Process "resize 800x webp q80" -}}
+  {{- end -}}
+  <img src="{{ $large.RelPermalink }}"
+    {{- if ne $small.RelPermalink $large.RelPermalink }}
+    srcset="{{ $small.RelPermalink }} 800w, {{ $large.RelPermalink }} {{ $large.Width }}w"
+    sizes="(max-width: 860px) 100vw, 760px"
+    {{- end }}
+    width="{{ $large.Width }}" height="{{ $large.Height }}"
+    alt="{{ $alt }}"{{ with .Title }} title="{{ . }}"{{ end }}
+    loading="lazy" decoding="async">
+{{- else -}}
+  <img src="{{ $dest | safeURL }}" alt="{{ $alt }}"{{ with .Title }} title="{{ . }}"{{ end }} loading="lazy" decoding="async">
+{{- end -}}
