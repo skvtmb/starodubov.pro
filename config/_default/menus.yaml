@@ -5,8 +5,8 @@ main:
   - name: Статьи
     url: /posts/
     weight: 2
-  - name: Сейчас
-    url: /now/
+  - name: Обо мне
+    url: /добро-пожаловать-в-мой-блог/
     weight: 3
   - name: Категории
     url: /categories/
