@@ -74,3 +74,6 @@ config.local.*
 *.tmp
 *.temp
 *.log
+# Claude Code local files
+.claude/settings.local.json
+.claude/worktrees/
