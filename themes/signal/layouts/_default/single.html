@@ -36,17 +36,13 @@
 <div class="wrap">
   <div class="art-wrap">
     <article class="art-body">
-      {{ if .Fragments.Headings }}
+      {{ with .TableOfContents }}
+      {{ if ne . "<nav id=\"TableOfContents\"></nav>" }}
       <details class="toc-inline" open>
         <summary>Содержание</summary>
-        <nav>
-          <ul>
-          {{ range .Fragments.Headings }}
-            <li><a href="#{{ .ID }}">{{ .Title }}</a></li>
-          {{ end }}
-          </ul>
-        </nav>
+        {{ . }}
       </details>
+      {{ end }}
       {{ end }}
       {{ .Content }}
       {{ with .GetTerms "tags" }}
