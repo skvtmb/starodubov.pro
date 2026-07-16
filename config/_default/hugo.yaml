@@ -30,7 +30,8 @@ markup:
       unsafe: true
   tableOfContents:
     startLevel: 2
-    endLevel: 3
+    endLevel: 2
+    ordered: false
   highlight:
     codeFences: true
     noClasses: false

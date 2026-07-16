@@ -202,8 +202,8 @@ h1.title{font-family:var(--disp);font-weight:700;font-size:56px;line-height:1.02
 .art-body a{color:var(--acc);border-bottom:1px solid var(--acc-dim);transition:border-color .15s}
 .art-body a:hover{border-bottom-color:var(--acc)}
 .art-body strong{color:var(--ink);font-weight:600}
-.art-body h2{font-family:var(--disp);font-weight:600;font-size:30px;letter-spacing:-.02em;margin:54px 0 6px;scroll-margin-top:96px;display:flex;align-items:baseline;gap:14px;counter-increment:h2}
-.art-body h2::before{content:counter(h2,decimal-leading-zero);font-family:var(--mono);font-size:14px;color:var(--acc);font-weight:500}
+.art-body h2{font-family:var(--disp);font-weight:600;font-size:30px;letter-spacing:-.02em;margin:54px 0 6px;scroll-margin-top:96px;display:flex;align-items:center;gap:16px;counter-increment:h2}
+.art-body h2::before{content:counter(h2,decimal-leading-zero);display:inline-grid;place-items:center;min-width:44px;height:44px;padding:0 11px;font-family:var(--mono);font-size:20px;font-weight:700;color:#06140a;background:var(--acc);border-radius:11px;letter-spacing:-.01em;box-shadow:0 0 0 5px var(--acc-dim)}
 .art-body h3{font-family:var(--disp);font-weight:600;font-size:21px;letter-spacing:-.01em;margin:36px 0 4px;scroll-margin-top:96px}
 .art-body ul,.art-body ol{margin:20px 0;padding-left:0;list-style:none}
 .art-body li{font-size:17.5px;line-height:1.7;color:#cfcfce;padding-left:28px;position:relative;margin:12px 0}
@@ -320,9 +320,11 @@ footer.site{border-top:1px solid var(--line);margin-top:64px;padding:54px 0 40px
 .toc-inline summary::after{content:"+";float:right;color:var(--acc);font-size:14px}
 .toc-inline[open] summary::after{content:"–"}
 .toc-inline nav{padding:2px 20px 16px}
-.toc-inline nav ul{list-style:none;margin:0;padding:0}
-.toc-inline nav li{margin:0;padding:0}
-.toc-inline nav a{display:block;font-size:14.5px;color:var(--muted);padding:7px 0;line-height:1.4;border:0;transition:color .15s}
+.toc-inline nav ul{list-style:none;margin:0;padding:0;counter-reset:toc}
+.toc-inline nav li{margin:0;padding:0;counter-increment:toc}
+.toc-inline nav li::before{content:none}
+.toc-inline nav a{display:flex;align-items:baseline;gap:12px;font-size:15px;color:var(--muted);padding:8px 0;line-height:1.4;border:0;transition:color .15s}
+.toc-inline nav a::before{content:counter(toc,decimal-leading-zero);font-family:var(--mono);font-size:13px;font-weight:700;color:var(--acc)}
 .toc-inline nav a:hover{color:var(--acc)}
 .toc-inline nav a.active{color:var(--acc)}
 /* сайдбар статьи теперь содержит только кнопки «поделиться» */
