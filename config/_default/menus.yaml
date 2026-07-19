@@ -8,9 +8,15 @@ main:
   - name: Обо мне
     url: /добро-пожаловать-в-мой-блог/
     weight: 3
+  - name: Материалы
+    url: /материалы/
+    weight: 4
+  - name: Рекомендации
+    url: /рекомендации/
+    weight: 5
   - name: Категории
     url: /categories/
-    weight: 4
+    weight: 6
   - name: Теги
     url: /tags/
-    weight: 5
+    weight: 7
