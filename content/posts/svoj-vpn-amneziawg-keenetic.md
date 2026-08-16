@@ -309,6 +309,7 @@ AllowedIPs = 0.0.0.0/0
 
 ## Полезные ссылки
 
+* 📖 [Часть 2: раздельное туннелирование в AmneziaVPN](/раздельное-туннелирование-в-amneziavpn-vpn-только-для-нужных-сайтов/) — та же выборочная логика для ноутбука и телефона вне дома
 * 🌐 [AmneziaVPN](https://amnezia.org/downloads) — клиент для всех платформ
 * 📚 [Документация Amnezia](https://docs.amnezia.org/ru/) — протоколы и тонкая настройка
 * 📋 [iplist.opencck.org](https://iplist.opencck.org/ru/) — готовые списки доменов в формате Keenetic
