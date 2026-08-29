@@ -16,6 +16,7 @@ relativeURLs: false
 
 permalinks:
   posts: /:slug/
+  fotografiya: /фото/:slug/
 
 pagination:
   pagerSize: 9

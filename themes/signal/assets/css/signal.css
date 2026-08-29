@@ -254,6 +254,61 @@ footer.site{border-top:1px solid var(--line);margin-top:64px;padding:54px 0 40px
 .foot a:hover{color:var(--acc)}
 .foot-bottom{display:flex;justify-content:space-between;align-items:center;margin-top:46px;padding-top:24px;border-top:1px solid var(--line-2);color:var(--faint);font-size:13px}
 
+/* ---- gallery ---- */
+.gal-intro{max-width:62ch;color:var(--muted);font-size:17.5px;line-height:1.7;margin:0 0 36px}
+.gal-intro p{margin:0 0 14px}
+.gal-intro p:last-child{margin:0}
+.gal-empty{color:var(--faint);font-size:16px}
+.gal-hero .crumbs{padding-top:0;margin-bottom:18px}
+.gal-meta{display:flex;flex-wrap:wrap;gap:10px 18px;margin-top:22px;font-family:var(--mono);font-size:12px;letter-spacing:.04em;color:var(--faint)}
+.gal-meta span+span::before{content:"·";margin-right:18px;color:var(--line)}
+
+.album-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+.album-grid .album:only-child{grid-column:1/-1}
+.album{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:var(--bg-2);display:flex;flex-direction:column;transition:transform .15s,border-color .15s}
+.album:hover{transform:translateY(-4px);border-color:var(--acc)}
+.album-cover{aspect-ratio:16/10;background:repeating-linear-gradient(135deg,#16161a 0 12px,#121215 12px 24px);overflow:hidden;position:relative}
+.album-cover img{width:100%;height:100%;object-fit:cover;display:block;filter:grayscale(.12) contrast(1.04);transition:transform .5s ease,filter .3s}
+.album:hover .album-cover img{transform:scale(1.04);filter:grayscale(0) contrast(1.04)}
+.album-body{padding:22px 22px 24px;display:flex;flex-direction:column;flex:1}
+.album-place{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--acc)}
+.album-body h2{font-family:var(--disp);font-weight:600;font-size:24px;letter-spacing:-.02em;margin:10px 0 8px}
+.album-body p{color:var(--muted);font-size:14.5px;line-height:1.55;flex:1}
+.album-meta{display:flex;flex-wrap:wrap;gap:8px 14px;margin-top:16px;color:var(--faint);font-family:var(--mono);font-size:11px;letter-spacing:.05em}
+
+.gal-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.gal-item{position:relative;display:block;aspect-ratio:3/2;overflow:hidden;border-radius:12px;border:1px solid var(--line);background:var(--bg-2);cursor:zoom-in}
+.gal-item img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .45s ease,filter .3s}
+.gal-item:hover img{transform:scale(1.05)}
+.gal-cap{position:absolute;left:0;right:0;bottom:0;padding:28px 12px 10px;font-size:12.5px;color:var(--ink);background:linear-gradient(180deg,transparent,rgba(10,10,11,.78));opacity:0;transform:translateY(6px);transition:opacity .2s,transform .2s}
+.gal-item:hover .gal-cap,.gal-item:focus-visible .gal-cap{opacity:1;transform:none}
+
+.gal-article{margin-top:40px;padding:24px 28px;border:1px solid var(--line);border-radius:14px;background:var(--bg-2);display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap}
+.gal-article p{margin:0;color:var(--muted);font-size:16px}
+
+.gal-notes{margin-top:64px;border-top:1px solid var(--line-2)}
+.gal-notes .sec-head{display:flex;align-items:baseline;gap:16px;padding:54px 0 26px}
+.gal-notes .sec-num{display:inline;min-width:0;height:auto;padding:0;background:none;color:var(--acc);box-shadow:none;font-family:var(--mono);font-size:13px;letter-spacing:.1em}
+.gal-notes .sec-title{font-size:28px}
+.gal-notes .sec-head a.all{margin-left:auto;font-size:14px;color:var(--muted);border-bottom:1px solid var(--line);padding-bottom:2px;transition:color .15s,border-color .15s}
+.gal-notes .sec-head a.all:hover{color:var(--acc);border-color:var(--acc)}
+
+/* lightbox */
+.lb{position:fixed;inset:0;z-index:80;background:rgba(6,6,8,.92);backdrop-filter:blur(10px);display:grid;place-items:center;padding:56px 72px 72px}
+.lb[hidden]{display:none !important}
+.lb-img{cursor:pointer}
+body.lb-open{overflow:hidden}
+.lb-fig{margin:0;max-width:min(1400px,100%);max-height:100%;display:flex;flex-direction:column;align-items:center;gap:14px}
+.lb-img{max-width:100%;max-height:calc(100vh - 160px);width:auto;height:auto;object-fit:contain;border-radius:10px;border:1px solid var(--line);box-shadow:0 24px 80px rgba(0,0,0,.45)}
+.lb-cap{font-size:14.5px;color:var(--muted);text-align:center;max-width:60ch}
+.lb-count{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:12px;letter-spacing:.08em;color:var(--faint)}
+.lb-x,.lb-nav{position:absolute;border:1px solid var(--line);background:var(--bg-2);color:var(--ink);border-radius:10px;cursor:pointer;display:grid;place-items:center;transition:border-color .15s,color .15s}
+.lb-x:hover,.lb-nav:hover{border-color:var(--acc);color:var(--acc)}
+.lb-x{top:18px;right:18px;width:44px;height:44px;font-size:26px;line-height:1}
+.lb-nav{top:50%;transform:translateY(-50%);width:46px;height:46px;font-size:20px}
+.lb-prev{left:18px}
+.lb-next{right:18px}
+
 /* ---- scroll reveal ---- */
 @media (prefers-reduced-motion: no-preference){
   .reveal{opacity:0;transform:translateY(22px);transition:opacity .7s cubic-bezier(.22,.61,.36,1),transform .7s cubic-bezier(.22,.61,.36,1)}
@@ -280,6 +335,9 @@ footer.site{border-top:1px solid var(--line);margin-top:64px;padding:54px 0 40px
   .svc-card{border-right:0!important}
   .room-grid{grid-template-columns:repeat(2,1fr)}
   .post-grid{grid-template-columns:1fr 1fr}
+  .album-grid{grid-template-columns:1fr}
+  .gal-grid{grid-template-columns:1fr 1fr}
+  .lb{padding:52px 56px 64px}
   .art-wrap{grid-template-columns:1fr;gap:0}
   .toc{display:none}
   .foot{grid-template-columns:1fr 1fr}
@@ -305,6 +363,14 @@ footer.site{border-top:1px solid var(--line);margin-top:64px;padding:54px 0 40px
   .sec-title{font-size:25px}
   .room-grid{grid-template-columns:1fr}
   .post-grid{grid-template-columns:1fr}
+  .gal-grid{grid-template-columns:1fr}
+  .gal-cap{opacity:1;transform:none}
+  .album-body h2{font-size:20px}
+  .lb{padding:56px 8px 56px}
+  .lb-x{top:10px;right:10px;width:40px;height:40px}
+  .lb-nav{width:40px;height:40px}
+  .lb-prev{left:6px}
+  .lb-next{right:6px}
   .art-body p,.art-body li{font-size:16.5px}
   .art-body h2{font-size:25px}
   .author-in{grid-template-columns:auto 1fr;gap:16px}

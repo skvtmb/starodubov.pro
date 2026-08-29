@@ -54,4 +54,42 @@
       "itemListElement" $crumbs
   -}}
   <script type="application/ld+json">{{ $breadcrumb | jsonify | safeJS }}</script>
+{{- else if and .IsPage (eq .Type "fotografiya") -}}
+  {{- $images := slice -}}
+  {{- range .Params.photos -}}
+    {{- with .src -}}{{- $images = $images | append (. | absURL) -}}{{- end -}}
+  {{- end -}}
+  {{- $gallery := dict
+      "@context" "https://schema.org"
+      "@type" "ImageGallery"
+      "name" .Title
+      "description" (.Description | default .Summary | plainify | truncate 180)
+      "url" .Permalink
+      "inLanguage" "ru-RU"
+      "author" (dict "@type" "Person" "name" ($author.name | default site.Title) "url" site.BaseURL)
+  -}}
+  {{- with .Params.cover -}}{{- $gallery = merge $gallery (dict "image" (. | absURL)) -}}{{- end -}}
+  {{- with $images -}}{{- $gallery = merge $gallery (dict "associatedMedia" .) -}}{{- end -}}
+  <script type="application/ld+json">{{ $gallery | jsonify | safeJS }}</script>
+  {{- $crumbs := slice
+      (dict "@type" "ListItem" "position" 1 "name" "Главная" "item" site.BaseURL)
+      (dict "@type" "ListItem" "position" 2 "name" "Фото" "item" (printf "%sфото/" site.BaseURL))
+      (dict "@type" "ListItem" "position" 3 "name" .Title "item" .Permalink)
+  -}}
+  {{- $breadcrumb := dict
+      "@context" "https://schema.org"
+      "@type" "BreadcrumbList"
+      "itemListElement" $crumbs
+  -}}
+  <script type="application/ld+json">{{ $breadcrumb | jsonify | safeJS }}</script>
+{{- else if and .IsSection (eq .Type "fotografiya") -}}
+  {{- $col := dict
+      "@context" "https://schema.org"
+      "@type" "CollectionPage"
+      "name" .Title
+      "description" (.Description | plainify | truncate 180)
+      "url" .Permalink
+      "inLanguage" "ru-RU"
+  -}}
+  <script type="application/ld+json">{{ $col | jsonify | safeJS }}</script>
 {{- end -}}

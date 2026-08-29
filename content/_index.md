@@ -83,7 +83,7 @@ servicesHidden:
 
 rooms:
   - { slug: "/posts", title: "Блог", desc: "Заметки про ИБ, финтех, технологии и фотографию", url: "/posts/" }
+  - { slug: "/фото", title: "Фото", desc: "Галерея: городские серии и поездки на Canon EOS R8", url: "/фото/" }
   - { slug: "/now", title: "Сейчас", desc: "Чем я занят прямо сейчас: работа, фото, проекты", url: "/now/" }
   - { slug: "/categories", title: "Категории", desc: "Структурированный список тем", url: "/categories/" }
-  - { slug: "/tags", title: "Теги", desc: "Поиск по ключевым словам", url: "/tags/" }
 ---
