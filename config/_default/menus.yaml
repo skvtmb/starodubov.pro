@@ -5,18 +5,15 @@ main:
   - name: Статьи
     url: /posts/
     weight: 2
+  - name: Фото
+    url: /фото/
+    weight: 3
   - name: Обо мне
     url: /добро-пожаловать-в-мой-блог/
-    weight: 3
+    weight: 4
   - name: Материалы
     url: /материалы/
-    weight: 4
+    weight: 5
   - name: Рекомендации
     url: /рекомендации/
-    weight: 5
-  - name: Категории
-    url: /categories/
     weight: 6
-  - name: Теги
-    url: /tags/
-    weight: 7
