@@ -47,7 +47,7 @@ photos:
     alt: "Уличная торговка жарит мясо на гриле у прилавка с одеждой и красными фонарями"
     caption: "Уличная торговка жарит мясо на гриле у прилавка с одеждой и красными фонарями"
     meta: "Пхукет · 9 марта 2025 · Canon EOS R8 · RF24-105mm F4 L IS USM"
-  - src: "/images/gallery/lyudi/street-performer playing-music-in-belgrade-city-center.jpg"
+  - src: "/images/gallery/lyudi/street-performer-playing-music-in-belgrade-city-center.jpg"
     alt: "Голубь в полёте над мощёной площадью, ребёнок и старинные здания на заднем плане"
     caption: "Голубь в полёте над мощёной площадью, ребёнок и старинные здания на заднем плане"
     meta: "Белград · 24 августа 2026 · Canon EOS R8 · RF 24-105mm F4L IS USM"
