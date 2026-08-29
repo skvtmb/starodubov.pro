@@ -6,7 +6,7 @@
 {{- /* cover может быть объектом (image/alt/caption) из старого формата front matter */ -}}
 {{- if reflect.IsMap $cover }}{{ $cover = $cover.image }}{{ end -}}
 <a class="post" href="{{ .RelPermalink }}">
-  <div class="thumb{{ if $cover }} has-img{{ end }}"{{ with $cover }} style="background-image:url('{{ . | relURL }}')"{{ end }}>
+  <div class="thumb{{ if $cover }} has-img{{ end }}"{{ with $cover }} style="background-image:url('{{ partial "cover-url.html" (dict "src" . "width" 800) }}')"{{ end }}>
     <span class="cat">{{ $cat }}</span>
   </div>
   <div class="body">
