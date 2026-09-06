@@ -1,0 +1,34 @@
+{{- /* Обработанное фото для галереи.
+       Контекст: dict "src" "alt" "sizes" "eager" "class"
+       Возвращает <img>; полный WebP кладёт в data-full для лайтбокса. */ -}}
+{{- $src := .src -}}
+{{- $alt := .alt | default "" -}}
+{{- $path := strings.TrimPrefix "/" $src -}}
+{{- $img := resources.Get $path -}}
+{{- if and $img (in (slice "jpeg" "png") $img.MediaType.SubType) -}}
+  {{- $full := $img -}}
+  {{- if gt $img.Width 1600 -}}
+    {{- $full = $img.Process "resize 1600x webp q82" -}}
+  {{- else -}}
+    {{- $full = $img.Process "webp q82" -}}
+  {{- end -}}
+  {{- $thumb := $full -}}
+  {{- if gt $img.Width 900 -}}
+    {{- $thumb = $img.Process "resize 900x webp q78" -}}
+  {{- end -}}
+  <img src="{{ $thumb.RelPermalink }}"
+    {{- if ne $thumb.RelPermalink $full.RelPermalink }}
+    srcset="{{ $thumb.RelPermalink }} {{ $thumb.Width }}w, {{ $full.RelPermalink }} {{ $full.Width }}w"
+    sizes="{{ .sizes | default "(max-width: 860px) 100vw, 33vw" }}"
+    {{- end }}
+    width="{{ $thumb.Width }}" height="{{ $thumb.Height }}"
+    alt="{{ $alt }}"
+    {{- with .class }} class="{{ . }}"{{ end }}
+    data-full="{{ $full.RelPermalink }}"
+    {{- if .eager }} fetchpriority="high"{{ else }} loading="lazy" decoding="async"{{ end }}>
+{{- else -}}
+  <img src="{{ $src | relURL }}" alt="{{ $alt }}"
+    {{- with .class }} class="{{ . }}"{{ end }}
+    data-full="{{ $src | relURL }}"
+    {{- if .eager }} fetchpriority="high"{{ else }} loading="lazy" decoding="async"{{ end }}>
+{{- end -}}
