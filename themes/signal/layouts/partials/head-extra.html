@@ -1,5 +1,11 @@
 {{- /* Хук для аналитики и дополнительных метатегов.
-      Яндекс.Метрика включается параметром yandexMetrikaID в params.yaml */ -}}
+      Яндекс.Метрика включается параметром yandexMetrikaID в params.yaml,
+      реклама РСЯ (авторазмещение) — параметром yandexAdsPageID */ -}}
+{{ with site.Params.yandexAdsPageID }}
+<!-- Yandex Autoplacement {{ . }} -->
+<script src="https://yandex.ru/ads/system/context.js" async></script>
+<script data-page-id="{{ . }}" src="https://yandex.ru/ads/system/ap-loader.js" async></script>
+{{ end }}
 {{ with site.Params.yandexMetrikaID }}
 <!-- Yandex.Metrika counter -->
 <script type="text/javascript">

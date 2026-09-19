@@ -168,6 +168,24 @@ if failed:
     sys.exit(1)
 print(f'Загружено: {len(jobs) - len(failed)}')
 
+# 3) зачистка: удаляем из бакета то, чего больше нет ни в сборке, ни в редиректах
+expected = {nfc(os.path.relpath(os.path.join(r, f), 'public'))
+            for r, _, fs in os.walk('public') for f in fs}
+expected |= set(stub_keys)
+stale = [k for k in remote if nfc(k) not in expected]
+if stale:
+    def delete(key):
+        r = subprocess.run(['yc', 'storage', 's3api', 'delete-object',
+                            '--bucket', BUCKET, '--key', key], capture_output=True)
+        return key, r.returncode == 0
+    del_failed = []
+    with ThreadPoolExecutor(max_workers=8) as ex:
+        for key, ok in ex.map(delete, stale):
+            if not ok:
+                del_failed.append(key)
+    print(f'Удалено устаревших: {len(stale) - len(del_failed)}'
+          + (f', ошибок: {len(del_failed)}' if del_failed else ''))
+
 # IndexNow: сообщаем поисковикам об изменённых страницах (Яндекс, Bing и др.)
 key_line = [l for l in open('config/_default/params.yaml', encoding='utf-8')
             if l.startswith('indexNowKey:')]

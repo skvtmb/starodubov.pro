@@ -1,0 +1,15 @@
+{{- /* URL обложки с обработкой через assets.
+       Контекст: dict "src" (путь /images/...) "width" (макс. ширина, 0 = как есть)
+       "fmt" ("webp"|"jpeg"). Если файла нет в assets — исходный URL как есть. */ -}}
+{{- $src := .src -}}
+{{- $w := .width | default 0 -}}
+{{- $fmt := .fmt | default "webp" -}}
+{{- $out := $src | absURL -}}
+{{- with resources.Get (strings.TrimPrefix "/" $src) -}}
+  {{- if in (slice "jpeg" "png") .MediaType.SubType -}}
+    {{- $spec := printf "%s q82" $fmt -}}
+    {{- if and (gt $w 0) (gt .Width $w) -}}{{- $spec = printf "resize %dx %s q82" $w $fmt -}}{{- end -}}
+    {{- $out = (.Process $spec).Permalink -}}
+  {{- end -}}
+{{- end -}}
+{{- return $out -}}
