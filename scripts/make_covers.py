@@ -418,11 +418,49 @@ def cover_openclaw():
     c.save("openclaw-cover.jpg")
 
 
+def cover_sprut():
+    c = Canvas()
+    c.layout(["УМНЫЙ ДОМ", "ЛОКАЛЬНО", "ZIGBEE"], "Умный дом", "без облака",
+             "Почему я выбрал Sprut.Hub 2",
+             "и что проверить до покупки", head=92)
+    c.line([(1040, 650), (1570, 650)], LINE, 3)
+    # спрут-хаб на тумбе
+    c.rrect(1270, 560, 1450, 650, (52, 44, 36), r=10)
+    OCT = (150, 120, 220)
+    # щупальца к устройствам (рисуем до тела)
+    targets = [((1214, 258), AMB), ((1300, 250), BLUE), ((1470, 300), ACC), ((1540, 470), CORAL)]
+    for (tx, ty), col in targets:
+        mx, my = (1360 + tx) / 2 + (30 if tx < 1360 else -30), (470 + ty) / 2 + 40
+        c.line([(1360, 480), (mx, my), (tx, ty + 34)], OCT, 9, amp=2.4)
+    c.blob(1360, 490, 62, 56, OCT, amp=1.6)
+    for sx in (-1, 1):
+        c.line([(1360 + sx * 40, 530), (1360 + sx * 70, 556), (1360 + sx * 58, 560)], OCT, 9, amp=1.6)
+        c.blob(1360 + sx * 20, 480, 10, 11, PAPER, amp=0.4, n=12)
+        c.blob(1360 + sx * 20, 483, 5, 5.5, (30, 26, 40), amp=0.2, n=10)
+    c.arc(1360, 508, 14, 8, 20, 160, (70, 50, 120), 3)
+    # устройства: лампа, датчик, розетка, капля
+    c.blob(1214, 248, 24, 26, AMB, amp=1.0); c.rrect(1204, 272, 1224, 288, (120, 110, 90), r=4)
+    for a in (-60, -90, -120):
+        import math as _m
+        c.line([(1214 + 36 * _m.cos(_m.radians(a)), 248 + 36 * _m.sin(_m.radians(a))),
+                (1214 + 50 * _m.cos(_m.radians(a)), 248 + 50 * _m.sin(_m.radians(a)))], AMB, 3)
+    c.rrect(1272, 216, 1328, 272, (24, 30, 40), outline=BLUE, width=3, r=12); c.label(1282, 232, "24°", BLUE, 20)
+    c.rrect(1442, 266, 1498, 322, (20, 34, 26), outline=ACC, width=3, r=12)
+    for sx in (-9, 9):
+        c.blob(1470 + sx, 294, 4, 4, ACC, amp=0.2, n=10)
+    c.blob(1540, 462, 16, 20, (70, 36, 32), outline=CORAL, width=3)
+    # довольный хозяин с кружкой, роутер без интернета не пугает
+    c.person(1096, 650, shirt=ACC, hairstyle="short", hair=(60, 44, 36), lhand=(1052, 540), rhand=(1162, 520), look=1)
+    c.rrect(1152, 490, 1182, 524, PAPER, r=6)
+    c.label(1300, 600, "SPRUT.HUB", PAPER, 18)
+    c.save("sprut-hub-cover.jpg")
+
+
 if __name__ == "__main__":
     import sys
     prepare_fonts()
     scenes = (cover_mama, cover_benzin, cover_vpn, cover_split, cover_openapi, cover_agents,
-              cover_risk, cover_openclaw)
+              cover_risk, cover_openclaw, cover_sprut)
     wanted = sys.argv[1:]                # напр.: make_covers.py openclaw
     for fn in scenes:
         if not wanted or any(w in fn.__name__ for w in wanted):
