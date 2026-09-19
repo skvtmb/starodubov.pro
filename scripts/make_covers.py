@@ -384,7 +384,46 @@ def cover_risk():
     c.save("anthropic-risk-report-cover.jpg")
 
 
+def cover_openclaw():
+    c = Canvas()
+    c.layout(["SELF-HOSTED", "ИИ-АГЕНТ", "ТОКЕНЫ"], "Домашний агент", "и экономия токенов",
+             "OpenClaw в отдельной виртуалке на NAS:",
+             "изоляция, модели и куда уходит контекст", head=88)
+    c.line([(1040, 650), (1570, 650)], LINE, 3)
+    # мини-сервер, внутри — «комната» VM с агентом
+    c.rrect(1320, 400, 1560, 650, (24, 28, 36), outline=BLUE, width=4, r=18)
+    c.label(1340, 412, "NAS", BLUE, 20)
+    c.rrect(1350, 450, 1530, 620, (14, 22, 17), outline=ACC, width=3, r=14)
+    c.label(1366, 458, "VM", ACC, 20)
+    RED = (214, 84, 72)
+    c.blob(1440, 552, 44, 42, RED, amp=1.4)                        # агент-клешня
+    for sx in (-1, 1):
+        c.blob(1440 + sx * 52, 540, 15, 13, RED, amp=1.2)          # клешни
+        c.line([(1440 + sx * 12, 512), (1440 + sx * 20, 494)], RED, 4)   # усики
+        c.blob(1440 + sx * 14, 544, 8, 9, PAPER, amp=0.4, n=12)
+        c.blob(1440 + sx * 14, 546, 4, 4.5, (30, 26, 26), amp=0.2, n=10)
+    c.arc(1440, 566, 12, 7, 20, 160, (110, 36, 30), 3)
+    for i in range(3):
+        c.blob(1350 + i * 22, 636, 5, 5, ACC if i < 2 else (60, 66, 76), amp=0.3, n=10)
+    # человек с телефоном получает сводку
+    c.person(1150, 650, shirt=AMB, hairstyle="short", hair=(60, 44, 36),
+             lhand=(1090, 540), rhand=(1222, 474), look=1)
+    c.rrect(1208, 424, 1244, 490, (28, 34, 44), outline=PAPER, width=3, r=8)
+    c.arrow(1346, 500, 1262, 462, ACC, 4, dashed=True)
+    c.bubble(1060, 236, 200, 66, "Сводка готова!", tail=(110, 12))
+    # счётчик контекста
+    c.label(1330, 300, "КОНТЕКСТ · 42%", DIM, 20)
+    c.rrect(1330, 334, 1560, 352, (34, 36, 42), r=8)
+    c.rrect(1330, 334, 1427, 352, AMB, r=8)
+    c.save("openclaw-cover.jpg")
+
+
 if __name__ == "__main__":
+    import sys
     prepare_fonts()
-    for fn in (cover_mama, cover_benzin, cover_vpn, cover_split, cover_openapi, cover_agents, cover_risk):
-        fn()
+    scenes = (cover_mama, cover_benzin, cover_vpn, cover_split, cover_openapi, cover_agents,
+              cover_risk, cover_openclaw)
+    wanted = sys.argv[1:]                # напр.: make_covers.py openclaw
+    for fn in scenes:
+        if not wanted or any(w in fn.__name__ for w in wanted):
+            fn()
