@@ -456,11 +456,36 @@ def cover_sprut():
     c.save("sprut-hub-cover.jpg")
 
 
+def cover_biometria():
+    """Реальная фотография книг в белой рамке-«полароиде» поверх фирменного макета."""
+    from PIL import ImageFilter
+    c = Canvas()
+    c.layout(["КНИГА", "УЧЕБНОЕ ПОСОБИЕ", "2026"], "Биометрическая", "идентификация",
+             "Новое учебное пособие под моей редакцией:",
+             "метрики, право, угрозы, защита и практикум", head=84)
+    photo = Image.open(os.path.join(OUT, "biometriya-posobie", "dva-posobiya.jpg")).convert("RGB")
+    ph = 620 * S
+    pw = round(photo.width * ph / photo.height)
+    photo = photo.resize((pw, ph), Image.LANCZOS)
+    pad = 18 * S
+    size = (pw + 2 * pad, ph + 2 * pad + 36 * S)
+    card = Image.new("RGB", size, PAPER)
+    card.paste(photo, (pad, pad))
+    card = card.rotate(4, resample=Image.BICUBIC, expand=True, fillcolor=(0, 0, 0))
+    mask = Image.new("L", size, 255).rotate(4, resample=Image.BICUBIC, expand=True)
+    x0, y0 = 1110 * S, 120 * S
+    shadow = Image.new("RGB", card.size, (0, 0, 0))
+    smask = mask.filter(ImageFilter.GaussianBlur(18 * S)).point(lambda v: int(v * 0.6))
+    c.img.paste(shadow, (x0 + 14 * S, y0 + 20 * S), smask)
+    c.img.paste(card, (x0, y0), mask)
+    c.save("biometriya-posobie-cover.jpg")
+
+
 if __name__ == "__main__":
     import sys
     prepare_fonts()
     scenes = (cover_mama, cover_benzin, cover_vpn, cover_split, cover_openapi, cover_agents,
-              cover_risk, cover_openclaw, cover_sprut)
+              cover_risk, cover_openclaw, cover_sprut, cover_biometria)
     wanted = sys.argv[1:]                # напр.: make_covers.py openclaw
     for fn in scenes:
         if not wanted or any(w in fn.__name__ for w in wanted):
