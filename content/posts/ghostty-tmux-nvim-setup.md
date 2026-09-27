@@ -41,11 +41,11 @@ cover:
 Установите нужные инструменты:
 
 ```bash
-brew install tmux neovim git fzf bat eza node
+brew install tmux neovim git fzf bat eza node ripgrep fd
 brew install --cask ghostty font-jetbrains-mono-nerd-font
 ```
 
-Шрифт **JetBrains Mono Nerd Font** нужен для иконок в prompt и лигатур в коде.
+Шрифт **JetBrains Mono Nerd Font** нужен для иконок в prompt и лигатур в коде. **ripgrep** и **fd** нужны Telescope: ripgrep обязателен для поиска по тексту (`live_grep`), fd ускоряет поиск файлов.
 
 ---
 
@@ -111,7 +111,7 @@ palette = 14=#8ec07c
 palette = 15=#ebdbb2
 ```
 
-После сохранения перезапустите Ghostty — тема применится.
+После сохранения перезапустите Ghostty или перечитайте конфиг сочетанием `Cmd+Shift+,` — тема применится. Строка `term = xterm-256color` необязательна: по умолчанию Ghostty выставляет свой `xterm-ghostty`, а `xterm-256color` выручает на серверах по SSH, где описания терминала Ghostty нет.
 
 ---
 
@@ -125,10 +125,10 @@ palette = 15=#ebdbb2
 set -g mouse on
 set -g history-limit 200000
 
-set -g default-terminal "screen-256color"
+set -g default-terminal "tmux-256color"
 
-set -ga terminal-overrides ",xterm-256color:Tc"
-set -ga terminal-overrides ",xterm-ghostty:Tc"
+set -as terminal-features ",xterm-256color:RGB"
+set -as terminal-features ",xterm-ghostty:RGB"
 
 set -sg escape-time 0
 
@@ -136,6 +136,8 @@ set -g focus-events on
 
 bind r source-file ~/.tmux.conf \; display "reloaded"
 ```
+
+`tmux-256color` вместо старого `screen-256color` нужен, чтобы внутри tmux работал курсив: с `screen-*` tmux его отключает. Строки `terminal-features ... :RGB` сообщают tmux, что внешний терминал умеет true color (24 бита). В tmux 3.2 и новее это штатная замена старому `terminal-overrides ... :Tc`.
 
 Перезагрузить конфиг без выхода из tmux: `Ctrl+b`, затем `r`.
 
@@ -199,7 +201,7 @@ Plug 'neovim/nvim-lspconfig'
 Plug 'hrsh7th/nvim-cmp'
 Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'nvim-lua/plenary.nvim'
-Plug 'nvim-telescope/telescope.nvim'
+Plug 'nvim-telescope/telescope.nvim', { 'tag': '*' }
 
 call plug#end()
 
@@ -223,10 +225,24 @@ nvim +PlugInstall +qall
 
 ## LSP-конфигурация (Neovim 0.11+)
 
-В тот же `init.vim` можно добавить блок для LSP (TypeScript и Python):
+В тот же `init.vim` после `call plug#end()` добавьте блок для автодополнения и LSP (TypeScript и Python). Сам по себе плагин nvim-cmp ничего не показывает: меню появится только после `cmp.setup()`.
 
 ```vim
 lua << EOF
+-- Автодополнение: nvim-cmp берёт варианты из LSP
+local cmp = require("cmp")
+
+cmp.setup({
+  mapping = cmp.mapping.preset.insert({
+    ["<C-Space>"] = cmp.mapping.complete(),
+    ["<CR>"] = cmp.mapping.confirm({ select = true }),
+  }),
+  sources = cmp.config.sources({
+    { name = "nvim_lsp" },
+  }),
+})
+
+-- Сообщаем серверам, что клиент умеет всё, что поддерживает nvim-cmp
 local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
 vim.lsp.config("ts_ls", {
@@ -243,6 +259,8 @@ vim.lsp.enable({
 })
 EOF
 ```
+
+В меню дополнений: `Ctrl+n` / `Ctrl+p` (или стрелки) — выбор варианта, `Enter` — подставить, `Ctrl+e` — закрыть, `Ctrl+Space` — вызвать меню вручную. Готовые настройки серверов `ts_ls` и `pyright` берутся из nvim-lspconfig, а `vim.lsp.config` / `vim.lsp.enable` — встроенный API Neovim 0.11+, старый `require("lspconfig").ts_ls.setup{}` больше не нужен.
 
 Установите LSP-серверы глобально (или через Mason и т.п.):
 
@@ -272,11 +290,11 @@ npm install -g pyright
 |--------|------------|
 | **vim-plug** | Менеджер плагинов: установка, обновление, загрузка по требованию. Вызывается через `call plug#begin()` / `Plug 'repo/name'` / `call plug#end()`. |
 | **morhetz/gruvbox** | Цветовая схема. Тёплые цвета, хорошая читаемость, единый вид с терминалом Ghostty. Включается через `colorscheme gruvbox`. |
-| **neovim/nvim-lspconfig** | Конфигурация встроенного LSP-клиента Neovim. Подключает языковые серверы (ts_ls, pyright и др.) без лишнего кода. |
-| **hrsh7th/nvim-cmp** | Движок автодополнения: показывает меню с вариантами (из LSP, буфера, путей). Работает вместе с источниками вроде cmp-nvim-lsp. |
+| **neovim/nvim-lspconfig** | Конфигурация встроенного LSP-клиента Neovim. Готовые настройки языковых серверов (ts_ls, pyright и др.): встроенные `vim.lsp.config` / `vim.lsp.enable` подхватывают их сами. |
+| **hrsh7th/nvim-cmp** | Движок автодополнения: показывает меню с вариантами. Сами варианты даёт источник: в этом конфиге только LSP (cmp-nvim-lsp), буфер и пути подключаются отдельными плагинами cmp-buffer и cmp-path. Включается через `cmp.setup()`. |
 | **hrsh7th/cmp-nvim-lsp** | Источник дополнений из LSP. Даёт nvim-cmp подсказки от языкового сервера (методы, переменные, аргументы). |
 | **nvim-lua/plenary.nvim** | Библиотека Lua для плагинов: асинхронные функции, утилиты. Нужна Telescope и многим другим плагинам как зависимость. |
-| **nvim-telescope/telescope.nvim** | Нечёткий поиск: по файлам, по тексту в проекте, по буферам. Своих привязок в конфиге выше нет: поиск файлов вызывается командой `:Telescope find_files`. Для поиска по тексту (`live_grep`) нужен ripgrep. |
+| **nvim-telescope/telescope.nvim** | Нечёткий поиск: по файлам, по тексту в проекте, по буферам. Своих привязок в конфиге выше нет: поиск файлов вызывается командой `:Telescope find_files`. Для поиска по тексту (`live_grep`) нужен ripgrep. Плагин закреплён на последнем релизе (`'tag': '*'`), как советуют авторы; нужен Neovim 0.11 или новее. |
 
 Итого: **vim-plug** ставит и грузит плагины, **gruvbox** даёт тему, **nvim-lspconfig** подключает LSP, **nvim-cmp** и **cmp-nvim-lsp** — автодополнение из LSP, **plenary.nvim** — зависимость, **telescope.nvim** — быстрая навигация по файлам и тексту.
 
