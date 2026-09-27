@@ -508,11 +508,36 @@ def cover_research():
     c.save("issledovaniya-2026-cover.jpg")
 
 
+def cover_jedi():
+    c = Canvas()
+    c.layout(["КНИГА", "ДОРОФЕЕВ", "ПРОДУКТИВНОСТЬ"], "Путь джедая", "пять уровней",
+             "Как собрать свою методику продуктивности:",
+             "вакцины, практики и индикаторы по уровням", head=92)
+    c.line([(1040, 650), (1570, 650)], LINE, 3)
+    # лестница из пяти ступеней
+    x0, step_w, step_h = 1130, 86, 62
+    for i in range(5):
+        x = x0 + i * step_w
+        top = 650 - (i + 1) * step_h
+        c.rrect(x, top, x + step_w + 4, 650, (28 + i * 4, 34 + i * 4, 44 + i * 4),
+                outline=(70, 80, 96), width=3, r=6)
+        c.label(x + 32, top + 16, str(i + 1), ACC if i == 4 else DIM, 22)
+    # смартфон экраном вниз у подножия
+    c.rrect(1060, 630, 1112, 648, (30, 30, 34), outline=(90, 90, 96), width=3, r=6)
+    # человек на третьей ступени со светящимся посохом
+    sx, sy = x0 + 2 * step_w + 44, 650 - 3 * step_h
+    c.person(sx, sy, shirt=(230, 222, 200), hairstyle="short", hair=(60, 44, 36),
+             lhand=(sx - 58, sy - 118), rhand=(sx + 46, sy - 176), look=1)
+    for w, col in ((16, (40, 90, 60)), (8, (110, 231, 150)), (3, (230, 255, 236))):
+        c.line([(sx + 30, sy - 70), (sx + 78, sy - 300)], col, w, amp=0.6)
+    c.save("put-dzhedaya-cover.jpg")
+
+
 if __name__ == "__main__":
     import sys
     prepare_fonts()
     scenes = (cover_mama, cover_benzin, cover_vpn, cover_split, cover_openapi, cover_agents,
-              cover_risk, cover_openclaw, cover_sprut, cover_biometria, cover_research)
+              cover_risk, cover_openclaw, cover_sprut, cover_biometria, cover_research, cover_jedi)
     wanted = sys.argv[1:]                # напр.: make_covers.py openclaw
     for fn in scenes:
         if not wanted or any(w in fn.__name__ for w in wanted):
