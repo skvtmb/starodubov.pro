@@ -138,4 +138,4 @@ cover:
 
 ### Из интересного! Обо мне написали в блоге Авто.РУ (upd 20.06.2026)
 
-У меня взяли интерьвью в [блоге Авто РУ](https://auto.ru/mag/article/chestnye-istorii-teh-kto-kupil-parallelnyy-audi-q5/) Вот тут можно просчитать об этом.
+У меня взяли интервью в [блоге Авто.РУ](https://auto.ru/mag/article/chestnye-istorii-teh-kto-kupil-parallelnyy-audi-q5/). Вот тут можно прочитать об этом.
