@@ -108,7 +108,7 @@ add comment=LAN mtu=1500 name=LAN-Bridge protocol-mode=none
 
 В него добавляются порты `LAN-Eth2`…`LAN-Eth5`, радиомодули `LAN-wifi5ghz` и `LAN-wifi24ghz`, а также виртуальный интерфейс для IoT (`iot-guest`). И основная сеть, и «умный дом» оказываются в одной подсети; разделение только по SSID и security profile, без VLAN. Для домашнего сценария этого часто хватает: устройства видят друг друга, при необходимости можно вынести IoT в отдельный VLAN позже.
 
-Добавление портов в bridge (виртуальный интерфейс IoT создаётся в §8 и тогда же добавляется в bridge):
+Добавление портов в bridge (виртуальный интерфейс IoT создаётся в §8 и тогда же добавляется в bridge). Имена `LAN-wifi5ghz` и `LAN-wifi24ghz` появляются только после переименования `wifi1`/`wifi2` в §7, так что две последние строки выполняю уже после него:
 
 ```routeros
 /interface bridge port
@@ -118,7 +118,6 @@ add bridge=LAN-Bridge interface=LAN-Eth4
 add bridge=LAN-Bridge interface=LAN-Eth5
 add bridge=LAN-Bridge interface=LAN-wifi5ghz
 add bridge=LAN-Bridge interface=LAN-wifi24ghz
-add bridge=LAN-Bridge interface=iot-guest
 ```
 
 ---
@@ -167,13 +166,13 @@ add interface=wireguard1 list=VPN
 
 ### Профиль безопасности и конфигурация
 
-Сначала создаём профиль безопасности: WPA2 и WPA3, отключаем PMKID и WPS, включаем **management protection** (для WPA3 он обязателен). Потом — каналы: для 5 ГГц берём 5180 МГц, отключаем DFS, ширину 20/40/80 MHz по вкусу; для 2.4 ГГц — свой channel (например 2437), ширина 20 MHz. В конфигурации привязываем канал, страну (Russia), SSID, включаем 802.11r (FT), multicast-enhance и при необходимости RRM/WNM с общим steering neighbor group, чтобы клиенты могли плавно переключаться между 2.4 и 5 ГГц.
+Сначала создаём профиль безопасности: WPA2 и WPA3, отключаем PMKID и WPS, **management protection** ставим в `allowed` (WPA3-клиенты используют его обязательно, WPA2 — если умеют), там же включаем 802.11r (`ft=yes`). Потом — каналы: для 5 ГГц берём 5180 МГц, отключаем DFS, ширину 20/40/80 MHz по вкусу; для 2.4 ГГц — свой channel (например 2437), ширина 20 MHz. В конфигурации привязываем канал, страну (Russia), SSID и security. RRM (802.11k) и WNM (802.11v) в steering включены по умолчанию, поэтому клиенты и так могут плавно переключаться между 2.4 и 5 ГГц.
 
 В ROS 7 логика такая: **Security** (аутентификация, passphrase) → **Channel** (band, frequency, width) → **Configuration** (channel + security + SSID + country) → вешаем configuration на интерфейсы `wifi1` и `wifi2`. Иногда security-профиль приходится указывать и в configuration, и прямо на интерфейсе — в разных версиях ведут себя по-разному. Ниже пример шаблона (passphrase и имена подставьте свои):
 
 ```routeros
 /interface wifi security
-add authentication-types=wpa2-psk,wpa3-psk disable-pmkid=yes management-protection=allowed name=sec1 wps=disable
+add authentication-types=wpa2-psk,wpa3-psk disable-pmkid=yes ft=yes ft-over-ds=yes management-protection=allowed name=sec1 wps=disable
 
 /interface wifi channel
 add band=5ghz-ax frequency=5180 name=ch5 skip-dfs-channels=all width=20/40/80mhz
@@ -190,7 +189,7 @@ set [ find default-name=wifi2 ] configuration=cfg24ghz name=LAN-wifi24ghz securi
 
 ### Один SSID для 2.4 и 5 ГГц с роумингом
 
-Если хочется один и тот же SSID для обоих диапазонов и чтобы телефон или ноутбук сам переключался между 2.4 и 5 ГГц в зависимости от уровня сигнала — это как раз то, для чего придуманы 802.11r/k/v. Включаем **802.11r** (FT, Fast BSS Transition) в security или configuration: при переключении на другую точку или канал ключи уже согласованы, разрыв минимальный. Дополнительно в steering можно включить **802.11k** (RRM) и **802.11v** (WNM): клиент получает список соседних AP и подсказки, куда перейти. Один и тот же SSID задаём в обеих configuration (2.4 и 5 ГГц), у обоих интерфейсов указываем общий `steering.neighbor-group` (он создаётся автоматически, вида `dynamic-SSID-xxxxxxxx`). Важно: когда именно переключаться — решает само клиентское устройство, роутер только даёт информацию. В логах потом можно увидеть строки вроде «roamed to LAN-wifi24ghz, signal strength -69».
+Если хочется один и тот же SSID для обоих диапазонов и чтобы телефон или ноутбук сам переключался между 2.4 и 5 ГГц в зависимости от уровня сигнала — это как раз то, для чего придуманы 802.11r/k/v. Включаем **802.11r** (FT, Fast BSS Transition) в security (`ft=yes`, в примере выше это уже сделано): при переключении на другую точку или канал ключи уже согласованы, разрыв минимальный. В steering по умолчанию включены **802.11k** (`rrm=yes`) и **802.11v** (`wnm=yes`): клиент получает список соседних AP и подсказки, куда перейти. Один и тот же SSID задаём в обеих configuration (2.4 и 5 ГГц). Общий `steering.neighbor-group` руками задавать не обязательно: для точек с одинаковым SSID и настройками аутентификации RouterOS сама создаёт динамическую neighbor group. Важно: когда именно переключаться — решает само клиентское устройство, роутер только даёт информацию. В логах потом можно увидеть строки вроде «roamed to LAN-wifi24ghz, signal strength -69».
 
 ---
 
@@ -206,20 +205,23 @@ add authentication-types=wpa2-psk disable-pmkid=yes management-protection=disabl
 # passphrase задайте своим
 ```
 
-**Виртуальный интерфейс** — «вторая точка доступа» на том же радиомодуле 2.4 ГГц, со своим SSID. Указываем master-interface (основной Wi‑Fi 2.4 ГГц), имя виртуального интерфейса и привязываем security:
+**Виртуальный интерфейс** — «вторая точка доступа» на том же радиомодуле 2.4 ГГц, со своим SSID. Указываем master-interface (основной Wi‑Fi 2.4 ГГц), имя виртуального интерфейса, SSID и привязываем security:
 
 ```routeros
 /interface wifi
-add comment=iot-guest configuration.mode=ap disabled=no master-interface=LAN-wifi24ghz name=iot-guest security=sec_iot
+add comment=iot-guest configuration.mode=ap configuration.ssid=iot-guest disabled=no master-interface=LAN-wifi24ghz name=iot-guest security=sec_iot
+
+/interface bridge port
+add bridge=LAN-Bridge interface=iot-guest
 ```
 
-В **bridge port** добавляем этот виртуальный интерфейс, чтобы трафик IoT шёл в тот же LAN-Bridge. **Access-list** по MAC нужен, если хотите явно разрешать только известные устройства (например принтер): тогда на интерфейсе IoT и при необходимости на основном 2.4 ГГц добавляете правило `action=accept` с `mac-address=AA:BB:CC:DD:EE:FF` (подставьте MAC принтера или датчика). Остальные по умолчанию могут быть reject или не подключаться без пароля — зависит от политики.
+Второй командой добавляем этот виртуальный интерфейс в **bridge port**, чтобы трафик IoT шёл в тот же LAN-Bridge. **Access-list** по MAC нужен, если хотите явно разрешать только известные устройства (например принтер): тогда на интерфейсе IoT и при необходимости на основном 2.4 ГГц добавляете правило `action=accept` с `mac-address=AA:BB:CC:DD:EE:FF` (подставьте MAC принтера или датчика). Остальные по умолчанию могут быть reject или не подключаться без пароля — зависит от политики.
 
 ---
 
 ## 9. Kid Control
 
-RouterOS умеет ограничивать устройства по расписанию и по скорости (rate-limit). В конфиге заведён профиль Kid Control для одного из пользователей: к нему привязаны устройства по MAC, заданы окна доступа и лимиты. В firewall добавлен jump в цепочку kid-control, чтобы трафик этих устройств обрабатывался по своим правилам.
+RouterOS умеет ограничивать устройства по расписанию и по скорости (rate-limit). В конфиге заведён профиль Kid Control для одного из пользователей: к нему привязаны устройства по MAC, заданы окна доступа и лимиты. Руками в firewall для этого ничего добавлять не нужно: RouterOS сама создаёт динамические правила.
 
 **Профиль** — имя пользователя, дни/часы доступа и лимит скорости. Например: пятница (fri) 7:00–21:00, суббота (sat) 6:00–21:00, лимит 2 Mbit/s:
 
@@ -236,7 +238,7 @@ add mac-address=AA:BB:CC:DD:EE:01 name=Phone user=kid-user
 add mac-address=AA:BB:CC:DD:EE:02 name=Tablet user=kid-user
 ```
 
-В **firewall filter** в цепочке forward в начале добавлен jump в цепочку `kid-control`, где по connection mark или по адресам устройств применяются ограничения. Так трафик с этих MAC обрабатывается по правилам Kid Control (расписание и rate-limit).
+Своей цепочки `kid-control` в firewall нет, и jump туда делать не нужно (jump в пустую цепочку ничего не даёт). Kid Control находит IP устройства по MAC в ARP-таблице и сам добавляет динамические правила: `action=reject` в цепочке forward, когда доступ по расписанию закрыт, и simple queue с `max-limit` для rate-limit. Увидеть их можно в `/ip firewall filter` и `/queue simple` с флагом D (dynamic). FastTrack у меня отключён (см. §17), так что queue действительно ограничивает весь трафик устройства.
 
 ---
 
@@ -310,6 +312,8 @@ add address=94.140.15.15 name=dns.adguard-dns.com type=A comment="AdGuard DoH"
 
 После этого первый запрос к `dns.adguard-dns.com` пойдёт по одной из этих записей, и DoH заработает без «курицы и яйца».
 
+С `verify-doh-cert=yes` роутер должен доверять корневому сертификату сервера. Импортировать его руками на свежих версиях не нужно: встроенное хранилище корневых CA настраивается в `/certificate settings` параметром `builtin-trust-store` (с 7.21; раньше это был `builtin-trust-anchors`), и значение по умолчанию `default` уже включает DNS. С 7.20 это хранилище остаётся доверенным и после сброса конфигурации.
+
 ---
 
 ## 13. WireGuard
@@ -345,7 +349,10 @@ add fib name=to_wg
 /ip firewall mangle
 add action=mark-routing chain=prerouting comment="Route AI via WireGuard" dst-address-list=ai_wg in-interface-list=LAN new-routing-mark=to_wg passthrough=no
 add action=mark-routing chain=prerouting comment="Route YouTube via WireGuard" dst-address-list=youtube_wg in-interface-list=LAN new-routing-mark=to_wg passthrough=no
+add action=mark-routing chain=prerouting comment="Route YouTube subnets (iplist) via WireGuard" dst-address-list=youtube_cidr4 in-interface-list=LAN new-routing-mark=to_wg passthrough=no
 ```
+
+Третье правило нужно для подсетей, которые импортирует скрипт `youtube ip` (см. §24): файл с iplist.opencck.org сам создаёт список `youtube_cidr4`. Скрипт `youtube dns` пишет адреса сразу в `youtube_wg`.
 
 **Address-list** `ai_wg` и `youtube_wg` содержат домены (openai.com, api.openai.com, chatgpt.com, youtube.com, googlevideo.com и т.д.) и подсети (например 172.64.150.0/24 из сетей Cloudflare или 173.194.0.0/16 у Google/YouTube). Домены резолвятся в IP при первом запросе; подсети добавляются вручную или скриптами. Примеры записей (остальные по тому же принципу):
 
@@ -377,7 +384,7 @@ add bridge-learning=no change-tcp-mss=yes interface-list=VPN name=l2tp use-compr
 add allow=mschap2 allow-fast-path=yes connect-to=vpn.example.com keepalive-timeout=30 name=L2TP-VPN profile=l2tp use-ipsec=yes user=your_l2tp_user
 ```
 
-Пароль задаётся в **Secrets** (`/ppp secret`). IPsec: в **IPsec proposal** можно оставить aes-128-cbc; в **IPsec profile** — dh-group и enc-algorithm под ваш сервер. После подключения интерфейс L2TP появится в списке, и маршруты через него настраиваются по необходимости.
+Пароль клиента задаётся прямо на интерфейсе параметром `password=`, IPsec secret — параметром `ipsec-secret=` (`/ppp secret` — это учётки для PPP-сервера, клиенту они не нужны). IPsec: в **IPsec proposal** можно оставить aes-128-cbc; в **IPsec profile** — dh-group и enc-algorithm под ваш сервер. После подключения интерфейс L2TP появится в списке, и маршруты через него настраиваются по необходимости.
 
 ---
 
@@ -407,7 +414,7 @@ add as=64999 hold-time=4m input.filter=antifilter-in keepalive-time=1m multihop=
 
 ## 17. Firewall filter
 
-На input: принимаем established/related/untracked, ICMP, разрешаем BGP от известных peer; invalid дропаем; всё, что не из LAN, в конце дропаем. Для защиты от перебора по SSH и Winbox агрессивные попытки с WAN попадают в blacklist. Forward: established/related — accept, invalid — drop, с WAN без dstnat новое — drop, затем цепочка DDoS и jump в kid-control. FastTrack отключён — из-за mangle, WireGuard, BGP и DDoS нужен полный проход пакетов через фильтр.
+На input: принимаем established/related/untracked, ICMP, разрешаем BGP от известных peer; invalid дропаем; всё, что не из LAN, в конце дропаем. Для защиты от перебора по SSH и Winbox агрессивные попытки с WAN попадают в blacklist. Forward: established/related — accept, invalid — drop, новое с WAN — через цепочку DDoS, с WAN без dstnat новое — drop. Правила Kid Control RouterOS добавляет в forward сама, отдельный jump под них не нужен. FastTrack отключён — из-за mangle, WireGuard, BGP и DDoS нужен полный проход пакетов через фильтр.
 
 **Input**: порядок правил — сначала разрешаем «нормальные» состояния и ICMP, потом BGP от IP пиров (чтобы не потерять сессию), затем защита портов 22 и 8291 — при превышении лимита соединений добавляем в blacklist и дропаем, в конце дроп всего не из LAN:
 
@@ -423,7 +430,20 @@ add action=drop chain=input dst-port=22,8291 in-interface-list=WAN protocol=tcp 
 add action=drop chain=input in-interface-list=!LAN comment="drop all not from LAN"
 ```
 
-**Forward**: jump в kid-control, затем accept established/related, drop invalid, drop новое с WAN не dstnat, jump в detect_DDoS для нового трафика с WAN (и при желании такой же jump для input на порты 22,80,443,8291). **Цепочка detect_DDoS**: при нормальной частоте — return; при превышении — add-dst-to-address-list ddos-targets и add-src-to-address-list ddos-attackers (timeout 10m).
+**Forward**: accept established/related, drop invalid, jump в detect_DDoS для нового трафика с WAN (и при желании такой же jump для input на порты 22,80,443,8291), затем drop новое с WAN не dstnat. **Цепочка detect_DDoS**: при нормальной частоте — return; при превышении — add-dst-to-address-list ddos-targets и add-src-to-address-list ddos-attackers (timeout 10m). Пороги взяты из примера MikroTik:
+
+```routeros
+/ip firewall filter
+add action=accept chain=forward connection-state=established,related,untracked comment="accept established,related,untracked"
+add action=drop chain=forward connection-state=invalid comment="drop invalid"
+add action=jump chain=forward connection-state=new in-interface-list=WAN jump-target=detect_DDoS comment="new from WAN -> detect_DDoS"
+add action=drop chain=forward connection-nat-state=!dstnat connection-state=new in-interface-list=WAN comment="drop new from WAN not dstnat"
+add action=return chain=detect_DDoS dst-limit=32,32,src-and-dst-addresses/10s
+add action=add-dst-to-address-list address-list=ddos-targets address-list-timeout=10m chain=detect_DDoS
+add action=add-src-to-address-list address-list=ddos-attackers address-list-timeout=10m chain=detect_DDoS
+```
+
+Имя в `jump-target` должно буква в букву совпадать с `chain` правил цепочки: иначе jump уходит в пустую цепочку, и пакет просто идёт дальше по forward.
 
 ---
 
@@ -504,7 +524,7 @@ set api-ssl disabled=yes
 set ftp disabled=yes
 ```
 
-Подставьте свою LAN-подсеть в `address`; с других адресов SSH и Winbox будут недоступны.
+Подставьте свою LAN-подсеть в `address`; с других адресов SSH и Winbox будут недоступны. В RouterOS 7.24 этот параметр переименовали в `available-from`; старое имя `address` пока принимается для обратной совместимости.
 
 ---
 
@@ -542,69 +562,76 @@ add address=1.ru.pool.ntp.org
 
 ### Back_up_1
 
-Создаёт бинарный backup и текстовый export в `usb1-part1/backup/`. Запускается из scheduler Backup.
+Создаёт бинарный backup и текстовый export в `usb1-part1/backup/`. Запускается из scheduler Backup. Расширения не указываю: `/system backup save` сам допишет `.backup`, а `/export file=` — `.rsc`. Двоеточия из времени убираю, чтобы в имени файла были только буквы, цифры, дефисы и подчёркивание. С RouterOS 7.10 `[/system clock get date]` отдаёт дату в ISO-формате (`2026-09-27`), раньше было `sep/27/2026`, и слэши превращались в лишние папки.
 
 ```routeros
-:local currentTime [/system clock get time]
-:local currentDate [/system clock get date]
-:local backupFile ("usb1-part1/backup/backup-" . $currentDate . "-" . $currentTime . ".backup")
-:local backupTXT ("usb1-part1/backup/backup-" . $currentDate . "-" . $currentTime . ".txt")
-/system backup save name=$backupFile
-/export show-sensitive file=$backupTXT
+:local curDate [/system clock get date]
+:local curTime [/system clock get time]
+:local stamp ($curDate . "_" . [:pick $curTime 0 2] . [:pick $curTime 3 5])
+:local base ("usb1-part1/backup/backup-" . $stamp)
+/system backup save name=$base
+/export show-sensitive file=$base
 ```
+
+На выходе получаются пары вида `backup-2026-09-27_0000.backup` и `backup-2026-09-27_0000.rsc`.
 
 ### Backup_2
 
-Удаляет файлы в `usb1-part1/backup/` старше 30 дней. Запускается сразу после Back_up_1.
+Удаляет из `usb1-part1/backup/` файлы `backup-*` (и `.backup`, и `.rsc`) старше 30 дней. Запускается сразу после Back_up_1. Даты превращаются в номер дня по честному календарю, с учётом длины месяцев и високосных лет, так что переход через месяц или год не ломает подсчёт. Скрипт рассчитан на RouterOS 7.16+: там дата в ISO-формате, а свойство файла называется `last-modified` (до 7.16 было `creation-time`). Если формат даты неожиданный, скрипт ничего не удаляет и пишет ошибку в лог.
 
 ```routeros
 {
-   :local daysAgo 30
-   :local filter "usb1-part1/backup/"
-   :local curDate [/system clock get date]
-   :local curMonth [:pick $curDate 5 7]
-   :local curDay [:pick $curDate 8 10]
-   :local curYear [:pick $curDate 0 4]
+    :local daysAgo 30
+    :local prefix "usb1-part1/backup/backup-"
 
-   :foreach i in=[/file find type=backup] do={
-      :local fileDate [/file get number=$i last-modified]
-      :set fileDate [:pick $fileDate 0 11]
-      :local fileMonth [:pick $fileDate 5 7]
-      :local fileDay [:pick $fileDate 8 10]
-      :local fileYear [:pick $fileDate 0 4]
-      :local sum 0
-      :set sum ($sum + (($curYear - $fileYear) * 365))
-      :set sum ($sum + (($curMonth - $fileMonth) * 30))
-      :set sum ($sum + ($curDay - $fileDay))
-      :if ($sum >= $daysAgo && [/file get number=$i name] ~ $filter) do={
-         /file remove $i
-      }
-   }
+    # "YYYY-MM-DD..." -> порядковый номер дня (алгоритм days-from-civil)
+    :local toDays do={
+        :local y [:tonum [:pick $1 0 4]]
+        :local m [:pick $1 5 7]
+        :if ([:pick $m 0 1] = "0") do={ :set m [:pick $m 1 2] }
+        :set m [:tonum $m]
+        :local d [:pick $1 8 10]
+        :if ([:pick $d 0 1] = "0") do={ :set d [:pick $d 1 2] }
+        :set d [:tonum $d]
+        :if ($m <= 2) do={
+            :set y ($y - 1)
+            :set m ($m + 9)
+        } else={
+            :set m ($m - 3)
+        }
+        :local era ($y / 400)
+        :local yoe ($y - ($era * 400))
+        :local doy ((((153 * $m) + 2) / 5) + ($d - 1))
+        :local doe (((($yoe * 365) + ($yoe / 4)) - ($yoe / 100)) + $doy)
+        :return (($era * 146097) + $doe)
+    }
 
-   :foreach i in=[/file find type=script] do={
-      :local fileDate [/file get number=$i last-modified]
-      :set fileDate [:pick $fileDate 0 11]
-      :local fileMonth [:pick $fileDate 5 7]
-      :local fileDay [:pick $fileDate 8 10]
-      :local fileYear [:pick $fileDate 0 4]
-      :local sum 0
-      :set sum ($sum + (($curYear - $fileYear) * 365))
-      :set sum ($sum + (($curMonth - $fileMonth) * 30))
-      :set sum ($sum + ($curDay - $fileDay))
-      :if ($sum >= $daysAgo && [/file get number=$i name] ~ $filter) do={
-         /file remove $i
-      }
-   }
+    :local curDate [/system clock get date]
+    :if ([:pick $curDate 4 5] != "-") do={
+        :log error ("Backup_2: unexpected date format " . $curDate . ", nothing removed")
+        :error "Backup_2: unexpected date format"
+    }
+    :local today [$toDays $curDate]
+
+    :foreach f in=[/file find where name~("^" . $prefix)] do={
+        :local fDate [:tostr [/file get $f last-modified]]
+        :if ([:pick $fDate 4 5] = "-") do={
+            :if (($today - [$toDays $fDate]) >= $daysAgo) do={
+                :log info ("Backup_2: removing " . [/file get $f name])
+                /file remove $f
+            }
+        }
+    }
 }
 ```
 
 ### Telegram
 
-Проверяет наличие новой версии RouterOS и при наличии отправляет уведомление в Telegram. **Замените `YOUR_BOT_TOKEN` и `YOUR_CHAT_ID` на свои.**
+Проверяет наличие новой версии RouterOS и при наличии отправляет уведомление в Telegram. **Замените `YOUR_BOT_TOKEN` и `YOUR_CHAT_ID` на свои.** Текст сообщения перед вставкой в URL кодирую через `:convert ... to=url` (команда есть с 7.11, пробелы и переводы строк она кодирует с 7.15): иначе пробелы, `<b>` и прочие спецсимволы ломают запрос.
 
 ```routeros
 :local TGSendMessage do={
-    :local tgUrl ("https://api.telegram.org/bot" . $Token . "/sendMessage?chat_id=" . $ChatID . "&text=" . $Text . "&parse_mode=html&disable_web_page_preview=True")
+    :local tgUrl ("https://api.telegram.org/bot" . $Token . "/sendMessage?chat_id=" . $ChatID . "&text=" . [:convert $Text to=url] . "&parse_mode=html&disable_web_page_preview=True")
     /tool fetch http-method=get url=$tgUrl keep-result=no
 }
 
@@ -643,7 +670,7 @@ add address=1.ru.pool.ntp.org
 :local result [/ping $host count=3]
 
 :if ($result = 0) do={
-    /tool fetch url=("https://api.telegram.org/bot" . $telegramToken . "/sendMessage?chat_id=" . $chatId . "&text=" . $message) keep-result=no
+    /tool fetch url=("https://api.telegram.org/bot" . $telegramToken . "/sendMessage?chat_id=" . $chatId . "&text=" . [:convert $message to=url]) keep-result=no
     :log warning ("Host " . $host . " unreachable. Alert sent to Telegram.")
 } else={
     :log info ("Host " . $host . " reachable (" . $result . " replies).")
@@ -652,26 +679,23 @@ add address=1.ru.pool.ntp.org
 
 ### youtube dns
 
-Собирает IP YouTube из DNS-кэша и добавляет их в address-list `youtube_dns_ips` (timeout 2d). Секретов нет.
+Собирает IP YouTube из DNS-кэша и добавляет их в address-list `youtube_wg` (timeout 2d) — тот самый, по которому mangle из §14 отправляет трафик в WireGuard. Поиск и чтение записей идут через одно и то же меню `/ip dns cache all`, чтобы ID записей гарантированно совпадали. Секретов нет.
 
 ```routeros
-:foreach i in=[/ip dns cache find where (name~"youtube") or (name~"ytstatic") or (name~"ytimg") or (name~"googlevideo.com") or (name~"googleapis.com")] do={
+:foreach i in=[/ip dns cache all find where type="A" and ((name~"youtube") or (name~"ytstatic") or (name~"ytimg") or (name~"googlevideo.com") or (name~"googleapis.com"))] do={
   :local cacheName [/ip dns cache all get $i name]
-  :local cacheType [/ip dns cache all get $i type]
+  :local cacheData [/ip dns cache all get $i data]
   :delay delay-time=10ms
-  :if ($cacheType="A") do={
-    :local cacheData [/ip dns cache all get $i data]
-    :if ([/ip firewall address-list find where address=$cacheData]="") do={
-      :put ("add: " . $cacheName . " " . $cacheType . " " . $cacheData)
-      /ip firewall address-list add address=$cacheData comment=$cacheName timeout=2d list=youtube_dns_ips
-    }
+  :if ([:len [/ip firewall address-list find where list="youtube_wg" and address=$cacheData]] = 0) do={
+    :put ("add: " . $cacheName . " " . $cacheData)
+    /ip firewall address-list add address=$cacheData comment=$cacheName timeout=2d list=youtube_wg
   }
 }
 ```
 
 ### youtube ip
 
-Скачивает список подсетей YouTube с iplist.opencck.org и импортирует в RouterOS. Секретов нет.
+Скачивает список подсетей YouTube с iplist.opencck.org и импортирует в RouterOS. Сам файл сначала удаляет старые статические записи списка `youtube_cidr4`, а потом добавляет актуальные, поэтому повторный импорт не плодит дубли. Чтобы эти подсети шли через WireGuard, в mangle нужно правило на `youtube_cidr4` (оно есть в §14). Секретов нет.
 
 ```routeros
 /tool fetch url="https://iplist.opencck.org/?format=mikrotik&site=youtube.com&data=cidr4" mode=https dst-path=iplist_v4_0cidr4.rsc
@@ -708,7 +732,7 @@ add address=1.ru.pool.ntp.org
 :if ($Start <= $End) do={
     :for i from=$Start to=$End do={
         :if (($ExcludeMessages = "") || !([/log get ($Array->$i) message] ~ $ExcludeMessages)) do={
-            :set Msg ($Msg . "%0A" . [/log get ($Array->$i) time] . " " . [:pick [/log get ($Array->$i) message] 0 $MsgLength])
+            :set Msg ($Msg . "\n" . [/log get ($Array->$i) time] . " " . [:pick [/log get ($Array->$i) message] 0 $MsgLength])
         }
     }
 }
@@ -724,14 +748,15 @@ add address=1.ru.pool.ntp.org
 
 ### TG_ME
 
-Отправляет глобальную переменную `MSG` в Telegram. **Замените `YOUR_CHAT_ID` и `YOUR_BOT_TOKEN` на свои.** Вызывается из Telegram, check-host-and-alert, Log_allert.
+Отправляет глобальную переменную `MSG` в Telegram. **Замените `YOUR_CHAT_ID` и `YOUR_BOT_TOKEN` на свои.** Вызывается из Log_allert (скрипты Telegram и check-host-and-alert шлют сообщения сами). Переводы строк `\n` из Log_allert и пробелы кодирует `:convert ... to=url`, поэтому `%0A` вручную больше не вставляю.
 
 ```routeros
 :local ID "YOUR_CHAT_ID"
 :local TKN "YOUR_BOT_TOKEN"
 :global MSG
+:local text ([/system identity get name] . ": " . $MSG)
 
-/tool fetch keep-result=no url=("https://api.telegram.org/bot" . $TKN . "/sendMessage?chat_id=" . $ID . "&text=" . [/system identity get name] . ": " . $MSG)
+/tool fetch keep-result=no url=("https://api.telegram.org/bot" . $TKN . "/sendMessage?chat_id=" . $ID . "&text=" . [:convert $text to=url])
 ```
 
 ---
@@ -742,6 +767,18 @@ add address=1.ru.pool.ntp.org
 - **Telegram** — ежедневно в 16:00: скрипт Telegram.
 - **check-host** — каждый час: check-host-and-alert.
 - **Log_allert_daily** — ежедневно в 22:00: Log_allert.
+
+В виде команд (с 7.10 `start-date` тоже задаётся в ISO-формате):
+
+```routeros
+/system scheduler
+add interval=5d name=Backup on-event="/system script run Back_up_1; /system script run Backup_2" start-date=2026-01-01 start-time=00:00:00
+add interval=1d name=Telegram on-event=Telegram start-date=2026-01-01 start-time=16:00:00
+add interval=1h name=check-host on-event=check-host-and-alert start-date=2026-01-01 start-time=00:00:00
+add interval=1d name=Log_allert_daily on-event=Log_allert start-date=2026-01-01 start-time=22:00:00
+```
+
+Про политики (`policy`): скрипт из scheduler работает с правами самого задания. Если урезаете набор, проверьте, что остались нужные: `/export show-sensitive` в Back_up_1 требует `sensitive`, `/ping` в check-host-and-alert — `test`, изменения конфигурации (address-list, удаление файлов) — `read` и `write`. Иначе скрипт не запустится или упадёт на середине; с 7.24 такие отказы по правам пишутся в лог.
 
 ---
 
