@@ -54,7 +54,7 @@ cover: "/images/macbook-apps-cover.jpg"
 * **Официальный сайт**: [https://www.cursor.com/](https://www.cursor.com/)
 
 ### Zed
-* **Установка через Homebrew**: ❌ Недоступно
+* **Установка через Homebrew**: `brew install --cask zed`
 * **Установка**: [Скачать с официального сайта](https://zed.dev/)
 * **Описание**: Быстрый редактор кода с минималистичным интерфейсом.
 * **Официальный сайт**: [https://zed.dev/](https://zed.dev/)
@@ -83,7 +83,7 @@ cover: "/images/macbook-apps-cover.jpg"
 * **Официальный сайт**: [https://www.wireguard.com/](https://www.wireguard.com/)
 
 ### xca
-* **Установка через Homebrew**: ❌ Недоступно
+* **Установка через Homebrew**: `brew install --cask xca`
 * **Установка**: [Скачать с официального сайта](https://www.hohnstaedt.de/xca/)
 * **Описание**: Управление сертификатами X.509, ключами и запросами на сертификаты (CSR).
 * **Официальный сайт**: [https://www.hohnstaedt.de/xca/](https://www.hohnstaedt.de/xca/)
@@ -104,7 +104,7 @@ cover: "/images/macbook-apps-cover.jpg"
 ### Photo Mechanic
 * **Установка через Homebrew**: ❌ Недоступно
 * **Установка**: [Скачать с официального сайта](https://home.camerabits.com/downloads/) (платное)
-* **Описание**: Профессиональный инструмент фотографа: его любят за быстрый отбор и обработку RAW-файлов.
+* **Описание**: Профессиональный инструмент фотографа: его любят за быстрый просмотр и отбор снимков (в том числе RAW), импорт с карт памяти и работу с метаданными.
 * **Официальный сайт**: [https://home.camerabits.com/](https://home.camerabits.com/)
 
 ### Adobe Lightroom Classic
@@ -120,7 +120,7 @@ cover: "/images/macbook-apps-cover.jpg"
 * **Официальный сайт**: [https://retouch4me.com/](https://retouch4me.com/)
 
 ### Minecraft
-* **Установка через Homebrew**: ❌ Недоступно
+* **Установка через Homebrew**: `brew install --cask minecraft`
 * **Установка**: [Скачать Java Edition с официального сайта](https://www.minecraft.net/download)
 * **Описание**: Игра-песочница с открытым миром, где можно строить что угодно.
 * **Официальный сайт**: [https://www.minecraft.net/](https://www.minecraft.net/)
@@ -151,12 +151,12 @@ cover: "/images/macbook-apps-cover.jpg"
 * **Установка через Homebrew**: ❌ Недоступно
 * **Установка через Mac App Store**: [Скачать из Mac App Store](https://apps.apple.com/us/app/owly-prevent-display-sleep/id882812218)
 * **Описание**: Не даёт Mac уснуть, пока идёт какая-нибудь долгая задача.
-* **Официальный сайт**: [https://owlyapp.com/](https://owlyapp.com/)
+* **Страница приложения**: [Mac App Store](https://apps.apple.com/us/app/owly-prevent-display-sleep/id882812218)
 
 ### PiPifier
 * **Установка через Homebrew**: ❌ Недоступно
-* **Установка**: [Установить расширение из GitHub](https://github.com/arnoappenzeller/PiPifier) (расширение для Safari)
-* **Описание**: Расширение для Safari: выносит видео с YouTube в отдельное окошко Picture-in-Picture.
+* **Установка**: [Страница проекта на GitHub](https://github.com/arnoappenzeller/PiPifier) (расширение для Safari, само приложение бесплатно в Mac App Store)
+* **Описание**: Расширение для Safari: выносит любое HTML5-видео (например, с YouTube) в отдельное окошко Picture-in-Picture.
 * **Официальный сайт**: [https://github.com/arnoappenzeller/PiPifier](https://github.com/arnoappenzeller/PiPifier)
 
 ## Сеть и коммуникации
@@ -182,7 +182,7 @@ cover: "/images/macbook-apps-cover.jpg"
 * **Официальный сайт**: [https://transmissionbt.com/](https://transmissionbt.com/)
 
 ### WinBox
-* **Установка через Homebrew**: ❌ Недоступно
+* **Установка через Homebrew**: `brew install --cask winbox`
 * **Установка**: [Скачать с официального сайта MikroTik](https://mikrotik.com/download)
 * **Описание**: Официальная утилита MikroTik: настройка роутеров в графическом интерфейсе.
 * **Официальный сайт**: [https://mikrotik.com/download](https://mikrotik.com/download)
@@ -190,7 +190,7 @@ cover: "/images/macbook-apps-cover.jpg"
 ## Графика и дизайн
 
 ### Adobe Creative Cloud
-* **Установка через Homebrew**: ❌ Недоступно
+* **Установка через Homebrew**: `brew install --cask adobe-creative-cloud`
 * **Установка**: [Установка через официальный установщик Adobe](https://www.adobe.com/creativecloud.html) (требуется подписка)
 * **Описание**: Пакет творческих приложений Adobe: Photoshop, Illustrator, InDesign и остальные.
 * **Официальный сайт**: [https://www.adobe.com/creativecloud.html](https://www.adobe.com/creativecloud.html)
@@ -199,7 +199,7 @@ cover: "/images/macbook-apps-cover.jpg"
 * **Установка через Homebrew**: ❌ Недоступно
 * **Установка**: [Скачать с официального сайта Anycubic](https://www.anycubic.com/slicerNextDownload)
 * **Описание**: Слайсер: режет 3D-модели на слои для печати на принтерах Anycubic.
-* **Официальный сайт**: [https://www.anycubic.com/pages/download](https://www.anycubic.com/pages/download)
+* **Официальный сайт**: [https://www.anycubic.com/](https://www.anycubic.com/)
 
 ## Приложения Apple
 
@@ -216,7 +216,7 @@ cover: "/images/macbook-apps-cover.jpg"
 ## Другое
 
 ### Microsoft Office (Word, Excel, PowerPoint)
-* **Установка через Homebrew**: ❌ Недоступно
+* **Установка через Homebrew**: `brew install --cask microsoft-word microsoft-excel microsoft-powerpoint`
 * **Установка через Mac App Store**:
   * [Microsoft Word](https://apps.apple.com/us/app/microsoft-word/id462054704)
   * [Microsoft Excel](https://apps.apple.com/us/app/microsoft-excel/id462058435)
@@ -225,19 +225,19 @@ cover: "/images/macbook-apps-cover.jpg"
 * **Официальный сайт**: [https://www.microsoft.com/microsoft-365](https://www.microsoft.com/microsoft-365)
 
 ### iMazing
-* **Установка через Homebrew**: ❌ Недоступно
+* **Установка через Homebrew**: `brew install --cask imazing`
 * **Установка**: [Скачать с официального сайта](https://imazing.com/download) (платное)
 * **Описание**: Управление iPhone и iPad с компьютера: резервные копии, перекидывание файлов, приложения.
 * **Официальный сайт**: [https://imazing.com/](https://imazing.com/)
 
 ### Android File Transfer
-* **Установка через Homebrew**: ❌ Недоступно
+* **Установка через Homebrew**: `brew install --cask android-file-transfer`
 * **Установка**: [Скачать с официального сайта Google](https://www.android.com/filetransfer/)
 * **Описание**: Официальная утилита Google, чтобы перекидывать файлы между Android и Mac.
 * **Официальный сайт**: [https://www.android.com/filetransfer/](https://www.android.com/filetransfer/)
 
 ### Yandex Browser и Yandex.Telemost
-* **Установка через Homebrew**: ❌ Недоступно
+* **Установка через Homebrew**: `brew install --cask yandex yandextelemost`
 * **Установка**:
   * [Скачать Yandex Browser](https://browser.yandex.ru/)
   * [Скачать Yandex.Telemost](https://telemost.yandex.ru/)
@@ -247,25 +247,25 @@ cover: "/images/macbook-apps-cover.jpg"
 ### Applite
 * **Установка через Homebrew**: `brew install --cask applite`
 * **Описание**: Графическая оболочка для Homebrew Cask. Ставит, обновляет и удаляет приложения в один клик — без терминала.
-* **Официальный сайт**: [https://aerolite.dev/applite](https://aerolite.dev/applite) | [GitHub](https://github.com/milanvarady/Applite)
+* **Официальный сайт**: [https://applite.app](https://applite.app) | [GitHub](https://github.com/milanvarady/Applite)
 
 ### Obsidian Web Clipper
 * **Установка через Homebrew**: ❌ Недоступно
-* **Установка**: [Установить расширение из магазина расширений браузера](https://obsidian.md/plugins) (расширение для браузеров)
+* **Установка**: [Установить расширение из магазина расширений браузера](https://obsidian.md/clipper) (расширение для браузеров)
 * **Описание**: Расширение для браузера, которое сохраняет веб-страницы прямо в Obsidian.
 * **Официальный сайт**: [https://obsidian.md/](https://obsidian.md/)
 
 ### uBlock Origin Lite
 * **Установка через Homebrew**: ❌ Недоступно
-* **Установка**: [Установить из Mac App Store или Safari Extensions](https://github.com/gorhill/uBlock) (расширение для Safari)
+* **Установка**: [Установить из Mac App Store или Safari Extensions](https://github.com/uBlockOrigin/uBOL-home) (расширение для Safari)
 * **Описание**: Облегчённая версия блокировщика рекламы uBlock Origin для Safari.
-* **Официальный сайт**: [https://github.com/gorhill/uBlock](https://github.com/gorhill/uBlock)
+* **Официальный сайт**: [https://github.com/uBlockOrigin/uBOL-home](https://github.com/uBlockOrigin/uBOL-home)
 
 ## Статистика
 
-Из **48 приложений** в списке:
-* ✅ **21 приложение** доступны через Homebrew Cask
-* ❌ **27 приложений** недоступны через Homebrew (устанавливаются через Mac App Store, официальные сайты или требуют платных подписок)
+Из **44 приложений** в списке:
+* ✅ **28 приложений** доступны через Homebrew Cask
+* ❌ **16 приложений** в Homebrew Cask нет (устанавливаются через Mac App Store, с официальных сайтов, как расширения браузера или встроены в macOS; у WireGuard в Homebrew есть только консольные `wireguard-tools`)
 
 ## Полезные команды Homebrew
 
@@ -291,7 +291,7 @@ whatsapp \
 applite
 ```
 
-Обновить всё, что стоит через Homebrew:
+Обновить приложения, установленные через Homebrew Cask (приложения с собственным автообновлением brew пропускает, если не добавить `--greedy`):
 
 ```bash
 brew upgrade --cask
