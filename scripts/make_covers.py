@@ -460,7 +460,7 @@ def cover_biometria():
     """Реальная фотография книг в белой рамке-«полароиде» поверх фирменного макета."""
     from PIL import ImageFilter
     c = Canvas()
-    c.layout(["КНИГА", "УЧЕБНОЕ ПОСОБИЕ", "2026"], "Биометрическая", "идентификация",
+    c.layout(["КНИГА", "УЧЕБНОЕ ПОСОБИЕ", "2025"], "Биометрическая", "идентификация",
              "Новое учебное пособие под моей редакцией:",
              "метрики, право, угрозы, защита и практикум", head=84)
     photo = Image.open(os.path.join(OUT, "biometriya-posobie", "dva-posobiya.jpg")).convert("RGB")
@@ -481,11 +481,38 @@ def cover_biometria():
     c.save("biometriya-posobie-cover.jpg")
 
 
+def cover_research():
+    c = Canvas()
+    c.layout(["НАУКА", "2026", "4 СТАТЬИ"], "Мои исследования", "в 2026 году",
+             "Нечёткая логика, скрытые марковские модели",
+             "и данные с пропусками — про неопределённость", head=88)
+    c.line([(1040, 650), (1570, 650)], LINE, 3)
+    # доска
+    c.rrect(1210, 200, 1560, 520, (24, 40, 32), outline=(90, 74, 56), width=8, r=10)
+    c.line([(1236, 470), (1536, 470)], (200, 200, 190), 3)          # ось
+    import math as _m
+    pts = [(1236 + i * 6, 470 - 140 * _m.exp(-((i * 6 - 150) / 70) ** 2)) for i in range(51)]
+    c.line(pts, AMB, 5, amp=1.0)                                     # функция принадлежности
+    c.label(1236, 214, "РИСК", PAPER, 20)
+    # скрытые состояния HMM
+    for i, (sx, lab) in enumerate(((1270, "S1"), (1360, "S2"), (1450, "S3"))):
+        c.blob(sx + 60, 262, 24, 24, None, outline=ACC, width=4)
+        c.label(sx + 46, 250, lab, ACC, 18)
+        if i < 2:
+            c.arrow(sx + 88, 262, sx + 116, 262, ACC, 3)
+    c.label(1470, 480, "?", CORAL, 30)
+    # человек с мелом
+    c.person(1120, 650, shirt=LILAC, hairstyle="short", hair=(60, 44, 36),
+             lhand=(1060, 540), rhand=(1214, 380), look=1)
+    c.rrect(1210, 370, 1226, 384, PAPER, r=3)
+    c.save("issledovaniya-2026-cover.jpg")
+
+
 if __name__ == "__main__":
     import sys
     prepare_fonts()
     scenes = (cover_mama, cover_benzin, cover_vpn, cover_split, cover_openapi, cover_agents,
-              cover_risk, cover_openclaw, cover_sprut, cover_biometria)
+              cover_risk, cover_openclaw, cover_sprut, cover_biometria, cover_research)
     wanted = sys.argv[1:]                # напр.: make_covers.py openclaw
     for fn in scenes:
         if not wanted or any(w in fn.__name__ for w in wanted):
