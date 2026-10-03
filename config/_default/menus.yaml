@@ -5,12 +5,15 @@ main:
   - name: Статьи
     url: /posts/
     weight: 2
-  - name: Сейчас
-    url: /now/
+  - name: Фото
+    url: /фото/
     weight: 3
-  - name: Категории
-    url: /categories/
+  - name: Обо мне
+    url: /добро-пожаловать-в-мой-блог/
     weight: 4
-  - name: Теги
-    url: /tags/
+  - name: Материалы
+    url: /материалы/
     weight: 5
+  - name: Рекомендации
+    url: /рекомендации/
+    weight: 6

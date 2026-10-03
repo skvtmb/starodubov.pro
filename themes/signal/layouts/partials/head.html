@@ -26,7 +26,7 @@
        без обложки используется дефолтная брендированная карточка */ -}}
 {{ $ogCover := .Params.cover }}{{ if reflect.IsMap $ogCover }}{{ $ogCover = $ogCover.image }}{{ end }}
 {{ $ogCover = $ogCover | default site.Params.ogImage | default "/images/og-default.jpg" }}
-<meta property="og:image" content="{{ $ogCover | absURL }}">
+<meta property="og:image" content="{{ partial "cover-url.html" (dict "src" $ogCover "width" 1200 "fmt" "jpeg") }}">
 <meta property="og:locale" content="ru_RU">
 {{ if .IsPage }}<meta property="article:published_time" content="{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}">{{ end }}
 <meta name="twitter:card" content="summary_large_image">

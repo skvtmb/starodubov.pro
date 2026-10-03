@@ -13,9 +13,9 @@
 
   /* ---- scroll reveal (home & lists) ---- */
   (function reveal() {
-    document.querySelectorAll('.sec-head, .about-grid, .factbox, .hero-in > div, .svc-foot, .page-hero .inner')
+    document.querySelectorAll('.sec-head, .about-grid, .factbox, .hero-in > div, .svc-foot, .page-hero .inner, .gal-intro')
       .forEach(function (el) { el.classList.add('reveal'); });
-    document.querySelectorAll('.svc-grid, .room-grid, .post-grid, .term-cloud')
+    document.querySelectorAll('.svc-grid, .room-grid, .post-grid, .term-cloud, .album-grid, .gal-grid')
       .forEach(function (el) { el.classList.add('stagger'); });
 
     var targets = document.querySelectorAll('.reveal, .stagger');
@@ -62,6 +62,70 @@
     window.addEventListener('resize', onScroll);
     onScroll();
   })();
+})();
+
+/* ---- gallery lightbox ---- */
+(function () {
+  var grid = document.getElementById('gal-grid');
+  var box = document.getElementById('lb');
+  if (!grid || !box) return;
+
+  var items = [].slice.call(grid.querySelectorAll('.gal-item'));
+  if (!items.length) return;
+
+  var img = box.querySelector('.lb-img');
+  var cap = box.querySelector('.lb-cap');
+  var count = box.querySelector('.lb-count');
+  var btnX = box.querySelector('.lb-x');
+  var btnPrev = box.querySelector('.lb-prev');
+  var btnNext = box.querySelector('.lb-next');
+  var i = 0;
+  var lastFocus = null;
+
+  function show(idx) {
+    i = (idx + items.length) % items.length;
+    var a = items[i];
+    var inner = a.querySelector('img');
+    img.src = a.getAttribute('href');
+    img.alt = a.getAttribute('data-alt') || (inner && inner.alt) || '';
+    cap.textContent = a.getAttribute('data-caption') || '';
+    count.textContent = (i + 1) + ' / ' + items.length;
+  }
+
+  function open(idx) {
+    lastFocus = document.activeElement;
+    show(idx);
+    box.hidden = false;
+    document.body.classList.add('lb-open');
+    btnX.focus();
+  }
+
+  function close() {
+    box.hidden = true;
+    document.body.classList.remove('lb-open');
+    img.removeAttribute('src');
+    if (lastFocus && lastFocus.focus) lastFocus.focus();
+  }
+
+  grid.addEventListener('click', function (e) {
+    var a = e.target.closest('.gal-item');
+    if (!a || !grid.contains(a)) return;
+    e.preventDefault();
+    open(items.indexOf(a));
+  });
+
+  btnX.addEventListener('click', close);
+  btnPrev.addEventListener('click', function () { show(i - 1); });
+  btnNext.addEventListener('click', function () { show(i + 1); });
+  img.addEventListener('click', function () { show(i + 1); });
+  box.addEventListener('click', function (e) { if (e.target === box) close(); });
+
+  document.addEventListener('keydown', function (e) {
+    if (box.hidden) return;
+    if (e.key === 'Escape') close();
+    else if (e.key === 'ArrowLeft') show(i - 1);
+    else if (e.key === 'ArrowRight') show(i + 1);
+  });
 })();
 
 /* ---- email-ссылки: адрес собирается на клиенте (защита от спам-ботов) ---- */

@@ -7,14 +7,14 @@ categories: ["Технологии"]
 tags: ["macos", "настройка", "терминал"]
 ---
 
-Многие настройки macOS недоступны через стандартный интерфейс «Системные настройки», но их можно изменить через команду **`defaults write`** в терминале. Это удобно при переносе окружения на новый Mac или при автоматизации настройки: один скрипт — и Finder, Dock, скриншоты и клавиатура ведут себя так, как нужно.
+Многих настроек macOS в «Системных настройках» просто нет, зато их можно поменять из терминала командой **`defaults write`**. Особенно выручает при переезде на новый Mac или когда хочется автоматизировать настройку: запустил один скрипт, и Finder, Dock, скриншоты и клавиатура ведут себя так, как нужно.
 
-В этой статье — готовый скрипт с примерами и кратким пояснением, что за что отвечает. Справка по ключам: [macos-defaults.com](https://macos-defaults.com/).
+Ниже — готовый скрипт с примерами и короткими пояснениями, что за что отвечает. Справка по ключам: [macos-defaults.com](https://macos-defaults.com/).
 
 ## Finder
 
 - **Скрытые файлы** — показывать точки и служебные файлы.
-- **Расширения файлов** — видеть суффикс (например, `.md`, `.png`).
+- **Расширения файлов** — видеть суффикс (например, `.md`, `.png`). Этот ключ живёт в глобальном домене (`-g`, он же `NSGlobalDomain`), а не в `com.apple.finder`.
 - **Путь внизу окна** — строка пути внизу окна Finder.
 - **Статус-бар** — количество элементов и свободное место.
 - **Папки сверху** — при сортировке папки выше файлов.
@@ -25,8 +25,8 @@ tags: ["macos", "настройка", "терминал"]
 # Показывать скрытые файлы
 defaults write com.apple.finder AppleShowAllFiles -bool true
 
-# Показывать расширения файлов
-defaults write com.apple.finder AppleShowAllExtensions -bool true
+# Показывать расширения файлов (ключ глобальный, не com.apple.finder)
+defaults write -g AppleShowAllExtensions -bool true
 
 # Показывать путь внизу окна Finder
 defaults write com.apple.finder ShowPathbar -bool true
@@ -49,7 +49,7 @@ defaults write com.apple.finder FXEnableExtensionChangeWarning -bool true
 ## Dock
 
 - **Автоскрытие** — Dock уезжает за край экрана и появляется при наведении.
-- **Задержка** — `0` значит без задержки при появлении/скрытии.
+- **Задержка** — `0` значит, что Dock появляется без задержки (по умолчанию 0,2 секунды).
 - **Размер иконок** — в пикселях (например, 36).
 - **Позиция** — `left`, `bottom` или `right`.
 - **Эффект сворачивания** — `genie` или `scale`.
@@ -98,26 +98,26 @@ defaults write com.apple.screencapture location -string "${HOME}/Desktop/screens
 # Без тени у окон
 defaults write com.apple.screencapture disable-shadow -bool true
 
-# Показывать миниатюру
+# Не показывать миниатюру
 defaults write com.apple.screencapture show-thumbnail -bool false
 ```
 
-Не забудьте создать папку, если её нет: `mkdir -p ~/Desktop/screenshots`.
+Не забудьте создать папку, если её нет: `mkdir -p ~/Desktop/screenshots`. Чтобы новая папка подхватилась сразу, перезапустите системный UI-сервер: `killall SystemUIServer`.
 
 ---
 
 ## Клавиатура и глобальные настройки (NSGlobalDomain)
 
-- **KeyRepeat** — скорость повтора при удержании клавиши (меньше значение — быстрее повтор). Типичные значения 1–2 для быстрого повтора.
-- **InitialKeyRepeat** — задержка до начала повтора в миллисекундах (15 — короткая задержка).
+- **KeyRepeat** — скорость повтора при удержании клавиши (меньше значение — быстрее повтор). Значение задаётся не в миллисекундах, а в единицах примерно по 15 мс: 2 ≈ 30 мс между повторами. Типичные значения 1–2 для быстрого повтора.
+- **InitialKeyRepeat** — задержка до начала повтора, в тех же единицах примерно по 15 мс (15 ≈ 225 мс — короткая задержка).
 - **Умные кавычки и тире** — отключение автозамены «кавычек» и — тире.
 - **Точка по двойному пробелу** — отключение автоматической точки после двойного пробела.
 
 ```bash
-# Скорость повтора клавиш (в миллисекундах, 2 = очень быстро)
+# Скорость повтора клавиш (единица ≈ 15 мс, 2 ≈ 30 мс — очень быстро)
 defaults write -g KeyRepeat -int 2
 
-# Задержка до повтора (в миллисекундах)
+# Задержка до повтора (единица ≈ 15 мс, 15 ≈ 225 мс)
 defaults write -g InitialKeyRepeat -int 15
 
 # Отключить «умные» кавычки и тире
@@ -132,13 +132,15 @@ defaults write -g NSAutomaticPeriodSubstitutionEnabled -bool false
 
 ## Трекпад
 
-**Трёхпальцевое перетаскивание** — перетаскивание окна или выделенного текста тремя пальцами без включения «Блокировка перетаскивания». Удобно для тех, кто не любит «нажимать и тянуть».
+**Трёхпальцевое перетаскивание** — перетаскивание окна или выделенного текста тремя пальцами, без режима «Блокировка перетаскивания». Удобно для тех, кто не любит «нажимать и тянуть».
 
 ```bash
 # Трёхпальцевое перетаскивание (без drag lock)
 defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadThreeFingerDrag -bool true
 defaults write com.apple.AppleMultitouchTrackpad TrackpadThreeFingerDrag -bool true
 ```
+
+Первая строка — для внешнего Magic Trackpad, вторая — для встроенного. Применяется после выхода из учётной записи. Если не сработало, включите вручную: «Системные настройки → Универсальный доступ → Управление указателем → Параметры трекпада», там «Перетаскивание тремя пальцами».
 
 ---
 
@@ -149,18 +151,22 @@ defaults write com.apple.AppleMultitouchTrackpad TrackpadThreeFingerDrag -bool t
 
 ```bash
 # Группировать окна по приложению
-defaults write com.apple.dock expose-group-by-app -bool true
+defaults write com.apple.dock expose-group-apps -bool true
 
-# Не переключаться на Space с открытым окном
-defaults write com.apple.dock AppleSpacesSwitchOnActivate -bool false
+# Не переключаться на Space с открытым окном (ключ глобальный, не com.apple.dock)
+defaults write -g AppleSpacesSwitchOnActivate -bool false
+
+killall Dock
 ```
+
+Обе настройки есть и в интерфейсе: «Системные настройки → Рабочий стол и Dock», блок Mission Control. Ключ группировки называется `expose-group-apps` (не `expose-group-by-app`, как в старых dotfiles), а `AppleSpacesSwitchOnActivate` хранится в глобальном домене `NSGlobalDomain`, поэтому пишется через `-g`. Применяются обе после `killall Dock`.
 
 ---
 
 ## Разное
 
 - **Сохранять окна при выходе** — `false` означает не восстанавливать окна при следующем запуске приложения (классическое поведение).
-- **Карантин скачанных приложений** — отключение закомментировано: без карантина macOS не будет предупреждать о непроверенных приложениях (использовать осторожно).
+- **Карантин скачанных приложений** — отключение закомментировано: ключ убирает предупреждение «Приложение загружено из интернета» (использовать осторожно). По данным macos-defaults.com, начиная с macOS Big Sur он уже не работает.
 - **Анимации** — закомментированы примеры отключения анимаций для ускорения интерфейса.
 
 ```bash
@@ -179,7 +185,7 @@ defaults write -g NSQuitAlwaysKeepsWindows -bool false
 
 ## Полный скрипт и применение
 
-Скрипт ниже объединяет все приведённые настройки. Запуск: `./macos-defaults-examples.sh` (файл должен быть исполняемым: `chmod +x macos-defaults-examples.sh`). Или копируйте нужные блоки в свой скрипт.
+Здесь все настройки выше собраны в один скрипт. Запуск: `./macos-defaults-examples.sh` (файл должен быть исполняемым: `chmod +x macos-defaults-examples.sh`). Или копируйте нужные блоки в свой скрипт.
 
 ```bash
 #!/usr/bin/env bash
@@ -194,7 +200,7 @@ echo "Applying macOS defaults (examples)..."
 
 # === Finder ===
 defaults write com.apple.finder AppleShowAllFiles -bool true
-defaults write com.apple.finder AppleShowAllExtensions -bool true
+defaults write -g AppleShowAllExtensions -bool true
 defaults write com.apple.finder ShowPathbar -bool true
 defaults write com.apple.finder ShowStatusBar -bool true
 defaults write com.apple.finder _FXSortFoldersFirst -bool true
@@ -211,6 +217,7 @@ defaults write com.apple.dock show-process-indicators -bool true
 defaults write com.apple.dock show-recents -bool false
 
 # === Скриншоты ===
+mkdir -p "${HOME}/Desktop/screenshots"
 defaults write com.apple.screencapture type -string "png"
 defaults write com.apple.screencapture location -string "${HOME}/Desktop/screenshots"
 defaults write com.apple.screencapture disable-shadow -bool true
@@ -228,19 +235,21 @@ defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadThreeF
 defaults write com.apple.AppleMultitouchTrackpad TrackpadThreeFingerDrag -bool true
 
 # === Mission Control ===
-defaults write com.apple.dock expose-group-by-app -bool true
-defaults write com.apple.dock AppleSpacesSwitchOnActivate -bool false
+defaults write com.apple.dock expose-group-apps -bool true
+defaults write -g AppleSpacesSwitchOnActivate -bool false
 
 # === Разное ===
 defaults write -g NSQuitAlwaysKeepsWindows -bool false
 
-echo "Done. Restart Finder and Dock: killall Finder Dock"
+killall Finder Dock SystemUIServer
+
+echo "Done. Keyboard and trackpad settings need a logout or reboot."
 ```
 
-После применения перезапустите Finder и Dock, чтобы изменения вступили в силу:
+Скрипт в конце сам перезапускает Finder, Dock и SystemUIServer (он отвечает за скриншоты). Если применяете команды вручную, сделайте это сами:
 
 ```bash
-killall Finder Dock
+killall Finder Dock SystemUIServer
 ```
 
-Часть настроек (например, трекпад) может потребовать выхода из учётной записи или перезагрузки. Полный справочник по ключам и возможным значениям — на [macos-defaults.com](https://macos-defaults.com/).
+Скорость повтора клавиш и трекпад так не применятся: для них нужно выйти из учётной записи или перезагрузить Mac. Полный справочник по ключам и возможным значениям — на [macos-defaults.com](https://macos-defaults.com/).
