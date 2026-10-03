@@ -164,7 +164,44 @@ def resize_copy(src: Path, dest: Path) -> None:
         stdout=subprocess.DEVNULL,
         stderr=subprocess.PIPE,
     )
+    strip_metadata(tmp)
     tmp.replace(dest)
+
+
+def strip_metadata(path: Path) -> None:
+    """Удаляет из JPEG метаданные (EXIF с GPS и контактами из Copyright, XMP,
+    IPTC, комментарии) без пересжатия. Цветовой профиль сохраняется,
+    поворот кадра переносится в минимальный EXIF."""
+    import struct
+    from PIL import Image
+
+    data = path.read_bytes()
+    if data[:2] != b"\xff\xd8":
+        return
+    orientation = Image.open(path).getexif().get(0x0112, 1)
+    exif_seg = b""
+    if orientation != 1:
+        ex = Image.Exif()
+        ex[0x0112] = orientation
+        payload = ex.tobytes()
+        exif_seg = b"\xff\xe1" + struct.pack(">H", len(payload) + 2) + payload
+    out = bytearray(b"\xff\xd8")
+    i = 2
+    while i < len(data):
+        marker = data[i + 1]
+        if marker == 0xDA:  # начало сжатых данных: копируем как есть
+            out += exif_seg + data[i:]
+            exif_seg = b""
+            break
+        length = struct.unpack(">H", data[i + 2:i + 4])[0]
+        segment = data[i:i + 2 + length]
+        if marker not in (0xE1, 0xED, 0xFE):  # APP1 Exif/XMP, APP13 IPTC, COM
+            out += segment
+            if marker == 0xE0 and exif_seg:
+                out += exif_seg
+                exif_seg = b""
+        i += 2 + length
+    path.write_bytes(bytes(out))
 
 
 RU_MONTHS = ["января", "февраля", "марта", "апреля", "мая", "июня",
