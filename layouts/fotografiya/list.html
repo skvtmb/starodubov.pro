@@ -1,0 +1,64 @@
+{{ define "main" }}
+<div class="page-hero">
+  <div class="wrap">
+    <div class="inner">
+      <span class="eyebrow">Canon EOS R8</span>
+      <h1>{{ .Title }}</h1>
+      {{ with .Description | default .Content }}<div class="lede">{{ . | plainify | truncate 220 }}</div>{{ end }}
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="list-wrap">
+    {{ with .Content }}<div class="gal-intro">{{ . }}</div>{{ end }}
+
+    {{ $albums := .Pages.ByDate.Reverse }}
+    {{ with $albums }}
+    <div class="album-grid">
+      {{ range $i, $a := . }}
+      {{ $cover := $a.Params.cover }}
+      {{ $n := len ($a.Params.photos | default slice) }}
+      <a class="album" href="{{ $a.RelPermalink }}">
+        <div class="album-cover">
+          {{ if $cover }}
+            {{ partial "gallery-img.html" (dict "src" $cover "alt" $a.Title "sizes" "(max-width: 860px) 100vw, 50vw" "eager" (eq $i 0)) }}
+          {{ end }}
+        </div>
+        <div class="album-body">
+          {{ with $a.Params.place }}<span class="album-place">{{ . }}</span>{{ end }}
+          <h2>{{ $a.Title }}</h2>
+          {{ with $a.Description }}<p>{{ . | plainify | truncate 140 }}</p>{{ end }}
+          <div class="album-meta">
+            <span>{{ $a.Date | time.Format ":date_long" }}</span>
+            {{ if $n }}<span>{{ $n }} {{ partial "ru-kadry.html" $n }}</span>{{ end }}
+            {{ with $a.Params.gear }}<span>{{ . }}</span>{{ end }}
+          </div>
+        </div>
+      </a>
+      {{ end }}
+    </div>
+    {{ else }}
+    <p class="gal-empty">Серии появятся здесь.</p>
+    {{ end }}
+
+    {{ $photoPosts := slice }}
+    {{ range where site.RegularPages "Type" (site.Params.blogSection | default "posts") }}
+      {{ if in .Params.categories "Фотография" }}{{ $photoPosts = $photoPosts | append . }}{{ end }}
+    {{ end }}
+    {{ $photoTerm := site.GetPage "/categories/фотография" }}
+    {{ with $photoPosts }}
+    <div class="gal-notes">
+      <div class="sec-head">
+        <span class="sec-num">→</span>
+        <span class="sec-title">Заметки о съёмке</span>
+        {{ with $photoTerm }}<a class="all" href="{{ .RelPermalink }}">Все в категории →</a>{{ end }}
+      </div>
+      <div class="post-grid">
+        {{ range first 3 . }}{{ partial "post-card.html" . }}{{ end }}
+      </div>
+    </div>
+    {{ end }}
+  </div>
+</div>
+{{ end }}

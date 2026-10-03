@@ -1,0 +1,72 @@
+{{ define "main" }}
+{{ $photos := .Params.photos | default slice }}
+{{ $n := len $photos }}
+
+<div class="page-hero gal-hero">
+  <div class="wrap">
+    <div class="inner">
+      <div class="crumbs">
+        <a href="{{ "/" | relLangURL }}">Главная</a><span class="sep">/</span>
+        <a href="{{ with .Parent }}{{ .RelPermalink }}{{ else }}{{ "/фото/" | relLangURL }}{{ end }}">Фото</a>
+      </div>
+      {{ with .Params.place }}<span class="eyebrow">{{ . }}</span>{{ end }}
+      <h1>{{ .Title }}</h1>
+      {{ with .Description }}<div class="lede">{{ . }}</div>{{ end }}
+      <div class="gal-meta">
+        <span>{{ .Date | time.Format ":date_long" }}</span>
+        {{ if $n }}<span>{{ $n }} {{ partial "ru-kadry.html" $n }}</span>{{ end }}
+        {{ with .Params.gear }}<span>{{ . }}</span>{{ end }}
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="list-wrap">
+    {{ with .Content }}<div class="gal-intro">{{ . }}</div>{{ end }}
+
+    {{ with $photos }}
+    <div class="gal-grid" id="gal-grid">
+      {{ range $i, $p := . }}
+      {{ $src := $p.src }}
+      {{ $alt := $p.alt | default $p.caption | default "" }}
+      {{ $caption := $p.caption | default "" }}
+      {{ with $p.meta }}{{ $caption = printf "%s — %s" $caption . }}{{ end }}
+      {{ $path := strings.TrimPrefix "/" $src }}
+      {{ $img := resources.Get $path }}
+      {{ $href := $src | relURL }}
+      {{ if and $img (in (slice "jpeg" "png") $img.MediaType.SubType) }}
+        {{ if gt $img.Width 1600 }}{{ $href = ($img.Process "resize 1600x webp q82").RelPermalink }}
+        {{ else }}{{ $href = ($img.Process "webp q82").RelPermalink }}{{ end }}
+      {{ end }}
+      <a class="gal-item" href="{{ $href }}"
+         data-caption="{{ $caption }}"
+         data-alt="{{ $alt }}"
+         {{ if eq $i 0 }}data-eager{{ end }}>
+        {{ partial "gallery-img.html" (dict "src" $src "alt" $alt "eager" (lt $i 3) "sizes" "(max-width: 640px) 100vw, (max-width: 1000px) 50vw, 33vw") }}
+        {{ with $caption }}<span class="gal-cap">{{ . }}</span>{{ end }}
+      </a>
+      {{ end }}
+    </div>
+    {{ end }}
+
+    {{ with .Params.article }}
+    <div class="gal-article">
+      <p>Маршрут, адреса и заметки о съёмке — в статье.</p>
+      <a class="btn-sec" href="{{ relref $ . }}">Читать заметку →</a>
+    </div>
+    {{ end }}
+  </div>
+</div>
+
+<div class="lb" id="lb" hidden role="dialog" aria-modal="true" aria-label="Просмотр фотографии">
+  <button class="lb-x" type="button" aria-label="Закрыть">×</button>
+  <button class="lb-nav lb-prev" type="button" aria-label="Предыдущий кадр">←</button>
+  <button class="lb-nav lb-next" type="button" aria-label="Следующий кадр">→</button>
+  <figure class="lb-fig">
+    <img class="lb-img" alt="">
+    <figcaption class="lb-cap"></figcaption>
+  </figure>
+  <div class="lb-count" aria-live="polite"></div>
+</div>
+{{ end }}

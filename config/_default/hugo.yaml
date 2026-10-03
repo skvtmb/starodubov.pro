@@ -4,6 +4,9 @@ title: Константин Стародубов
 theme: signal
 enableEmoji: true
 
+# Названия рубрик и тегов: заглавная только первая буква («Информационная безопасность»)
+titleCaseStyle: firstupper
+
 # Посты датированы 2026 годом — без этого они не попадут в сборку
 buildFuture: true
 
@@ -16,6 +19,7 @@ relativeURLs: false
 
 permalinks:
   posts: /:slug/
+  fotografiya: /фото/:slug/
 
 pagination:
   pagerSize: 9
@@ -30,7 +34,8 @@ markup:
       unsafe: true
   tableOfContents:
     startLevel: 2
-    endLevel: 3
+    endLevel: 2
+    ordered: false
   highlight:
     codeFences: true
     noClasses: false

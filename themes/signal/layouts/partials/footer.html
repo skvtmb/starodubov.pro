@@ -12,6 +12,8 @@
         {{- range site.Menus.main -}}
           <a href="{{ .URL | relLangURL }}">{{ .Name }}</a>
         {{- end -}}
+        <a href="{{ "/categories/" | relLangURL }}">Категории</a>
+        <a href="{{ "/tags/" | relLangURL }}">Теги</a>
       </div>
       <div>
         <h5>Контакты</h5>
