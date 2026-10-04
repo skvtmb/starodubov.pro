@@ -567,12 +567,45 @@ def cover_vault():
     c.arrow(1400, 470, px - 78, py - 228, ACC, 4)
     c.save("vaultwarden-cover.jpg")
 
+
+def cover_monitoring():
+    import math
+    c = Canvas()
+    c.layout(["TRUENAS", "GRAFANA", "PROMETHEUS"], "Центр мониторинга", "домашнего сервера",
+             "Один экран для дисков, приложений и ИИ-агента,",
+             "предупреждения в Telegram без каскада дублей", head=84)
+    c.line([(1030, 650), (1580, 650)], LINE, 3)
+    # монитор с панелью
+    c.rrect(1050, 330, 1420, 560, (24, 26, 32), outline=(90, 98, 112), width=4, r=14)
+    c.rrect(1215, 560, 1255, 610, (60, 64, 74), width=3, r=4)
+    c.rrect(1170, 606, 1300, 622, (60, 64, 74), width=3, r=6)
+    # три плитки-показателя
+    for i, (col, txt) in enumerate(((ACC, "CPU"), (AMB, "SMART"), (BLUE, "RAM"))):
+        x = 1074 + i * 112
+        c.rrect(x, 352, x + 98, 412, (32, 36, 44), outline=(70, 78, 92), width=3, r=8)
+        c.label(x + 12, 360, txt, DIM, 16)
+        c.line([(x + 14, 398), (x + 84, 398)], col, 6, amp=0.3)
+    # график
+    pts = [(1076 + k * 22, 500 - 40 * math.sin(k / 2.2) - (18 if k in (9, 10) else 0)) for k in range(15)]
+    c.line(pts, ACC, 4, amp=0.6)
+    c.line([(1076, 530), (1394, 530)], (60, 66, 78), 2, amp=0.3)
+    # колокольчик уведомления над монитором
+    c.blob(1418, 316, 26, 26, AMB, (120, 90, 30), 3)
+    c.label(1410, 302, "!", (40, 30, 10), 24)
+    # человек с телефоном
+    px, py = 1500, 650
+    c.person(px, py, shirt=(176, 150, 230), hairstyle="short", hair=(60, 44, 36),
+             lhand=(px - 40, py - 150), rhand=(px - 52, py - 214), look=-1)
+    c.rrect(px - 70, py - 252, px - 40, py - 200, (24, 24, 28), outline=(200, 200, 205), width=3, r=6)
+    c.arrow(1446, 330, px - 74, py - 250, AMB, 4, dashed=True)
+    c.save("truenas-monitoring-cover.jpg")
+
 if __name__ == "__main__":
     import sys
     prepare_fonts()
     scenes = (cover_mama, cover_benzin, cover_vpn, cover_split, cover_openapi, cover_agents,
               cover_risk, cover_openclaw, cover_sprut, cover_biometria, cover_research, cover_jedi,
-              cover_vault)
+              cover_vault, cover_monitoring)
     wanted = sys.argv[1:]                # напр.: make_covers.py openclaw
     for fn in scenes:
         if not wanted or any(w in fn.__name__ for w in wanted):
