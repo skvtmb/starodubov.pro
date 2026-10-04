@@ -97,7 +97,7 @@ def list_remote():
         cmd = ['yc', 'storage', 's3api', 'list-objects', '--bucket', BUCKET,
                '--max-keys', '1000', '--format', 'json']
         if marker:
-            cmd += ['--marker', marker]
+            cmd += ['--start-after', marker]   # listObjectsV2: --marker не поддерживается
         out = json.loads(subprocess.run(cmd, capture_output=True, text=True, check=True).stdout or '{}')
         contents = out.get('contents') or []
         for obj in contents:
