@@ -533,11 +533,46 @@ def cover_jedi():
     c.save("put-dzhedaya-cover.jpg")
 
 
+
+def cover_vault():
+    c = Canvas()
+    c.layout(["ПАРОЛИ", "SELF-HOSTED", "TRUENAS"], "Vaultwarden", "вместо KeePass",
+             "Перенос базы без открытого файла,",
+             "один адрес дома и снаружи, резервные копии", head=84)
+    c.line([(1030, 650), (1580, 650)], LINE, 3)
+    # файл базы KeePass с замком
+    c.poly([(1050, 470), (1112, 470), (1134, 492), (1134, 574), (1050, 574)], PAPER, (60, 60, 64), 3)
+    c.label(1062, 500, "KDBX", (40, 40, 44), 20)
+    c.rrect(1076, 536, 1108, 562, AMB, outline=(90, 70, 30), width=3, r=4)
+    c.arc(1092, 536, 11, 12, 180, 360, (90, 70, 30), 3)
+    # перенос на сервер
+    c.arrow(1146, 520, 1228, 520, ACC, 5, dashed=True)
+    # домашний сервер-сейф
+    c.rrect(1240, 380, 1390, 650, (30, 34, 42), outline=(84, 92, 108), width=4, r=12)
+    for yy in (412, 444, 476):
+        c.line([(1262, yy), (1368, yy)], (70, 78, 92), 3, amp=0.4)
+        c.blob(1360, yy, 4, 4, ACC)
+    c.blob(1315, 560, 46, 46, (22, 24, 30), (110, 231, 150), 4)
+    c.blob(1315, 560, 10, 10, ACC)
+    for a in range(0, 360, 60):
+        import math
+        c.line([(1315 + 20 * math.cos(math.radians(a)), 560 + 20 * math.sin(math.radians(a))),
+                (1315 + 36 * math.cos(math.radians(a)), 560 + 36 * math.sin(math.radians(a)))], ACC, 3, amp=0.2)
+    c.label(1262, 350, "vault", DIM, 22)
+    # человек с телефоном, синхронизация
+    px, py = 1500, 650
+    c.person(px, py, shirt=(126, 178, 235), hairstyle="short", hair=(60, 44, 36),
+             lhand=(px - 40, py - 150), rhand=(px - 52, py - 214), look=-1)
+    c.rrect(px - 70, py - 252, px - 40, py - 200, (24, 24, 28), outline=(200, 200, 205), width=3, r=6)
+    c.arrow(1400, 470, px - 78, py - 228, ACC, 4)
+    c.save("vaultwarden-cover.jpg")
+
 if __name__ == "__main__":
     import sys
     prepare_fonts()
     scenes = (cover_mama, cover_benzin, cover_vpn, cover_split, cover_openapi, cover_agents,
-              cover_risk, cover_openclaw, cover_sprut, cover_biometria, cover_research, cover_jedi)
+              cover_risk, cover_openclaw, cover_sprut, cover_biometria, cover_research, cover_jedi,
+              cover_vault)
     wanted = sys.argv[1:]                # напр.: make_covers.py openclaw
     for fn in scenes:
         if not wanted or any(w in fn.__name__ for w in wanted):
