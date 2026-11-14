@@ -77,3 +77,6 @@ config.local.*
 # Claude Code local files
 .claude/settings.local.json
 .claude/worktrees/
+
+# Impeccable: локальный кеш хука
+.impeccable/hook.cache.json

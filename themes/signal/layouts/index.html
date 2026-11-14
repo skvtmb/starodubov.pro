@@ -23,7 +23,7 @@
       </div>
       {{ end }}
       <div class="hero-cta">
-        {{ with $hero.primaryCta }}{{ if hasPrefix .url "mailto:" }}{{ $p := split (strings.TrimPrefix "mailto:" .url) "@" }}<a class="btn-pri js-mail" href="#" data-user="{{ index $p 0 }}" data-host="{{ index $p 1 }}">{{ .label }} <span>→</span></a>{{ else }}<a class="btn-pri" href="{{ .url }}">{{ .label }} <span>→</span></a>{{ end }}{{ end }}
+        {{ with $hero.primaryCta }}{{ if hasPrefix .url "mailto:" }}{{ $p := split (strings.TrimPrefix "mailto:" .url) "@" }}<a class="btn-pri js-mail" href="#contacts" data-user="{{ index $p 0 }}" data-host="{{ index $p 1 }}">{{ .label }} <span>→</span></a>{{ else }}<a class="btn-pri" href="{{ .url }}">{{ .label }} <span>→</span></a>{{ end }}{{ end }}
         {{ with $hero.secondaryCta }}<a class="btn-sec" href="{{ .url }}">{{ .label }}</a>{{ end }}
       </div>
       {{ with site.Params.socials }}
@@ -48,15 +48,15 @@
 <section class="about">
   <div class="wrap">
     <div class="sec-head">
-      {{ $secNum = add $secNum 1 }}<span class="sec-num">{{ printf "%02d" $secNum }}</span>
-      <span class="sec-title">{{ $about.title | default "Обо мне" }}</span>
+      {{ $secNum = add $secNum 1 }}<span class="sec-num" aria-hidden="true">{{ printf "%02d" $secNum }}</span>
+      <h2 class="sec-title">{{ $about.title | default "Обо мне" }}</h2>
       {{ with $about.subtitle }}<span class="sec-sub">{{ . }}</span>{{ end }}
     </div>
     <div class="about-grid">
       <div>{{ $about.body | markdownify }}</div>
       {{ with $about.facts }}
       <div class="factbox">
-        <h4>{{ $about.factsTitle | default "Коротко" }}</h4>
+        <h3>{{ $about.factsTitle | default "Коротко" }}</h3>
         {{ range . }}<div class="fact"><span>{{ .k }}</span><b>{{ .v }}</b></div>{{ end }}
       </div>
       {{ end }}
@@ -69,8 +69,8 @@
 <section class="svc">
   <div class="wrap">
     <div class="sec-head">
-      {{ $secNum = add $secNum 1 }}<span class="sec-num">{{ printf "%02d" $secNum }}</span>
-      <span class="sec-title">{{ .title | default "Сильные стороны" }}</span>
+      {{ $secNum = add $secNum 1 }}<span class="sec-num" aria-hidden="true">{{ printf "%02d" $secNum }}</span>
+      <h2 class="sec-title">{{ .title | default "Сильные стороны" }}</h2>
       {{ with .subtitle }}<span class="sec-sub">{{ . }}</span>{{ end }}
     </div>
     <div class="svc-grid">
@@ -97,14 +97,14 @@
 <section class="rooms">
   <div class="wrap">
     <div class="sec-head">
-      {{ $secNum = add $secNum 1 }}<span class="sec-num">{{ printf "%02d" $secNum }}</span>
-      <span class="sec-title">Разделы сайта</span>
+      {{ $secNum = add $secNum 1 }}<span class="sec-num" aria-hidden="true">{{ printf "%02d" $secNum }}</span>
+      <h2 class="sec-title">Разделы сайта</h2>
     </div>
     <div class="room-grid">
       {{ range . }}
       <a class="room" href="{{ .url | relLangURL }}">
         <span class="rn">{{ .slug }}</span>
-        <h4>{{ .title }}</h4>
+        <h3>{{ .title }}</h3>
         <p>{{ .desc }}</p>
         <div class="arrow">→</div>
       </a>
@@ -119,8 +119,8 @@
 <section class="posts" id="posts">
   <div class="wrap">
     <div class="sec-head">
-      {{ $secNum = add $secNum 1 }}<span class="sec-num">{{ printf "%02d" $secNum }}</span>
-      <span class="sec-title">Свежие статьи</span>
+      {{ $secNum = add $secNum 1 }}<span class="sec-num" aria-hidden="true">{{ printf "%02d" $secNum }}</span>
+      <h2 class="sec-title">Свежие статьи</h2>
       <a class="sec-sub" href="{{ (printf "/%s/" (site.Params.blogSection | default "posts")) | relLangURL }}">Все статьи →</a>
     </div>
     <div class="post-grid">

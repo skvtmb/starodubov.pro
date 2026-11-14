@@ -5,6 +5,7 @@
 #   URL с «й»/«ё» отдают 404)
 # - инкрементальность: неизменённые объекты (md5 == ETag) не перезаливаются
 # - редиректы со старых адресов /ru/<путь>/ и /en/
+# - --no-delete: загрузка без удаления существующих объектов бакета
 # Использует Yandex CLI (yc).
 
 set -e
@@ -16,6 +17,16 @@ BLUE='\033[0;34m'
 NC='\033[0m'
 
 BUCKET="starodubov.pro"
+DELETE_STALE="true"
+if [ "$#" -gt 1 ]; then
+    echo "Использование: $0 [--no-delete]"
+    exit 2
+fi
+case "${1:-}" in
+    --no-delete) DELETE_STALE="false" ;;
+    "") ;;
+    *) echo "Использование: $0 [--no-delete]"; exit 2 ;;
+esac
 
 echo -e "${BLUE}🚀 Деплой сайта starodubov.pro${NC}"
 echo "=================================="
@@ -37,7 +48,9 @@ if ! yc config list &> /dev/null; then
 fi
 
 echo -e "\n${YELLOW}🔨 Сборка сайта...${NC}"
-hugo --minify
+# --cleanDestinationDir: убрать из public/ всё, чего нет в сборке
+# (в том числе копии iCloud вида «index 2.html»)
+hugo --minify --cleanDestinationDir
 
 if [ ! -d "public" ]; then
     echo -e "${RED}❌ Папка public/ не создана!${NC}"
@@ -47,9 +60,19 @@ echo -e "${GREEN}✅ Сайт собран${NC}"
 
 echo -e "\n${YELLOW}📤 Загрузка в Object Storage (инкрементально)...${NC}"
 
-BUCKET="$BUCKET" python3 - <<'PYEOF'
-import hashlib, html, json, os, subprocess, sys, tempfile, unicodedata
+BUCKET="$BUCKET" DELETE_STALE="$DELETE_STALE" python3 - <<'PYEOF'
+import hashlib, html, json, os, re, subprocess, sys, tempfile, unicodedata
 from concurrent.futures import ThreadPoolExecutor
+
+# iCloud при конфликте синхронизации создаёт копии «index 2.html», «sitemap 2.xml».
+# Их не выгружаем; уже лежащие в бакете удалит зачистка устаревших объектов.
+ICLOUD_DUP = re.compile(r' [2-9](\.[^./ ]+)?$')
+
+def walk_public():
+    """os.walk('public') без копий iCloud — и файлов, и каталогов."""
+    for root, dirs, files in os.walk('public'):
+        dirs[:] = [d for d in dirs if not ICLOUD_DUP.search(d)]
+        yield root, dirs, [f for f in files if not ICLOUD_DUP.search(f)]
 
 BUCKET = os.environ['BUCKET']
 SITE = 'https://starodubov.pro'
@@ -97,7 +120,7 @@ def list_remote():
         cmd = ['yc', 'storage', 's3api', 'list-objects', '--bucket', BUCKET,
                '--max-keys', '1000', '--format', 'json']
         if marker:
-            cmd += ['--marker', marker]
+            cmd += ['--start-after', marker]   # listObjectsV2: --marker не поддерживается
         out = json.loads(subprocess.run(cmd, capture_output=True, text=True, check=True).stdout or '{}')
         contents = out.get('contents') or []
         for obj in contents:
@@ -122,7 +145,7 @@ print(f'В бакете объектов: {len(remote)}')
 
 # 1) файлы сайта из public/
 jobs, skipped = [], 0
-for root, _, files in os.walk('public'):
+for root, _, files in walk_public():
     for name in files:
         path = os.path.join(root, name)
         key = nfc(os.path.relpath(path, 'public'))
@@ -138,7 +161,7 @@ stub_tpl = ('<!DOCTYPE html><html lang="ru"><head><meta charset="utf-8">'
             '<link rel="canonical" href="{u}"><title>Перенаправление</title></head>'
             '<body><a href="{u}">Страница переехала</a></body></html>')
 stub_keys = ['en/index.html']
-for root, _, files in os.walk('public'):
+for root, _, files in walk_public():
     if 'index.html' in files:
         rel = nfc(os.path.relpath(root, 'public'))
         stub_keys.append('ru/index.html' if rel == '.' else f'ru/{rel}/index.html')
@@ -170,10 +193,10 @@ print(f'Загружено: {len(jobs) - len(failed)}')
 
 # 3) зачистка: удаляем из бакета то, чего больше нет ни в сборке, ни в редиректах
 expected = {nfc(os.path.relpath(os.path.join(r, f), 'public'))
-            for r, _, fs in os.walk('public') for f in fs}
+            for r, _, fs in walk_public() for f in fs}
 expected |= set(stub_keys)
 stale = [k for k in remote if nfc(k) not in expected]
-if stale:
+if stale and os.environ['DELETE_STALE'] == 'true':
     def delete(key):
         r = subprocess.run(['yc', 'storage', 's3api', 'delete-object',
                             '--bucket', BUCKET, '--key', key], capture_output=True)
@@ -185,6 +208,8 @@ if stale:
                 del_failed.append(key)
     print(f'Удалено устаревших: {len(stale) - len(del_failed)}'
           + (f', ошибок: {len(del_failed)}' if del_failed else ''))
+elif os.environ['DELETE_STALE'] != 'true':
+    print(f'Удаление отключено (--no-delete), сохранено объектов вне сборки: {len(stale)}')
 
 # IndexNow: сообщаем поисковикам об изменённых страницах (Яндекс, Bing и др.)
 key_line = [l for l in open('config/_default/params.yaml', encoding='utf-8')

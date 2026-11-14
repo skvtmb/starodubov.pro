@@ -15,6 +15,7 @@
 <div class="wrap">
   <div class="list-wrap">
     {{ $paginator := .Paginate .Pages }}
+    <h2 class="sr-only">Публикации</h2>
     <div class="post-grid">
       {{ range $paginator.Pages }}{{ partial "post-card.html" . }}{{ end }}
     </div>

@@ -1,0 +1,32 @@
+{{- /* Таблицы из Markdown: обёртка с горизонтальной прокруткой.
+       tabindex и role=region нужны, чтобы широкую таблицу можно было
+       прокрутить с клавиатуры и чтобы диктор назвал область. */ -}}
+<div class="tbl-wrap" role="region" tabindex="0" aria-label="Таблица, прокручивается по горизонтали">
+<table
+  {{- range $k, $v := .Attributes }}
+    {{- if $v }} {{ printf "%s=%q" $k $v | safeHTMLAttr }}{{ end }}
+  {{- end }}>
+  <thead>
+    {{- range .THead }}
+    <tr>
+      {{- range . }}
+      <th scope="col"
+        {{- with .Alignment }} {{ printf "style=%q" (printf "text-align: %s" .) | safeHTMLAttr }}{{ end -}}
+      >{{- .Text -}}</th>
+      {{- end }}
+    </tr>
+    {{- end }}
+  </thead>
+  <tbody>
+    {{- range .TBody }}
+    <tr>
+      {{- range . }}
+      <td
+        {{- with .Alignment }} {{ printf "style=%q" (printf "text-align: %s" .) | safeHTMLAttr }}{{ end -}}
+      >{{- .Text -}}</td>
+      {{- end }}
+    </tr>
+    {{- end }}
+  </tbody>
+</table>
+</div>

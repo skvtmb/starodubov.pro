@@ -1,7 +1,8 @@
 {{- /* Картинки в статьях: lazy-loading всегда; для локальных JPEG/PNG из assets
        генерируются WebP-варианты с srcset (оригиналы лежат в assets/images/) */ -}}
 {{- $dest := .Destination -}}
-{{- $alt := .Text | plainify -}}
+{{- /* plainify оставляет сущности типографа (&ldquo;), а атрибут кодирует их ещё раз — раскодируем */ -}}
+{{- $alt := .Text | plainify | htmlUnescape -}}
 {{- $img := "" -}}
 {{- if hasPrefix $dest "/images/" -}}
   {{- $img = resources.Get (strings.TrimPrefix "/" $dest) -}}
@@ -12,6 +13,8 @@
     {{- $large = $img.Process "resize 1400x webp q80" -}}
   {{- else -}}
     {{- $large = $img.Process "webp q82" -}}
+    {{- /* плоские логотипы в PNG бывают легче WebP с потерями — тогда отдаём оригинал */ -}}
+    {{- if lt (len $img.Content) (len $large.Content) }}{{ $large = $img }}{{ end -}}
   {{- end -}}
   {{- $small := $large -}}
   {{- if gt $img.Width 800 -}}
