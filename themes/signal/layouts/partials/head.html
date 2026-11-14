@@ -35,6 +35,7 @@
 {{- /* Шрифты self-hosted (см. @font-face в signal.css) — без Google Fonts */ -}}
 <link rel="preload" href="{{ "fonts/manrope-cyrillic-wght-normal.woff2" | relURL }}" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="{{ "fonts/manrope-latin-wght-normal.woff2" | relURL }}" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="{{ "fonts/geologica-cyrillic-wght-normal.woff2" | relURL }}" as="font" type="font/woff2" crossorigin>
 
 {{- /* Styles */ -}}
 {{ $css := resources.Get "css/signal.css" | minify | fingerprint }}

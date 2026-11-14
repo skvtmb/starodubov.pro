@@ -42,7 +42,22 @@
       {{- /* обложка под заголовком, если она не повторяет картинку из текста */ -}}
       {{- if and $cover (not (in .RawContent (printf "](%s" $cover))) }}
       <figure class="art-cover">
+        {{- /* адаптивная обложка: 700 и 1400 px в WebP, с реальными размерами против сдвига вёрстки */ -}}
+        {{- $res := resources.Get (strings.TrimPrefix "/" $cover) -}}
+        {{- if and $res (in (slice "jpeg" "png") $res.MediaType.SubType) -}}
+          {{- $img := "" -}}{{- $set := slice -}}
+          {{- range slice 700 1400 -}}
+            {{- if ge $res.Width . -}}
+              {{- $r := $res.Process (printf "resize %dx webp q82" .) -}}
+              {{- $set = $set | append (printf "%s %dw" $r.Permalink .) -}}
+              {{- $img = $r -}}
+            {{- end -}}
+          {{- end -}}
+          {{- if not $img }}{{ $img = $res.Process "webp q82" }}{{ end }}
+        <img src="{{ $img.Permalink }}"{{ with $set }} srcset="{{ delimit . ", " }}" sizes="(max-width: 640px) calc(100vw - 40px), (max-width: 1000px) calc(100vw - 64px), 752px"{{ end }} width="{{ $img.Width }}" height="{{ $img.Height }}" alt="{{ $coverAlt }}" fetchpriority="high" decoding="async">
+        {{- else }}
         <img src="{{ partial "cover-url.html" (dict "src" $cover "width" 1400) }}" alt="{{ $coverAlt }}" fetchpriority="high" decoding="async">
+        {{- end }}
         {{- with $coverCap }}<figcaption>{{ . }}</figcaption>{{ end }}
       </figure>
       {{- end }}
@@ -70,12 +85,14 @@
     </article>
 
     {{/* оглавление показывается в начале статьи (toc-inline);
-         в сайдбаре остаются только кнопки «поделиться» */}}
+         в сайдбаре — кнопки «поделиться» (Telegram, ВКонтакте, копирование ссылки) */}}
     <aside class="toc">
       <div class="share">
-        {{ with site.Params.shareTelegram }}<a href="{{ . }}" title="Телеграм" target="_blank" rel="noopener">TG</a>{{ end }}
-        {{ with site.Params.shareVK }}<a href="{{ . }}" title="ВКонтакте" target="_blank" rel="noopener">VK</a>{{ end }}
-        <a href="#" title="Скопировать ссылку" onclick="navigator.clipboard&&navigator.clipboard.writeText(location.href);return false;">↗</a>
+        {{- /* html/template сам кодирует значения в query-части href */}}
+        <a href="https://t.me/share/url?url={{ $.Permalink }}&text={{ $.Title }}" title="Поделиться в Telegram" aria-label="Поделиться в Telegram" target="_blank" rel="noopener">TG</a>
+        <a href="https://vk.com/share.php?url={{ $.Permalink }}&title={{ $.Title }}" title="Поделиться во ВКонтакте" aria-label="Поделиться во ВКонтакте" target="_blank" rel="noopener">VK</a>
+        <button type="button" class="copy-link" title="Скопировать ссылку" aria-label="Скопировать ссылку на статью"><span aria-hidden="true">↗</span></button>
+        <span class="copy-status" role="status"></span>
       </div>
     </aside>
   </div>
@@ -89,7 +106,7 @@
         <div class="nm">{{ $author.name | default site.Title }}</div>
         {{ with $author.bio }}<p class="bio">{{ . | markdownify }}</p>{{ end }}
       </div>
-      {{ with site.Params.contactEmail }}{{ $p := split . "@" }}<a class="cta-sm js-mail" href="#" data-user="{{ index $p 0 }}" data-host="{{ index $p 1 }}">Обсудить задачу</a>{{ end }}
+      {{ with site.Params.contactEmail }}{{ $p := split . "@" }}<a class="cta-sm js-mail" href="#contacts" data-user="{{ index $p 0 }}" data-host="{{ index $p 1 }}">{{ site.Params.contactLabel | default "Написать мне" }}</a>{{ end }}
     </div>
   </div>
 </section>
@@ -100,8 +117,8 @@
 <section class="related">
   <div class="wrap">
     <div class="sec-head">
-      <span class="sec-num">→</span>
-      <span class="sec-title">Читать дальше</span>
+      <span class="sec-num" aria-hidden="true">→</span>
+      <h2 class="sec-title">Читать дальше</h2>
       <a class="all" href="{{ (printf "/%s/" $blog) | relLangURL }}">Все статьи →</a>
     </div>
     <div class="post-grid">

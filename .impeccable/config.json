@@ -1,0 +1,17 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "flat-type-hierarchy",
+        "value": "*",
+        "files": [
+          "public/**"
+        ],
+        "createdAt": "2026-11-14T21:09:28.688Z",
+        "reason": "agent verified: public/ is Hugo build output with absolute stylesheet URLs (canonifyURLs), detector cannot load CSS and reads every role as 16px; rendered sizes measured in browser 14.11.2026: h1 74/56px, h2 30px, h3 22px, body 17.5px"
+      }
+    ]
+  }
+}
