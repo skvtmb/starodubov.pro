@@ -1,0 +1,16 @@
+Generated with the built-in image_gen tool.
+Reference: assets/images/welcome-blog-cover.jpg
+
+Use case: logo-brand.
+Asset type: finished landscape cover image for the personal blog and introduction article of Константин Стародубов, starodubov.pro. Wide aspect ratio approximately 1.83:1, ideally 1600x872.
+Input image: edit target, existing pale mint tree and English "THE LEARNING TREE BLOG" cover.
+Primary request: redesign this cover to be clearer, more beautiful and personally identifiable. Preserve the oak tree concept, but simplify it dramatically into a refined distinctive geometric oak emblem: a strong trunk, broad balanced crown of a few crisp oak leaves, and subtle branching that recalls knowledge and connected technology. No tiny books. The oak alludes to the surname Стародубов.
+Scene/backdrop: nearly black charcoal #0a0a0b, very subtle restrained tonal texture, spacious flat editorial composition.
+Style: sophisticated contemporary editorial identity, clean precise vector-like graphic, restrained and professional. Soft off-white typography and fresh green emblem (#78e88b), harmonious with a dark information-security blog. No stock-corporate appearance.
+Composition: oak emblem on left, readable typographic block on right; substantial space between them. All important content safely inside central 82 percent with generous edge margins. Name is dominant, oak is simple enough to read in a small article thumbnail. Clear balanced optical alignment. Exactly two name lines, large and bold, and a smaller topic line below. Domain smaller near bottom of text block.
+Text (verbatim), only these words, all Russian text must be spelled correctly:
+"Константин"
+"Стародубов"
+"Безопасность · Наука · Финтех"
+"starodubov.pro"
+Constraints: replace all original English text; no English slogans, no extra words, no shield or padlock, no UI cards, no mockup, no decorative ribbons, no giant circuit web, no glow, no gradients in the logo, no 3D. Crisp readable lettering. Final ready-to-use cover, not a presentation of a proposed logo.
