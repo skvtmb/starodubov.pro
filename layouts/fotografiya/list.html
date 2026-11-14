@@ -50,8 +50,8 @@
     {{ with $photoPosts }}
     <div class="gal-notes">
       <div class="sec-head">
-        <span class="sec-num">→</span>
-        <span class="sec-title">Заметки о съёмке</span>
+        <span class="sec-num" aria-hidden="true">→</span>
+        <h2 class="sec-title">Заметки о съёмке</h2>
         {{ with $photoTerm }}<a class="all" href="{{ .RelPermalink }}">Все в категории →</a>{{ end }}
       </div>
       <div class="post-grid">

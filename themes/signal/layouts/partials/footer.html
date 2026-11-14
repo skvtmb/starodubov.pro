@@ -8,7 +8,7 @@
         {{ with site.Params.footerNote }}<p>{{ . }}</p>{{ end }}
       </div>
       <div>
-        <h5>Навигация</h5>
+        <h2>Навигация</h2>
         {{- range site.Menus.main -}}
           <a href="{{ .URL | relLangURL }}">{{ .Name }}</a>
         {{- end -}}
@@ -16,7 +16,7 @@
         <a href="{{ "/tags/" | relLangURL }}">Теги</a>
       </div>
       <div>
-        <h5>Контакты</h5>
+        <h2 id="contacts">Контакты</h2>
         {{- range site.Params.socials -}}
           <a href="{{ .url }}"{{ if .external | default true }} target="_blank" rel="me noopener"{{ end }}>{{ .name }}</a>
         {{- end -}}

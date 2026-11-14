@@ -3,11 +3,36 @@
   'use strict';
 
   /* ---- mobile menu ---- */
+  var header = document.querySelector('header.site');
+  var menuBtn = header && header.querySelector('.menu-btn');
+  function setMenu(open) {
+    if (!header || !menuBtn) return;
+    header.classList.toggle('open', open);
+    menuBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  }
   document.addEventListener('click', function (e) {
-    var btn = e.target.closest('.menu-btn');
-    if (btn) {
-      var h = document.querySelector('header.site');
-      if (h) h.classList.toggle('open');
+    if (e.target.closest('.menu-btn')) setMenu(!header.classList.contains('open'));
+    else if (e.target.closest('.navlinks a')) setMenu(false);
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && header && header.classList.contains('open')) {
+      setMenu(false);
+      menuBtn.focus();
+    }
+  });
+
+  /* ---- copy article link ---- */
+  document.addEventListener('click', function (e) {
+    var btn = e.target.closest('.copy-link');
+    if (!btn) return;
+    var status = btn.parentNode.querySelector('.copy-status');
+    function say(t) { if (status) { status.textContent = t; setTimeout(function () { status.textContent = ''; }, 2500); } }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(location.href).then(
+        function () { say('Ссылка скопирована'); },
+        function () { say('Не удалось скопировать ссылку'); });
+    } else {
+      say('Скопируйте адрес из строки браузера');
     }
   });
 
@@ -44,23 +69,27 @@
       catch (err) { return null; }
     });
 
-    function onScroll() {
+    // Раз в кадр: сначала все чтения раскладки, потом записи.
+    // Индикатор двигается через transform, без пересчёта раскладки.
+    var queued = false;
+    function update() {
+      queued = false;
       var h = document.documentElement;
-      if (bar) {
-        var max = h.scrollHeight - h.clientHeight;
-        bar.style.width = (max > 0 ? (h.scrollTop / max * 100) : 0) + '%';
+      var max = h.scrollHeight - h.clientHeight;
+      var ratio = max > 0 ? Math.min(1, h.scrollTop / max) : 0;
+      var cur = -1;
+      for (var i = 0; i < sections.length; i++) {
+        if (sections[i] && sections[i].getBoundingClientRect().top < 140) cur = i;
       }
-      if (tocLinks.length) {
-        var cur = -1;
-        for (var i = 0; i < sections.length; i++) {
-          if (sections[i] && sections[i].getBoundingClientRect().top < 140) cur = i;
-        }
-        tocLinks.forEach(function (a, i) { a.classList.toggle('active', i === cur); });
-      }
+      if (bar) bar.style.transform = 'scaleX(' + ratio + ')';
+      tocLinks.forEach(function (a, i) { a.classList.toggle('active', i === cur); });
+    }
+    function onScroll() {
+      if (!queued) { queued = true; requestAnimationFrame(update); }
     }
     document.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', onScroll);
-    onScroll();
+    update();
   })();
 })();
 
@@ -73,7 +102,11 @@
   var items = [].slice.call(grid.querySelectorAll('.gal-item'));
   if (!items.length) return;
 
-  var img = box.querySelector('.lb-img');
+  // картинку создаём здесь, чтобы в HTML не было <img> без src
+  var img = document.createElement('img');
+  img.className = 'lb-img';
+  img.alt = '';
+  box.querySelector('.lb-fig').prepend(img);
   var cap = box.querySelector('.lb-cap');
   var count = box.querySelector('.lb-count');
   var btnX = box.querySelector('.lb-x');
@@ -93,7 +126,8 @@
   }
 
   function open(idx) {
-    lastFocus = document.activeElement;
+    // после закрытия вернуть фокус на кадр, с которого открыли просмотр
+    lastFocus = items[idx];
     show(idx);
     box.hidden = false;
     document.body.classList.add('lb-open');
@@ -123,6 +157,13 @@
   document.addEventListener('keydown', function (e) {
     if (box.hidden) return;
     if (e.key === 'Escape') close();
+    else if (e.key === 'Tab') {
+      // держим фокус внутри окна просмотра (aria-modal)
+      var f = [btnX, btnPrev, btnNext];
+      var at = f.indexOf(document.activeElement);
+      e.preventDefault();
+      f[(at + (e.shiftKey ? f.length - 1 : 1)) % f.length].focus();
+    }
     else if (e.key === 'ArrowLeft') show(i - 1);
     else if (e.key === 'ArrowRight') show(i + 1);
   });
