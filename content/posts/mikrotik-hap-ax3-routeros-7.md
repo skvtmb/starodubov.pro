@@ -1,6 +1,7 @@
 ---
 title: "MikroTik hAP ax3 с нуля: полный разбор конфигурации на RouterOS 7"
 date: 2026-03-07T00:00:00+03:00
+lastmod: 2026-11-01
 draft: false
 summary: "Разбор рабочей конфигурации роутера MikroTik hAP ax3 на RouterOS 7: Wi‑Fi 6, DHCP, DoH, WireGuard, split-tunnel для AI и YouTube, BGP, firewall, скрипты и обслуживание."
 categories: ["Технологии"]
@@ -11,7 +12,7 @@ cover:
   caption: "Официальная блок-схема hAP ax³ (источник: MikroTik)"
 ---
 
-Роутер с Wi‑Fi 6 (802.11ax) жалко просто включить и забыть. Хочется понять, что даёт новый стандарт, как выжать из него пользу и где лежат типичные грабли. Здесь я собрал разбор своей рабочей конфигурации **MikroTik hAP ax3** на **RouterOS 7.21.3**: от схемы и сброса до Wi‑Fi, VPN, BGP и скриптов. Инструкции в духе «нажмите сюда» не будет. Скорее рассказ о том, как всё устроено и почему сделано именно так. Если нужна пошаговая настройка «с нуля» с картинками и тестами, ориентируйтесь на [статью на Gregory Gost про hAP ax3 и RouterOS 7](https://gregory-gost.ru/mikrotik-perehodim-na-routeros-7-i-wi-fi-6-802-11ax-nastroika-hap-ax3/).
+Роутер с Wi‑Fi 6 (802.11ax) жалко просто включить и забыть. Хочется понять, что даёт новый стандарт, как выжать из него пользу и где лежат типичные грабли. Здесь я собрал разбор своей рабочей конфигурации **MikroTik hAP ax3** на **RouterOS 7.21.3**: от схемы и сброса до Wi‑Fi, VPN, BGP и скриптов. Если нужна пошаговая настройка «с нуля» с картинками и тестами, ориентируйтесь на [статью на Gregory Gost про hAP ax3 и RouterOS 7](https://gregory-gost.ru/mikrotik-perehodim-na-routeros-7-i-wi-fi-6-802-11ax-nastroika-hap-ax3/).
 
 ---
 
@@ -45,9 +46,7 @@ cover:
 
 ## 2. С чего начать с нуля
 
-Если брать роутер «из коробки» и собирать конфиг с нуля, логичный порядок такой:
-
-Сначала железо и база: обновить RouterOS (Main package + **wifi-qcom** из Extra packages), переименовать интерфейсы, собрать bridge, поднять Wi‑Fi (основной и при необходимости IoT SSID). Потом сеть: адресация на bridge, DHCP-сервер, WAN-клиент. Затем DNS и DoH, ограничение доступа к управлению. После этого — VPN (WireGuard, при желании L2TP), split-routing для нужных сервисов, BGP и фильтры. В конце — firewall, NAT, отключение лишних service-port, NTP, логирование, скрипты и scheduler. Так конфиг читается по слоям и меньше шансов что-то сломать в уже работающем.
+Сначала обновите RouterOS: Main package и **wifi-qcom** из Extra packages. Затем переносите настройки по частям. Полный порядок ручной настройки собран в [разделе 27](#27-порядок-настройки-вручную). Так меньше шансов что-то сломать в уже работающем.
 
 ---
 
@@ -146,7 +145,7 @@ add interface=wireguard1 list=VPN
 
 ## 7. Wi‑Fi 6: основная домашняя сеть
 
-Здесь самое интересное: ради чего вообще брали устройство с AX. Настройки в RouterOS 7 разнесены по меню **WiFi** — Security, Channel, Configuration; отдельного «Advanced Mode» больше нет, все опции на виду.
+Настройки в RouterOS 7 разнесены по меню **WiFi** — Security, Channel, Configuration; отдельного «Advanced Mode» больше нет, все опции на виду.
 
 ### Что даёт стандарт 802.11ax (Wi‑Fi 6)
 
@@ -792,7 +791,7 @@ add interval=1d name=Log_allert_daily on-event=Log_allert start-date=2026-01-01 
 
 ## 27. Порядок настройки вручную
 
-Если собирать конфиг вручную с нуля, удобно идти так: переименовать интерфейсы → создать LAN-Bridge и добавить порты → interface list (LAN, WAN, VPN) → Wi‑Fi security, channel, configuration → включить wifi1/wifi2 → при необходимости IoT SSID → IP на bridge → DHCP pool и server → DHCP client на WAN → DNS и DoH, bootstrap для AdGuard → WireGuard → routing-table to_wg → address-list для AI/YouTube → mangle → BGP и фильтры → filter, raw, nat → service-port и `/ip service` → NTP, identity, логи → скрипты и scheduler. В конце — `export show-sensitive` и сохранение в архив, чтобы не потерять наработки.
+Если собирать конфиг вручную с нуля, удобно идти так: переименовать интерфейсы → создать LAN-Bridge и добавить порты → interface list (LAN, WAN, VPN) → Wi‑Fi security, channel, configuration → включить wifi1/wifi2 → при необходимости IoT SSID → IP на bridge → DHCP pool и server → DHCP client на WAN → DNS и DoH, bootstrap для AdGuard → ограничение доступа к управлению → WireGuard и при необходимости L2TP/IPsec → routing-table to_wg → address-list для AI/YouTube → mangle → BGP и фильтры → filter, raw, nat → service-port и `/ip service` → NTP, identity, логи → скрипты и scheduler. В конце — `export show-sensitive` и сохранение в архив, чтобы не потерять наработки.
 
 ---
 
@@ -817,4 +816,4 @@ add interval=1d name=Log_allert_daily on-event=Log_allert start-date=2026-01-01 
 
 ## Итог
 
-В одной коробке в итоге уживаются: Wi‑Fi 6 с отдельным IoT SSID и роумингом между 2.4 и 5 ГГц, DoH и принудительный redirect DNS/NTP, WireGuard и L2TP/IPsec, split-routing для AI и YouTube, BGP с антифильтром, firewall, DDoS-защита, резервные копии на USB, scheduler и оповещения в Telegram. Собрать всё это на одном устройстве реально, если раскладывать конфиг по слоям и не сваливать правила в кучу. Статья вышла длинной, потому что хотелось объяснить, зачем нужен каждый кусок и как он цепляется за остальные. Для пошаговой настройки «с нуля», сброса, выбора каналов 5 ГГц и живых бенчмарков очень рекомендую [подробную статью по hAP ax3 и RouterOS 7 на Gregory Gost](https://gregory-gost.ru/mikrotik-perehodim-na-routeros-7-i-wi-fi-6-802-11ax-nastroika-hap-ax3/): там скриншоты, консольные команды и тесты в цифрах. Удачной настройки.
+В одной коробке в итоге уживаются: Wi‑Fi 6 с отдельным IoT SSID и роумингом между 2.4 и 5 ГГц, DoH и принудительный redirect DNS/NTP, WireGuard и L2TP/IPsec, split-routing для AI и YouTube, BGP с антифильтром, firewall, DDoS-защита, резервные копии на USB, scheduler и оповещения в Telegram. Собрать всё это на одном устройстве реально, если раскладывать конфиг по слоям и не сваливать правила в кучу. Для пошаговой настройки «с нуля», сброса, выбора каналов 5 ГГц и живых бенчмарков очень рекомендую [подробную статью по hAP ax3 и RouterOS 7 на Gregory Gost](https://gregory-gost.ru/mikrotik-perehodim-na-routeros-7-i-wi-fi-6-802-11ax-nastroika-hap-ax3/): там скриншоты, консольные команды и тесты в цифрах.

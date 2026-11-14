@@ -1,0 +1,7 @@
+{{- $src := .Get "src" -}}
+<figure class="article-infographic">
+  <a href="{{ $src | relURL }}" target="_blank" rel="noopener" style="display:block;border-bottom:0" aria-label="{{ .Get "alt" }}. Открыть в полном размере">
+    <img src="{{ $src | relURL }}" alt="{{ .Get "alt" }}" width="800" height="{{ .Get "height" }}" loading="lazy" decoding="async" style="width:100%;height:auto;max-height:none">
+  </a>
+  <figcaption>{{ .Get "caption" }} <a href="{{ $src | relURL }}" target="_blank" rel="noopener">Открыть в полном размере</a></figcaption>
+</figure>
