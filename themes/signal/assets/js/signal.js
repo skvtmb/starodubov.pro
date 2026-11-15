@@ -21,6 +21,28 @@
     }
   });
 
+  /* ---- переключатель темы: выбор сохраняется, без выбора — системная тема ---- */
+  (function () {
+    var btn = document.querySelector('.theme-btn');
+    if (!btn) return;
+    var root = document.documentElement;
+    var mq = window.matchMedia('(prefers-color-scheme: dark)');
+    function current() { return root.getAttribute('data-theme') || (mq.matches ? 'dark' : 'light'); }
+    function sync() {
+      var dark = current() === 'dark';
+      btn.setAttribute('aria-pressed', dark ? 'true' : 'false');
+      btn.setAttribute('aria-label', dark ? 'Светлая тема' : 'Тёмная тема');
+    }
+    btn.addEventListener('click', function () {
+      var next = current() === 'dark' ? 'light' : 'dark';
+      root.setAttribute('data-theme', next);
+      try { localStorage.setItem('theme', next); } catch (e) {}
+      sync();
+    });
+    if (mq.addEventListener) mq.addEventListener('change', sync);
+    sync();
+  })();
+
   /* ---- copy article link ---- */
   document.addEventListener('click', function (e) {
     var btn = e.target.closest('.copy-link');
@@ -175,4 +197,67 @@
     var u = a.getAttribute('data-user'), h = a.getAttribute('data-host');
     if (u && h) a.setAttribute('href', 'mailto:' + u + '@' + h);
   });
+})();
+
+/* ---- поиск по сайту: индекс /search.json, поиск в браузере ---- */
+(function () {
+  var input = document.getElementById('q');
+  if (!input) return;
+  var list = document.getElementById('search-results');
+  var status = document.getElementById('search-status');
+  var data = null, loading = null, timer;
+  function norm(s) { return (s || '').toLowerCase().replace(/ё/g, 'е'); }
+  function esc(s) { return s.replace(/[&<>"]/g, function (c) { return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  function load() {
+    if (data) return Promise.resolve(data);
+    if (!loading) loading = fetch(input.getAttribute('data-index')).then(function (r) { return r.json(); }).then(function (j) {
+      data = j.map(function (p) { p._t = norm(p.t); p._g = norm((p.g || []).join(' ') + ' ' + (p.c || '')); p._s = norm(p.s); p._x = norm(p.x); return p; });
+      return data;
+    });
+    return loading;
+  }
+  function snippet(p, words) {
+    var text = p.x || p.s || '', low = norm(text), at = -1;
+    for (var i = 0; i < words.length && at < 0; i++) at = low.indexOf(words[i]);
+    if (at < 0) return esc(p.s || '');
+    var from = Math.max(0, at - 80), part = text.slice(from, from + 220);
+    var out = esc((from ? '…' : '') + part + (from + 220 < text.length ? '…' : ''));
+    words.forEach(function (w) { if (w.length > 1) out = out.replace(new RegExp('(' + w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi'), '<mark>$1</mark>'); });
+    return out;
+  }
+  function plural(n) { var a = n % 10, b = n % 100; return a === 1 && b !== 11 ? 'материал' : (a >= 2 && a <= 4 && (b < 12 || b > 14) ? 'материала' : 'материалов'); }
+  function run() {
+    var q = input.value.trim();
+    var url = new URL(location.href);
+    if (q) url.searchParams.set('q', q); else url.searchParams.delete('q');
+    history.replaceState(null, '', url);
+    var words = norm(q).split(/\s+/).filter(function (w) { return w.length > 1; });
+    if (!words.length) { list.innerHTML = ''; status.textContent = ''; return; }
+    load().then(function (items) {
+      var res = [];
+      items.forEach(function (p) {
+        var score = 0;
+        for (var i = 0; i < words.length; i++) {
+          var w = words[i], sc = 0;
+          if (p._t.indexOf(w) >= 0) sc += 6;
+          if (p._g.indexOf(w) >= 0) sc += 4;
+          if (p._s.indexOf(w) >= 0) sc += 2;
+          if (p._x.indexOf(w) >= 0) sc += 1;
+          if (!sc) return;
+          score += sc;
+        }
+        res.push([score, p]);
+      });
+      res.sort(function (a, b) { return b[0] - a[0]; });
+      status.textContent = res.length ? 'Найдено: ' + res.length + ' ' + plural(res.length) : 'Ничего не нашлось. Попробуйте другое слово или откройте «Темы».';
+      list.innerHTML = res.slice(0, 50).map(function (r) {
+        var p = r[1];
+        return '<li><a href="' + p.u + '">' + esc(p.t) + '</a><div class="sr-meta">' + (p.c ? '<span>' + esc(p.c) + '</span>' : '') + (p.d ? '<span>' + p.d + '</span>' : '') + '</div><p>' + snippet(p, words) + '</p></li>';
+      }).join('');
+    }).catch(function () { status.textContent = 'Не удалось загрузить индекс поиска. Обновите страницу.'; });
+  }
+  input.addEventListener('input', function () { clearTimeout(timer); timer = setTimeout(run, 150); });
+  input.addEventListener('focus', load, { once: true });
+  var q0 = new URL(location.href).searchParams.get('q');
+  if (q0) { input.value = q0; run(); } else { input.focus(); }
 })();

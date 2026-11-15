@@ -7,12 +7,12 @@
 {{- if reflect.IsMap $cover }}{{ $cover = $cover.image }}{{ end -}}
 <a class="post" href="{{ .RelPermalink }}">
   <div class="thumb{{ if $cover }} has-img{{ end }}"{{ with $cover }} style="background-image:url('{{ partial "cover-url.html" (dict "src" . "width" 800) }}')"{{ end }}>
-    <span class="cat">{{ $cat }}</span>
   </div>
   <div class="body">
     <h3>{{ .Title }}</h3>
     <p>{{ .Description | default .Summary | plainify | truncate 120 }}</p>
     <div class="pmeta">
+      <span>{{ $cat }}</span>
       <span>{{ .Date.Format "02.01.2006" }}</span>
       <span>{{ .ReadingTime }} мин</span>
     </div>

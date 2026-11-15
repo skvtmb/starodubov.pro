@@ -13,9 +13,8 @@
       {{ with $cat }}<span class="sep">/</span><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a>{{ end }}
     </div>
     <div class="art-head">
-      {{ with $cat }}<span class="cat-pill"><span class="dot"></span>{{ .LinkTitle }}</span>{{ end }}
       <h1 class="title">{{ .Title }}</h1>
-      {{ with .Description }}<p class="dek">{{ . }}</p>{{ end }}
+      {{ with .Description | default .Params.summary }}<p class="dek">{{ . }}</p>{{ end }}
       <div class="art-meta">
         <div class="au">
           <span class="av">{{ with $author.photo }}<img src="{{ partial "cover-url.html" (dict "src" . "width" 96) }}" width="42" height="42" alt="" onerror="this.remove()">{{ else }}<span>{{ $author.avatarText | default "АА" }}</span>{{ end }}</span>
@@ -79,19 +78,23 @@
       {{ with site.Params.shareTelegram }}
       <div class="art-discuss">
         <p>Есть вопрос или хотите обсудить статью?</p>
-        <a class="btn-sec" href="{{ . }}" target="_blank" rel="noopener">Написать в Telegram →</a>
+        <a class="btn-sec" href="{{ . }}" target="_blank" rel="noopener">Написать в Telegram</a>
       </div>
       {{ end }}
     </article>
 
-    {{/* оглавление показывается в начале статьи (toc-inline);
-         в сайдбаре — кнопки «поделиться» (Telegram, ВКонтакте, копирование ссылки) */}}
+    {{/* на широком экране оглавление липнет справа, под ним «поделиться»;
+         на узком — раскрывающееся содержание в начале статьи (toc-inline) */}}
     <aside class="toc">
+      {{ with .TableOfContents }}{{ if ne . "<nav id=\"TableOfContents\"></nav>" }}
+      <h2 class="toc-title">Содержание</h2>
+      {{ replace . "<nav id=\"TableOfContents\">" "<nav aria-label=\"Содержание статьи\">" | safeHTML }}
+      {{ end }}{{ end }}
       <div class="share">
         {{- /* html/template сам кодирует значения в query-части href */}}
-        <a href="https://t.me/share/url?url={{ $.Permalink }}&text={{ $.Title }}" title="Поделиться в Telegram" aria-label="Поделиться в Telegram" target="_blank" rel="noopener">TG</a>
-        <a href="https://vk.com/share.php?url={{ $.Permalink }}&title={{ $.Title }}" title="Поделиться во ВКонтакте" aria-label="Поделиться во ВКонтакте" target="_blank" rel="noopener">VK</a>
-        <button type="button" class="copy-link" title="Скопировать ссылку" aria-label="Скопировать ссылку на статью"><span aria-hidden="true">↗</span></button>
+        <a href="https://t.me/share/url?url={{ $.Permalink }}&text={{ $.Title }}" title="Поделиться в Telegram" aria-label="Поделиться в Telegram" target="_blank" rel="noopener">{{ partial "icon.html" "telegram" }}</a>
+        <a href="https://vk.com/share.php?url={{ $.Permalink }}&title={{ $.Title }}" title="Поделиться во ВКонтакте" aria-label="Поделиться во ВКонтакте" target="_blank" rel="noopener">{{ partial "icon.html" "vk" }}</a>
+        <button type="button" class="copy-link" title="Скопировать ссылку" aria-label="Скопировать ссылку на статью">{{ partial "icon.html" "link" }}</button>
         <span class="copy-status" role="status"></span>
       </div>
     </aside>
@@ -117,9 +120,8 @@
 <section class="related">
   <div class="wrap">
     <div class="sec-head">
-      <span class="sec-num" aria-hidden="true">→</span>
       <h2 class="sec-title">Читать дальше</h2>
-      <a class="all" href="{{ (printf "/%s/" $blog) | relLangURL }}">Все статьи →</a>
+      <a class="all" href="{{ (printf "/%s/" $blog) | relLangURL }}">Все статьи</a>
     </div>
     <div class="post-grid">
       {{ range . }}{{ partial "post-card.html" . }}{{ end }}

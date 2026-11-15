@@ -2,7 +2,6 @@
 <div class="page-hero">
   <div class="wrap">
     <div class="inner">
-      <span class="eyebrow">Canon EOS R8</span>
       <h1>{{ .Title }}</h1>
       {{ with .Description | default .Content }}<div class="lede">{{ . | plainify | truncate 220 }}</div>{{ end }}
     </div>
@@ -26,10 +25,10 @@
           {{ end }}
         </div>
         <div class="album-body">
-          {{ with $a.Params.place }}<span class="album-place">{{ . }}</span>{{ end }}
           <h2>{{ $a.Title }}</h2>
           {{ with $a.Description }}<p>{{ . | plainify | truncate 140 }}</p>{{ end }}
           <div class="album-meta">
+            {{ with $a.Params.place }}<span>{{ . }}</span>{{ end }}
             <span>{{ $a.Date | time.Format ":date_long" }}</span>
             {{ if $n }}<span>{{ $n }} {{ partial "ru-kadry.html" $n }}</span>{{ end }}
             {{ with $a.Params.gear }}<span>{{ . }}</span>{{ end }}
@@ -50,9 +49,8 @@
     {{ with $photoPosts }}
     <div class="gal-notes">
       <div class="sec-head">
-        <span class="sec-num" aria-hidden="true">→</span>
         <h2 class="sec-title">Заметки о съёмке</h2>
-        {{ with $photoTerm }}<a class="all" href="{{ .RelPermalink }}">Все в категории →</a>{{ end }}
+        {{ with $photoTerm }}<a class="all" href="{{ .RelPermalink }}">Все в категории</a>{{ end }}
       </div>
       <div class="post-grid">
         {{ range first 3 . }}{{ partial "post-card.html" . }}{{ end }}

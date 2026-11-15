@@ -5,7 +5,6 @@
 <div class="page-hero">
   <div class="wrap">
     <div class="inner">
-      <span class="eyebrow">{{ if eq .Data.Singular "category" }}Категория{{ else }}Тег{{ end }}</span>
       <h1>{{ if eq .Data.Singular "tag" }}#{{ end }}{{ .Title }}</h1>
       <div class="lede">{{ len .Pages }} материал(ов) по теме.</div>
     </div>
@@ -22,11 +21,11 @@
 
     {{ if gt $paginator.TotalPages 1 }}
     <nav class="pager">
-      {{ if $paginator.HasPrev }}<a href="{{ $paginator.Prev.URL }}">←</a>{{ end }}
+      {{ if $paginator.HasPrev }}<a href="{{ $paginator.Prev.URL }}" aria-label="Предыдущая страница">{{ partial "icon.html" "arrow-left" }}</a>{{ end }}
       {{ range $paginator.Pagers }}
         {{ if eq . $paginator }}<span class="cur">{{ .PageNumber }}</span>{{ else }}<a href="{{ .URL }}">{{ .PageNumber }}</a>{{ end }}
       {{ end }}
-      {{ if $paginator.HasNext }}<a href="{{ $paginator.Next.URL }}">→</a>{{ end }}
+      {{ if $paginator.HasNext }}<a href="{{ $paginator.Next.URL }}" aria-label="Следующая страница">{{ partial "icon.html" "arrow-right" }}</a>{{ end }}
     </nav>
     {{ end }}
   </div>
@@ -35,7 +34,6 @@
 <div class="page-hero">
   <div class="wrap">
     <div class="inner">
-      <span class="eyebrow">{{ .Title }}</span>
       <h1>{{ if eq .Data.Plural "categories" }}Категории{{ else if eq .Data.Plural "tags" }}Теги{{ else }}{{ .Title }}{{ end }}</h1>
       <div class="lede">{{ len .Data.Terms }} {{ if eq .Data.Plural "tags" }}тегов{{ else }}разделов{{ end }} · выберите тему, чтобы открыть подборку материалов.</div>
     </div>

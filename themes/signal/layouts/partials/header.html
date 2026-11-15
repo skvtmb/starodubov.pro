@@ -1,8 +1,7 @@
 {{- $brandName := site.Params.brandName | default site.Title -}}
-{{- $mark := site.Params.brandMark | default (substr site.Title 0 2) -}}
 <header class="site">
   <div class="wrap nav">
-    <a class="brand" href="{{ "/" | relLangURL }}"><span class="mark">{{ $mark }}</span><span>{{ $brandName }}</span></a>
+    <a class="brand" href="{{ "/" | relLangURL }}"><span class="mark">{{ partial "oak.html" . }}</span><span>{{ $brandName }}</span></a>
     <nav class="navlinks" id="site-nav" aria-label="Основное меню">
       {{- range site.Menus.main -}}
         {{ $active := or ($.IsMenuCurrent "main" .) ($.HasMenuCurrent "main" .) }}
@@ -10,6 +9,8 @@
       {{- end -}}
     </nav>
     <div class="nav-r">
+      <a class="icon-btn" href="{{ "/поиск/" | relLangURL }}" aria-label="Поиск" title="Поиск">{{ partial "icon.html" "search" }}</a>
+      <button class="theme-btn" type="button" aria-label="Тёмная тема" aria-pressed="false" title="Сменить тему">{{ partial "icon.html" "sun" | replaceRE "class=\"ico\"" "class=\"ico ico-sun\"" | safeHTML }}{{ partial "icon.html" "moon" | replaceRE "class=\"ico\"" "class=\"ico ico-moon\"" | safeHTML }}</button>
       {{ with site.Params.contactEmail }}{{ $p := split . "@" }}<a class="cta-sm js-mail" href="#contacts" data-user="{{ index $p 0 }}" data-host="{{ index $p 1 }}">{{ site.Params.contactLabel | default "Написать мне" }}</a>{{ end }}
     </div>
     <button class="menu-btn" aria-label="Меню" aria-controls="site-nav" aria-expanded="false" type="button"><span></span></button>

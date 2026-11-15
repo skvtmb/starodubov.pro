@@ -9,7 +9,7 @@ tags: ["macos", "настройка", "разработка"]
 cover: "/images/macbook-apps-cover.jpg"
 ---
 
-Собрал в одном месте всё, что стоит у меня на MacBook. У каждого приложения — команда установки через Homebrew (если оно есть в Homebrew Cask), пара слов о том, что это такое, и ссылка на официальный сайт.
+Собрал в одном месте всё, что стоит у меня на MacBook. У каждого приложения есть команда установки через Homebrew (если оно есть в Homebrew Cask), пара слов о том, что это такое, и ссылка на официальный сайт.
 
 ## Содержание
 
@@ -46,7 +46,7 @@ cover: "/images/macbook-apps-cover.jpg"
 
 ### Visual Studio Code
 * **Установка через Homebrew**: `brew install --cask visual-studio-code`
-* **Описание**: Редактор кода от Microsoft с открытым исходным кодом. Понимает кучу языков, расширений под него — море.
+* **Описание**: Редактор кода от Microsoft с открытым исходным кодом. Понимает кучу языков, а расширений под него море.
 * **Официальный сайт**: [https://code.visualstudio.com/](https://code.visualstudio.com/)
 
 ### Cursor
@@ -140,7 +140,7 @@ cover: "/images/macbook-apps-cover.jpg"
 
 ### AppCleaner
 * **Установка через Homebrew**: `brew install --cask appcleaner`
-* **Описание**: Удаляет приложения начисто — вместе со всеми их файлами и настройками.
+* **Описание**: Удаляет приложения начисто, вместе со всеми их файлами и настройками.
 * **Официальный сайт**: [https://freemacsoft.net/appcleaner/](https://freemacsoft.net/appcleaner/)
 
 ### Keka
@@ -247,7 +247,7 @@ cover: "/images/macbook-apps-cover.jpg"
 
 ### Applite
 * **Установка через Homebrew**: `brew install --cask applite`
-* **Описание**: Графическая оболочка для Homebrew Cask. Ставит, обновляет и удаляет приложения в один клик — без терминала.
+* **Описание**: Графическая оболочка для Homebrew Cask. Ставит, обновляет и удаляет приложения в один клик, без терминала.
 * **Официальный сайт**: [https://applite.app](https://applite.app) | [GitHub](https://github.com/milanvarady/Applite)
 
 ### Obsidian Web Clipper

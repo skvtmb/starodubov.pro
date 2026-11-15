@@ -1,9 +1,11 @@
 {{- $isHome := .IsHome -}}
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+{{- /* тема из переключателя применяется до отрисовки, чтобы не мигала */ -}}
+<script>try{var t=localStorage.getItem('theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
 
 {{- /* Title */ -}}
-{{ $sep := " — " }}
+{{ $sep := " · " }}
 <title>{{ if $isHome }}{{ site.Title }}{{ with site.Params.tagline }}{{ $sep }}{{ . }}{{ end }}{{ else }}{{ .Title }}{{ $sep }}{{ site.Title }}{{ end }}</title>
 
 {{- /* SEO */ -}}

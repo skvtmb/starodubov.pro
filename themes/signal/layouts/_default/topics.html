@@ -1,0 +1,36 @@
+{{- /* «Темы»: рубрики и теги на одной странице (content/temy.md, layout: topics).
+       Отдельные списки /categories/ и /tags/ отключены (disableKinds: taxonomy)
+       и перенаправляют сюда; страницы конкретной рубрики или тега остаются. */ -}}
+{{ define "main" }}
+{{ $cats := site.Taxonomies.categories }}
+{{ $tags := site.Taxonomies.tags }}
+<div class="page-hero">
+  <div class="wrap">
+    <div class="inner">
+      <h1>{{ .Title }}</h1>
+      <div class="lede">{{ len $cats }} {{ partial "ru-plural.html" (dict "n" (len $cats) "forms" (slice "рубрика" "рубрики" "рубрик")) }} и {{ len $tags }} {{ partial "ru-plural.html" (dict "n" (len $tags) "forms" (slice "тег" "тега" "тегов")) }}. Выберите тему, чтобы открыть подборку материалов.</div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="list-wrap topics">
+    {{ with $cats }}
+    <section aria-labelledby="t-cats">
+      <h2 id="t-cats" class="topics-h">Рубрики</h2>
+      <div class="term-cloud term-cloud--main">
+        {{ range .ByCount }}<a href="{{ .Page.RelPermalink }}">{{ .Page.Title }}<span class="ct">{{ .Count }}</span></a>{{ end }}
+      </div>
+    </section>
+    {{ end }}
+    {{ with $tags }}
+    <section aria-labelledby="t-tags">
+      <h2 id="t-tags" class="topics-h">Теги</h2>
+      <div class="term-cloud">
+        {{ range .Alphabetical }}<a href="{{ .Page.RelPermalink }}">#{{ .Page.Title }}<span class="ct">{{ .Count }}</span></a>{{ end }}
+      </div>
+    </section>
+    {{ end }}
+  </div>
+</div>
+{{ end }}

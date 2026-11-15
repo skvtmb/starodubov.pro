@@ -1,0 +1,22 @@
+{{- /* Поиск по сайту: индекс /search.json собирает Hugo, ищет скрипт signal.js в браузере. */ -}}
+{{ define "main" }}
+<div class="page-hero">
+  <div class="wrap">
+    <div class="inner">
+      <h1>{{ .Title }}</h1>
+      <form class="search-form" role="search" action="{{ .RelPermalink }}" onsubmit="return false">
+        <label class="sr-only" for="q">Что ищем</label>
+        {{ partial "icon.html" "search" }}
+        <input id="q" name="q" type="search" placeholder="Например: TrueNAS, комплаенс, VPN" autocomplete="off" spellcheck="false" data-index="{{ "search.json" | relURL }}">
+      </form>
+      <p class="search-status" id="search-status" role="status" aria-live="polite"></p>
+    </div>
+  </div>
+</div>
+<div class="wrap">
+  <div class="list-wrap">
+    <ol class="search-results" id="search-results"></ol>
+    <noscript><p class="gal-empty">Для поиска нужен JavaScript. Все материалы есть в разделе <a href="{{ "/posts/" | relURL }}">«Статьи»</a> и на странице <a href="{{ "/темы/" | relURL }}">«Темы»</a>.</p></noscript>
+  </div>
+</div>
+{{ end }}
