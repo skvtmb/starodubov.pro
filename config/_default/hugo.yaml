@@ -24,6 +24,9 @@ permalinks:
 pagination:
   pagerSize: 9
 
+# Списки всех рубрик и всех тегов заменены одной страницей «Темы» (content/temy.md)
+disableKinds: ["taxonomy"]
+
 taxonomies:
   category: categories
   tag: tags
@@ -41,3 +44,13 @@ markup:
     noClasses: false
     style: github
     tabWidth: 2
+
+# Индекс для поиска по сайту: /search.json (шаблон themes/signal/layouts/index.searchindex.json)
+outputFormats:
+  SearchIndex:
+    mediaType: application/json
+    baseName: search
+    isPlainText: true
+    notAlternative: true
+outputs:
+  home: ["HTML", "RSS", "SearchIndex"]

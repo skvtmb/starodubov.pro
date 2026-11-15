@@ -1,0 +1,22 @@
+{{- /*
+  Обложка страницы — единственное место, которое знает форматы поля cover во front matter:
+    cover: "/images/x.jpg"
+    cover: { image: "/images/x.jpg", alt: "…", caption: "…" }
+
+  Интерфейс: partial "cover.html" .Page → dict
+    src      путь к картинке или "" (обложки нет)
+    alt      alt (по умолчанию заголовок страницы)
+    caption  подпись или ""
+    inText   true, если та же картинка уже стоит в тексте (тогда в статье её не повторяем)
+*/ -}}
+{{- $c := .Params.cover -}}
+{{- $src := "" -}}{{- $alt := .Title -}}{{- $caption := "" -}}
+{{- if reflect.IsMap $c -}}
+  {{- $src = $c.image | default "" -}}
+  {{- $alt = $c.alt | default .Title -}}
+  {{- $caption = $c.caption | default "" -}}
+{{- else if $c -}}
+  {{- $src = $c -}}
+{{- end -}}
+{{- $inText := and (ne $src "") (in .RawContent (printf "](%s" $src)) -}}
+{{- return (dict "src" $src "alt" $alt "caption" $caption "inText" $inText) -}}

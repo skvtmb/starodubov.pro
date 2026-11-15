@@ -1,0 +1,65 @@
+{{- /*
+  Адаптивная картинка — единственное место, где решается, как обрабатывать изображения.
+
+  Интерфейс:
+    partial "img.html" (dict
+      "src"   "/images/…"   путь как в Markdown/front matter (файл ищется в assets/, иначе отдаётся как есть)
+      "alt"   "…"           обязательный по смыслу; пустая строка — для декоративных
+      "role"  "inline|cover|card|gallery"   (по умолчанию inline)
+      "title" "…"           необязательно, всплывающая подсказка
+      "class" "…"           необязательно
+      "eager" true          необязательно: первый экран, без lazy и с fetchpriority=high
+      "sizes" "…"           необязательно: переопределить sizes роли
+    )
+
+  Роль задаёт всё остальное: ширины srcset, sizes, качество WebP, загрузку.
+  Гарантии: WebP только для JPEG/PNG из assets/; без увеличения сверх исходника;
+  если WebP без уменьшения тяжелее исходника (плоские PNG), отдаётся исходник;
+  всегда width/height против сдвига вёрстки; роль gallery добавляет data-full для лайтбокса.
+*/ -}}
+{{- $roles := dict
+  "inline"  (dict "widths" (slice 800 1400) "q" 80 "sizes" "(max-width: 860px) 100vw, 760px" "eager" false)
+  "cover"   (dict "widths" (slice 700 1400) "q" 82 "sizes" "(max-width: 640px) calc(100vw - 40px), (max-width: 1000px) calc(100vw - 64px), 752px" "eager" true)
+  "card"    (dict "widths" (slice 480 800) "q" 80 "sizes" "(max-width: 640px) calc(100vw - 40px), (max-width: 1000px) 45vw, 360px" "eager" false)
+  "gallery" (dict "widths" (slice 900 1600) "q" 82 "sizes" "(max-width: 640px) 100vw, (max-width: 1000px) 50vw, 33vw" "eager" false)
+-}}
+{{- $role := index $roles (.role | default "inline") | default (index $roles "inline") -}}
+{{- $src := .src -}}
+{{- $alt := .alt | default "" -}}
+{{- $eager := cond (isset . "eager") .eager $role.eager -}}
+{{- $sizes := .sizes | default $role.sizes -}}
+{{- $res := "" -}}
+{{- if and $src (hasPrefix $src "/images/") -}}{{- $res = resources.Get (strings.TrimPrefix "/" $src) -}}{{- end -}}
+
+{{- if and $res (in (slice "jpeg" "png") $res.MediaType.SubType) -}}
+  {{- $q := $role.q -}}
+  {{- $maxW := index $role.widths (sub (len $role.widths) 1) -}}
+  {{- $set := slice -}}
+  {{- range $role.widths -}}
+    {{- if lt . $res.Width -}}
+      {{- $set = $set | append (dict "r" ($res.Process (printf "resize %dx webp q%d" . $q)) "w" .) -}}
+    {{- end -}}
+  {{- end -}}
+  {{- /* исходник не шире максимума роли: добавить версию в его собственном размере */ -}}
+  {{- if le $res.Width $maxW -}}
+    {{- $own := $res.Process (printf "webp q%d" $q) -}}
+    {{- /* плоские PNG бывают легче WebP с потерями: тогда отдаём исходник */ -}}
+    {{- if lt (len $res.Content) (len $own.Content) }}{{ $own = $res }}{{ end -}}
+    {{- $set = $set | append (dict "r" $own "w" $res.Width) -}}
+  {{- end -}}
+  {{- $top := (index $set (sub (len $set) 1)).r -}}
+  {{- $src1 := (index $set 0).r -}}
+  <img src="{{ $src1.RelPermalink }}"
+    {{- if gt (len $set) 1 }} srcset="{{ range $i, $c := $set }}{{ if $i }}, {{ end }}{{ $c.r.RelPermalink }} {{ $c.w }}w{{ end }}" sizes="{{ $sizes }}"{{ end }}
+    width="{{ $src1.Width }}" height="{{ $src1.Height }}" alt="{{ $alt }}"
+    {{- with .title }} title="{{ . }}"{{ end }}
+    {{- with .class }} class="{{ . }}"{{ end }}
+    {{- if eq (.role | default "inline") "gallery" }} data-full="{{ $top.RelPermalink }}"{{ end }}
+    {{- if $eager }} fetchpriority="high" decoding="async"{{ else }} loading="lazy" decoding="async"{{ end }}>
+{{- else -}}
+  <img src="{{ $src | relURL }}" alt="{{ $alt }}"
+    {{- with .title }} title="{{ . }}"{{ end }}
+    {{- with .class }} class="{{ . }}"{{ end }}
+    {{- if eq (.role | default "inline") "gallery" }} data-full="{{ $src | relURL }}"{{ end }}
+    {{- if $eager }} fetchpriority="high" decoding="async"{{ else }} loading="lazy" decoding="async"{{ end }}>
+{{- end -}}

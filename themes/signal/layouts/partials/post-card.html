@@ -2,17 +2,14 @@
 {{- $cat := "" -}}
 {{- with .Params.categories -}}{{ $cat = index . 0 }}{{- end -}}
 {{- if not $cat -}}{{ $cat = .Type }}{{- end -}}
-{{- $cover := .Params.cover | default .Params.thumbnail -}}
-{{- /* cover может быть объектом (image/alt/caption) из старого формата front matter */ -}}
-{{- if reflect.IsMap $cover }}{{ $cover = $cover.image }}{{ end -}}
+{{- $cover := partial "cover.html" . -}}
 <a class="post" href="{{ .RelPermalink }}">
-  <div class="thumb{{ if $cover }} has-img{{ end }}"{{ with $cover }} style="background-image:url('{{ partial "cover-url.html" (dict "src" . "width" 800) }}')"{{ end }}>
-    <span class="cat">{{ $cat }}</span>
-  </div>
+  <div class="thumb">{{ with $cover.src }}{{ partial "img.html" (dict "src" . "alt" "" "role" "card") }}{{ end }}</div>
   <div class="body">
     <h3>{{ .Title }}</h3>
     <p>{{ .Description | default .Summary | plainify | truncate 120 }}</p>
     <div class="pmeta">
+      <span>{{ $cat }}</span>
       <span>{{ .Date.Format "02.01.2006" }}</span>
       <span>{{ .ReadingTime }} мин</span>
     </div>

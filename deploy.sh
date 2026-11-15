@@ -6,6 +6,7 @@
 # - инкрементальность: неизменённые объекты (md5 == ETag) не перезаливаются
 # - редиректы со старых адресов /ru/<путь>/ и /en/
 # - --no-delete: загрузка без удаления существующих объектов бакета
+# - --dry-run:   только показать, что будет загружено и удалено (бакет не меняется)
 # Использует Yandex CLI (yc).
 
 set -e
@@ -18,15 +19,15 @@ NC='\033[0m'
 
 BUCKET="starodubov.pro"
 DELETE_STALE="true"
-if [ "$#" -gt 1 ]; then
-    echo "Использование: $0 [--no-delete]"
-    exit 2
-fi
-case "${1:-}" in
-    --no-delete) DELETE_STALE="false" ;;
-    "") ;;
-    *) echo "Использование: $0 [--no-delete]"; exit 2 ;;
-esac
+DRY_RUN="false"
+USAGE="Использование: $0 [--no-delete] [--dry-run]"
+for arg in "$@"; do
+    case "$arg" in
+        --no-delete) DELETE_STALE="false" ;;
+        --dry-run) DRY_RUN="true" ;;
+        *) echo "$USAGE"; exit 2 ;;
+    esac
+done
 
 echo -e "${BLUE}🚀 Деплой сайта starodubov.pro${NC}"
 echo "=================================="
@@ -60,7 +61,7 @@ echo -e "${GREEN}✅ Сайт собран${NC}"
 
 echo -e "\n${YELLOW}📤 Загрузка в Object Storage (инкрементально)...${NC}"
 
-BUCKET="$BUCKET" DELETE_STALE="$DELETE_STALE" python3 - <<'PYEOF'
+BUCKET="$BUCKET" DELETE_STALE="$DELETE_STALE" DRY_RUN="$DRY_RUN" python3 - <<'PYEOF'
 import hashlib, html, json, os, re, subprocess, sys, tempfile, unicodedata
 from concurrent.futures import ThreadPoolExecutor
 
@@ -176,6 +177,20 @@ for i, key in enumerate(stub_keys):
     jobs.append((key, path))
 
 print(f'К загрузке: {len(jobs)}, без изменений (пропущено): {skipped}')
+if os.environ['DRY_RUN'] == 'true':
+    expected = {nfc(os.path.relpath(os.path.join(r, f), 'public'))
+                for r, _, fs in walk_public() for f in fs} | set(stub_keys)
+    stale = sorted(k for k in remote if nfc(k) not in expected)
+    print('\nБудет загружено:')
+    for k, _ in sorted(jobs):
+        print('  +', k)
+    print(f'\nБудет удалено устаревших: {len(stale) if os.environ["DELETE_STALE"] == "true" else 0}'
+          + ('' if os.environ['DELETE_STALE'] == 'true' else ' (--no-delete)'))
+    if os.environ['DELETE_STALE'] == 'true':
+        for k in stale:
+            print('  -', k)
+    print('\nПробный прогон: бакет не изменён, IndexNow не вызывался.')
+    sys.exit(0)
 failed = []
 with ThreadPoolExecutor(max_workers=8) as ex:
     for key, ok in ex.map(put, jobs):
@@ -235,6 +250,10 @@ if key_line and changed:
     except Exception as e:
         print(f'IndexNow: не удалось отправить ({e}) — не критично')
 PYEOF
+
+if [ "$DRY_RUN" = "true" ]; then
+    exit 0
+fi
 
 echo -e "\n${YELLOW}🔍 Проверка MIME-типов...${NC}"
 CSS_FILE=$(find public -name "*.css" -type f | head -1)

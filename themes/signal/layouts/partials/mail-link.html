@@ -1,0 +1,17 @@
+{{- /*
+  Ссылка на почту с защитой от спам-ботов — единственное место, где это решается.
+
+  Интерфейс: partial "mail-link.html" (dict
+    "label" "…"          текст или HTML ссылки (по умолчанию site.Params.contactLabel или «Написать мне»)
+    "class" "…"          необязательно, классы оформления
+    "email" "a@b.ru"     необязательно, по умолчанию site.Params.contactEmail
+  )
+  В HTML адреса нет: скрипт signal.js собирает mailto: из data-атрибутов.
+  Без JavaScript ссылка ведёт к блоку контактов в подвале (#contacts).
+*/ -}}
+{{- $email := .email | default site.Params.contactEmail -}}
+{{- with $email -}}
+  {{- $p := split . "@" -}}
+  {{- $label := $.label | default site.Params.contactLabel | default "Написать мне" -}}
+  <a href="#contacts" class="js-mail{{ with $.class }} {{ . }}{{ end }}" data-user="{{ index $p 0 }}" data-host="{{ index $p 1 }}">{{ $label | safeHTML }}</a>
+{{- end -}}

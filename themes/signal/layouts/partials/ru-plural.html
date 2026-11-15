@@ -1,0 +1,6 @@
+{{- /* Склонение по числу: partial "ru-plural.html" (dict "n" 34 "forms" (slice "тег" "тега" "тегов")) */ -}}
+{{- $n := .n -}}{{- $f := .forms -}}
+{{- $a := mod $n 10 -}}{{- $b := mod $n 100 -}}
+{{- if and (eq $a 1) (ne $b 11) -}}{{- index $f 0 -}}
+{{- else if and (ge $a 2) (le $a 4) (or (lt $b 12) (gt $b 14)) -}}{{- index $f 1 -}}
+{{- else -}}{{- index $f 2 -}}{{- end -}}

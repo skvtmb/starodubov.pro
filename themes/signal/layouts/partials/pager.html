@@ -1,0 +1,11 @@
+{{- /* Постраничная навигация. Контекст: пагинатор (.Paginator / результат .Paginate). */ -}}
+{{- if gt .TotalPages 1 }}
+<nav class="pager" aria-label="Страницы">
+  {{- if .HasPrev }}<a href="{{ .Prev.URL }}" aria-label="Предыдущая страница">{{ partial "icon.html" "arrow-left" }}</a>{{ end }}
+  {{- $cur := . }}
+  {{- range .Pagers }}
+    {{- if eq . $cur }}<span class="cur" aria-current="page">{{ .PageNumber }}</span>{{ else }}<a href="{{ .URL }}">{{ .PageNumber }}</a>{{ end }}
+  {{- end }}
+  {{- if .HasNext }}<a href="{{ .Next.URL }}" aria-label="Следующая страница">{{ partial "icon.html" "arrow-right" }}</a>{{ end }}
+</nav>
+{{- end }}

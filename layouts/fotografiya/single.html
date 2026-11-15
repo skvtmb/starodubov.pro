@@ -9,10 +9,10 @@
         <a href="{{ "/" | relLangURL }}">Главная</a><span class="sep">/</span>
         <a href="{{ with .Parent }}{{ .RelPermalink }}{{ else }}{{ "/фото/" | relLangURL }}{{ end }}">Фото</a>
       </div>
-      {{ with .Params.place }}<span class="eyebrow">{{ . }}</span>{{ end }}
       <h1>{{ .Title }}</h1>
       {{ with .Description }}<div class="lede">{{ . }}</div>{{ end }}
       <div class="gal-meta">
+        {{ with .Params.place }}<span>{{ . }}</span>{{ end }}
         <span>{{ .Date | time.Format ":date_long" }}</span>
         {{ if $n }}<span>{{ $n }} {{ partial "ru-kadry.html" $n }}</span>{{ end }}
         {{ with .Params.gear }}<span>{{ . }}</span>{{ end }}
@@ -31,19 +31,13 @@
       {{ $src := $p.src }}
       {{ $alt := $p.alt | default $p.caption | default "" }}
       {{ $caption := $p.caption | default "" }}
-      {{ with $p.meta }}{{ $caption = printf "%s — %s" $caption . }}{{ end }}
-      {{ $path := strings.TrimPrefix "/" $src }}
-      {{ $img := resources.Get $path }}
-      {{ $href := $src | relURL }}
-      {{ if and $img (in (slice "jpeg" "png") $img.MediaType.SubType) }}
-        {{ if gt $img.Width 1600 }}{{ $href = ($img.Process "resize 1600x webp q82").RelPermalink }}
-        {{ else }}{{ $href = ($img.Process "webp q82").RelPermalink }}{{ end }}
-      {{ end }}
+      {{ with $p.meta }}{{ $caption = printf "%s · %s" $caption . }}{{ end }}
+      {{ $href := partial "img-url.html" (dict "src" $src "width" 1600) }}
       <a class="gal-item" href="{{ $href }}"
          data-caption="{{ $caption }}"
          data-alt="{{ $alt }}"
          {{ if eq $i 0 }}data-eager{{ end }}>
-        {{ partial "gallery-img.html" (dict "src" $src "alt" $alt "eager" (lt $i 3) "sizes" "(max-width: 640px) 100vw, (max-width: 1000px) 50vw, 33vw") }}
+        {{ partial "img.html" (dict "src" $src "alt" $alt "role" "gallery" "eager" (lt $i 3)) }}
         {{ with $caption }}<span class="gal-cap">{{ . }}</span>{{ end }}
       </a>
       {{ end }}
@@ -52,17 +46,17 @@
 
     {{ with .Params.article }}
     <div class="gal-article">
-      <p>Маршрут, адреса и заметки о съёмке — в статье.</p>
-      <a class="btn-sec" href="{{ relref $ . }}">Читать заметку →</a>
+      <p>Маршрут, адреса и заметки о съёмке есть в статье.</p>
+      <a class="btn-sec" href="{{ relref $ . }}">Читать заметку</a>
     </div>
     {{ end }}
   </div>
 </div>
 
 <div class="lb" id="lb" hidden role="dialog" aria-modal="true" aria-label="Просмотр фотографии">
-  <button class="lb-x" type="button" aria-label="Закрыть">×</button>
-  <button class="lb-nav lb-prev" type="button" aria-label="Предыдущий кадр">←</button>
-  <button class="lb-nav lb-next" type="button" aria-label="Следующий кадр">→</button>
+  <button class="lb-x" type="button" aria-label="Закрыть">{{ partial "icon.html" "close" }}</button>
+  <button class="lb-nav lb-prev" type="button" aria-label="Предыдущий кадр">{{ partial "icon.html" "arrow-left" }}</button>
+  <button class="lb-nav lb-next" type="button" aria-label="Следующий кадр">{{ partial "icon.html" "arrow-right" }}</button>
   <figure class="lb-fig">
     <figcaption class="lb-cap"></figcaption>
   </figure>

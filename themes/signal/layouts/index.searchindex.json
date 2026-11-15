@@ -1,0 +1,15 @@
+{{- /* Индекс поиска: статьи, страницы и фотоальбомы. Текст обрезан, чтобы файл оставался лёгким. */ -}}
+{{- $items := slice -}}
+{{- range where site.RegularPages "Params.searchHidden" "!=" true -}}
+  {{- $cat := "" -}}{{- with .Params.categories -}}{{- $cat = index . 0 -}}{{- end -}}
+  {{- $items = $items | append (dict
+      "t" .Title
+      "u" .RelPermalink
+      "d" (cond .Date.IsZero "" (.Date.Format "02.01.2006"))
+      "c" $cat
+      "g" (.Params.tags | default slice)
+      "s" (.Description | default .Summary | plainify | htmlUnescape | truncate 220)
+      "x" (.Plain | htmlUnescape | truncate 4000)
+  ) -}}
+{{- end -}}
+{{- $items | jsonify -}}

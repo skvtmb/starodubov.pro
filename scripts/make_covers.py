@@ -1,10 +1,14 @@
 #!/usr/bin/env python3
-"""Обложки с рисованными от руки сценками и людьми. Рендер в 2x с даунскейлом."""
-import os, re, math, random, tempfile
+"""Обложки с рисованными от руки сценками и людьми. Рендер в 2x с даунскейлом.
+
+Стиль (редизайн 14.11.2026): светлое спокойное поле, подходящее к светлой и тёмной
+теме сайта; без сетки, без полосы слева, без моно-подписи капсом над заголовком.
+Каталог вывода можно переопределить переменной COVERS_OUT (для пробных образцов)."""
+import os, re, math, random, tempfile, inspect
 from PIL import Image, ImageDraw, ImageFont
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-OUT = os.path.join(ROOT, "assets", "images")
+OUT = os.environ.get("COVERS_OUT") or os.path.join(ROOT, "assets", "images")
 SC = os.path.join(tempfile.gettempdir(), "starodubov-cover-fonts")   # кэш TTF
 S = 2                                   # суперсэмплинг
 
@@ -19,6 +23,8 @@ def prepare_fonts():
         "manrope700lat": ("manrope-latin-wght-normal.woff2", 700),
         "manrope500cyr": ("manrope-cyrillic-wght-normal.woff2", 500),
         "manrope500lat": ("manrope-latin-wght-normal.woff2", 500),
+        "geo700cyr": ("geologica-cyrillic-wght-normal.woff2", 700),
+        "geo700lat": ("geologica-latin-wght-normal.woff2", 700),
         "mono600cyr": ("jetbrains-mono-cyrillic-wght-normal.woff2", 600),
         "mono600lat": ("jetbrains-mono-latin-wght-normal.woff2", 600),
     }.items():
@@ -30,25 +36,48 @@ def prepare_fonts():
             instantiateVariableFont(font, {"wght": w}, inplace=True)
         font.save(dst)
 W, H = 1600, 900
-ACC = (110, 231, 150); BLUE = (126, 178, 235); INK = (244, 244, 242)
-MUT = (196, 196, 194); DIM = (150, 150, 148); BG = (10, 10, 11); CARD = (18, 18, 21)
+# светлое поле; ACC — зелёный для рисунка (читается и на тёмных экранах приборов),
+# TITLE_ACC — фирменный тёмно-зелёный для второй строки заголовка (как акцент сайта)
+ACC = (46, 160, 80); TITLE_ACC = (26, 122, 53); BLUE = (126, 178, 235); INK = (21, 23, 21)
+MUT = (76, 82, 78); DIM = (128, 133, 129); BG = (243, 243, 239); CARD = (18, 18, 21)
 AMB = (240, 196, 96); CORAL = (236, 130, 110); SKIN = (238, 196, 160); SKIN2 = (196, 140, 104)
-LILAC = (176, 150, 230); PAPER = (236, 232, 222); LINE = (44, 44, 50)
-CYR = re.compile(r'[А-Яа-яЁё]')
+LILAC = (176, 150, 230); PAPER = (255, 255, 255); LINE = (214, 215, 211)
+CYR = re.compile(r'[А-Яа-яЁё№]')   # № есть только в кириллических наборах шрифтов
 rnd = random.Random(7)
 
 def F(name, size):
     return ImageFont.truetype(os.path.join(SC, name + ".ttf"), size * S)
 
+def _impeccable_bin():
+    """Утилита impeccable для записи происхождения: из IMPECCABLE_BIN или из кеша плагина Claude Code."""
+    import glob
+    env = os.environ.get("IMPECCABLE_BIN")
+    if env and os.path.exists(env):
+        return env
+    found = sorted(glob.glob(os.path.expanduser(
+        "~/.claude/plugins/cache/impeccable/impeccable/*/skills/impeccable/scripts/impeccable")))
+    return found[-1] if found else None
+
+
+def embed_provenance(path, fn):
+    """Записывает в файл, чем и как он сделан. Без утилиты молча пропускает:
+    обложка остаётся валидной, просто без встроенного описания."""
+    import subprocess
+    tool = _impeccable_bin()
+    if not tool:
+        return
+    prompt = (f"Procedural illustration rendered by scripts/make_covers.py, function {fn} "
+              "(light calm ground, composition centred by content with even margins, "
+              "no grid/stripe/mono kicker; Geologica title, Manrope subtitle). "
+              f"Regenerate: python scripts/make_covers.py {fn.removeprefix('cover_')}")
+    subprocess.run([tool, "embed-prompt", path, "--prompt", prompt],
+                   stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=False)
+
+
 class Canvas:
     def __init__(self):
         self.img = Image.new("RGB", (W * S, H * S), BG)
         self.d = ImageDraw.Draw(self.img)
-        for gx in range(0, W, 100):
-            self.d.line([gx * S, 0, gx * S, H * S], fill=(17, 17, 19), width=S)
-        for gy in range(0, H, 100):
-            self.d.line([0, gy * S, W * S, gy * S], fill=(17, 17, 19), width=S)
-        self.d.rectangle([0, 0, 10 * S, H * S], fill=ACC)
 
     # ---------- текст ----------
     def text(self, x, y, s, cyr, lat, fill, tracking=0):
@@ -60,22 +89,13 @@ class Canvas:
         return x / S
 
     def layout(self, badge, t1, t2, s1, s2, head=92):
-        hc, hl = F("manrope700cyr", head), F("manrope700lat", head)
+        hc, hl = F("geo700cyr", head), F("geo700lat", head)
         sc, sl = F("manrope500cyr", 33), F("manrope500lat", 33)
-        mc, ml = F("mono600cyr", 26), F("mono600lat", 26)
         X = 84
         sub2 = H - 76 - 42; sub1 = sub2 - 46
         ty2 = sub1 - 36 - (head + 20); ty1 = ty2 - (head + 12); by = ty1 - 64
-        self.d.ellipse([X * S, (by + 9) * S, (X + 13) * S, (by + 22) * S], fill=ACC)
-        bx = X + 33
-        for i, part in enumerate(badge):
-            if i:
-                bx += 22
-                self.d.ellipse([bx * S, (by + 12) * S, (bx + 6) * S, (by + 18) * S], fill=ACC)
-                bx += 28
-            bx = self.text(bx, by, part, mc, ml, ACC, tracking=4)
         self.text(X - 4, ty1, t1, hc, hl, INK)
-        self.text(X - 4, ty2, t2, hc, hl, ACC)
+        self.text(X - 4, ty2, t2, hc, hl, TITLE_ACC)
         self.text(X, sub1, s1, sc, sl, MUT)
         self.text(X, sub2, s2, sc, sl, MUT)
 
@@ -200,7 +220,7 @@ class Canvas:
         w = max(w, tw + 44)                      # облачко всегда шире текста
         if x + w > W - 24:
             x = W - 24 - w
-        self.rrect(x, y, x + w, y + h, fill, r=18)
+        self.rrect(x, y, x + w, y + h, fill, outline=(196, 198, 192), width=3, r=18)
         self.poly([(x + 30, y + h - 4), (x + 60, y + h - 4), (x + 30 + tail[0], y + h + 26 + tail[1])], fill)
         self.text(x + 20, y + (h - 30) / 2, text, F("manrope700cyr", 24), F("manrope700lat", 24), col)
 
@@ -213,8 +233,20 @@ class Canvas:
         self.arc(x, y + 8 * k, 6 * k, 4 * k, 20, 160, (40, 34, 32), 3)
 
     def save(self, name):
-        out = self.img.resize((W, H), Image.LANCZOS)
-        out.save(os.path.join(OUT, name), quality=90)
+        # Композицию уменьшаем и ставим по центру с равными полями: в миниатюрах
+        # и превью соцсетей текст не прижимается к краю, а сцена не обрезается.
+        from PIL import ImageChops
+        full = self.img.resize((W, H), Image.LANCZOS)
+        box = ImageChops.difference(full, Image.new("RGB", (W, H), BG)).point(lambda v: 255 if v > 12 else 0).getbbox()
+        if box:
+            full = full.crop(box)
+        k = min(W * 0.86 / full.width, H * 0.80 / full.height, 1.0)
+        inner = full.resize((int(full.width * k), int(full.height * k)), Image.LANCZOS)
+        out = Image.new("RGB", (W, H), BG)
+        out.paste(inner, ((W - inner.width) // 2, (H - inner.height) // 2))
+        path = os.path.join(OUT, name)
+        out.save(path, quality=90)
+        embed_provenance(path, inspect.stack()[1].function)
         print("saved", name)
 
 
@@ -600,12 +632,186 @@ def cover_monitoring():
     c.arrow(1446, 330, px - 74, py - 250, AMB, 4, dashed=True)
     c.save("truenas-monitoring-cover.jpg")
 
+
+# ---------- обложки, перенесённые в скрипт при редизайне 14.11.2026 ----------
+
+def _doc(c, x, y, w, h, title, lines=4, stamp=None):
+    """Лист документа с заголовком-меткой, строками текста и (опционально) печатью."""
+    c.rrect(x, y, x + w, y + h, PAPER, outline=(170, 172, 166), width=3, r=6)
+    c.label(x + 16, y + 14, title, (60, 64, 60), 18)
+    for i in range(lines):
+        yy = y + 52 + i * 22
+        c.line([(x + 16, yy), (x + w - 16 - (i % 2) * 30, yy)], (196, 198, 192), 4, amp=0.4)
+    if stamp:
+        c.blob(x + w - 40, y + h - 36, 24, 24, None, outline=stamp, width=4)
+        c.line([(x + w - 52, y + h - 36), (x + w - 42, y + h - 26), (x + w - 26, y + h - 48)], stamp, 4, amp=0.3)
+
+
+def cover_fintech():
+    c = Canvas()
+    c.layout([], "Комплаенс в финтехе:", "опыт с нормативкой",
+             "Требования Банка России, ГОСТы и PCI DSS:",
+             "как я с ними разбирался и что из этого вышло", head=72)
+    c.line([(1030, 650), (1580, 650)], LINE, 3)
+    # стопка нормативки
+    _doc(c, 1090, 330, 170, 210, "ГОСТ 57580", stamp=TITLE_ACC)
+    _doc(c, 1130, 290, 170, 210, "PCI DSS")
+    _doc(c, 1170, 250, 170, 210, "Банк России", stamp=TITLE_ACC)
+    # стол
+    c.line([(1060, 560), (1400, 560)], (150, 120, 90), 10, amp=0.6)
+    for lx in (1080, 1380):
+        c.line([(lx, 560), (lx, 650)], (150, 120, 90), 8, amp=0.4)
+    # человек с чек-листом
+    px, py = 1480, 650
+    c.person(px, py, shirt=BLUE, hairstyle="short", hair=(60, 44, 36),
+             lhand=(px - 60, py - 190), rhand=(px - 20, py - 200), look=-1)
+    c.rrect(px - 78, py - 250, px - 8, py - 170, PAPER, outline=(170, 172, 166), width=3, r=6)
+    for i in range(3):
+        yy = py - 232 + i * 22
+        c.line([(px - 68, yy), (px - 60, yy + 6), (px - 50, yy - 6)], ACC, 3, amp=0.2)
+        c.line([(px - 44, yy), (px - 18, yy)], (190, 192, 186), 3, amp=0.2)
+    c.save("fintech-compliance-cover.jpg")
+
+
+def cover_laws():
+    c = Canvas()
+    c.layout([], "Изменения в законах", "по ИБ в 2026 году",
+             "ФСТЭК №117 вместо №17, КИИ, персональные данные,",
+             "лицензирование: что поменяется и как подготовиться", head=84)
+    c.line([(1030, 650), (1580, 650)], LINE, 3)
+    # календарь 2026
+    c.rrect(1040, 300, 1220, 510, PAPER, outline=(170, 172, 166), width=3, r=10)
+    c.rrect(1040, 300, 1220, 350, CORAL, r=10)
+    c.label(1096, 312, "2026", PAPER, 24)
+    for r in range(4):
+        for k in range(4):
+            x0, y0 = 1060 + k * 38, 368 + r * 34
+            c.rrect(x0, y0, x0 + 26, y0 + 22, (232, 233, 228), r=4)
+    c.blob(1060 + 2 * 38 + 13, 368 + 34 + 11, 20, 18, None, outline=TITLE_ACC, width=4)
+    # приказ: было №17 (зачёркнут) → стало №117
+    _doc(c, 1250, 290, 130, 160, "№17", lines=3)
+    c.line([(1258, 300), (1372, 440)], CORAL, 5, amp=0.4)
+    c.arrow(1315, 462, 1315, 512, TITLE_ACC, 5)
+    _doc(c, 1250, 520, 130, 124, "№117", lines=2, stamp=TITLE_ACC)
+    # человек с новым приказом
+    px, py = 1490, 650
+    c.person(px, py, shirt=AMB, hairstyle="long", hair=(70, 48, 36),
+             lhand=(px - 60, py - 170), rhand=(px + 50, py - 120), look=-1)
+    c.save("izmeneniya-ib-2026-cover.jpg")
+
+
+def cover_openclaw_month():
+    import math
+    c = Canvas()
+    c.layout([], "OpenClaw", "месяц спустя",
+             "Пять помощников и грабли домашнего ИИ:",
+             "молчащий Telegram, reload, нехватка памяти", head=92)
+    c.line([(1030, 650), (1580, 650)], LINE, 3)
+    # сервер-коробка с агентом
+    c.rrect(1150, 400, 1350, 600, (30, 34, 42), outline=(84, 92, 108), width=4, r=14)
+    c.blob(1250, 490, 46, 40, CORAL, amp=1.0)                      # «краб»-агент
+    for sx in (-16, 16):
+        c.blob(1250 + sx, 480, 7, 8, PAPER, amp=0.3, n=10)
+        c.blob(1250 + sx, 482, 3, 4, (30, 30, 34), amp=0.2, n=8)
+    for sx in (-1, 1):
+        c.line([(1250 + sx * 40, 476), (1250 + sx * 70, 450)], CORAL, 8, amp=0.6)
+        c.blob(1250 + sx * 76, 444, 12, 10, CORAL, amp=0.6)
+    c.line([(1180, 570), (1320, 570)], (70, 78, 92), 3, amp=0.3)
+    # пять помощников вокруг
+    tiles = [(1100, 300, BLUE), (1190, 250, AMB), (1300, 250, LILAC), (1390, 300, ACC), (1420, 400, CORAL)]
+    for i, (x, y, col) in enumerate(tiles):
+        c.rrect(x, y, x + 64, y + 56, PAPER, outline=col, width=4, r=10)
+        c.line([(x + 14, y + 22), (x + 50, y + 22)], col, 4, amp=0.3)
+        c.line([(x + 14, y + 36), (x + 38, y + 36)], (196, 198, 192), 4, amp=0.3)
+        c.line([(x + 32, y + 56), (1250, 420)], (196, 198, 192), 2, amp=0.6)
+    # предупреждение
+    c.poly([(1470, 520), (1500, 470), (1530, 520)], AMB, (120, 90, 30), 3)
+    c.label(1494, 488, "!", (40, 30, 10), 22)
+    c.save("october-2026/openclaw-month-later-cover.png")
+
+
+def cover_wd60():
+    c = Canvas()
+    c.layout([], "Отказ резервного", "диска на 6 ТБ",
+             "WD60EFRX: рост SMART 5 при статусе PASSED",
+             "и остановка резервного пула", head=88)
+    c.line([(1030, 650), (1580, 650)], LINE, 3)
+    # NAS
+    c.rrect(1060, 380, 1220, 640, (30, 34, 42), outline=(84, 92, 108), width=4, r=10)
+    for i in range(4):
+        y = 404 + i * 56
+        c.rrect(1078, y, 1202, y + 44, (44, 50, 60), outline=(70, 78, 92), width=3, r=6)
+        c.blob(1186, y + 22, 5, 5, CORAL if i == 2 else ACC)
+    # вынутый диск с треснувшей пластиной
+    c.rrect(1270, 360, 1450, 590, (196, 200, 204), outline=(120, 124, 128), width=4, r=10)
+    c.blob(1360, 450, 66, 66, (150, 156, 162), outline=(110, 114, 120), width=3)
+    c.blob(1360, 450, 14, 14, (110, 114, 120))
+    c.line([(1320, 430), (1352, 468), (1340, 500)], CORAL, 4, amp=0.6)
+    c.label(1290, 540, "WD60EFRX", (50, 52, 56), 20)
+    # SMART 5: растущий счётчик
+    c.rrect(1460, 270, 1580, 340, PAPER, outline=(170, 172, 166), width=3, r=8)
+    c.label(1474, 282, "SMART 5", (60, 64, 60), 16)
+    c.line([(1474, 326), (1510, 318), (1540, 304), (1566, 286)], CORAL, 4, amp=0.3)
+    c.poly([(1500, 600), (1530, 548), (1560, 600)], AMB, (120, 90, 30), 3)
+    c.label(1524, 566, "!", (40, 30, 10), 22)
+    c.save("october-2026/wd60efrx-backup-failure-cover.png")
+
+
+def cover_ted():
+    c = Canvas()
+    c.layout([], "Победи", "прокрастинацию!",
+             "Что происходит в голове мастера прокрастинации",
+             "и почему это про каждого из нас", head=92)
+    c.line([(1030, 650), (1580, 650)], LINE, 3)
+    # экран на сцене: часы и список дел
+    c.rrect(1080, 230, 1420, 470, PAPER, outline=(170, 172, 166), width=4, r=12)
+    c.blob(1170, 340, 62, 62, None, outline=INK, width=4)
+    c.line([(1170, 340), (1170, 300)], INK, 4, amp=0.2)
+    c.line([(1170, 340), (1204, 356)], CORAL, 4, amp=0.2)
+    for i in range(4):
+        y = 282 + i * 42
+        c.rrect(1270, y, 1292, y + 22, (232, 233, 228), outline=(170, 172, 166), width=2, r=4)
+        c.line([(1306, y + 11), (1396 - i * 12, y + 11)], (190, 192, 186), 4, amp=0.3)
+    c.line([(1274, 293), (1281, 300), (1290, 286)], ACC, 3, amp=0.1)
+    # сцена
+    c.blob(1310, 652, 230, 16, (210, 70, 60), amp=0.6)
+    # спикер
+    c.person(1480, 640, shirt=(60, 64, 72), hairstyle="short", hair=(60, 44, 36),
+             lhand=(1430, 520), rhand=(1540, 560), look=-1)
+    c.save("ted-urban-cover.jpg")
+
+
+def cover_welcome():
+    c = Canvas()
+    c.layout([], "Константин", "Стародубов",
+             "Наука о безопасности · Комплаенс ИБ · Финтех",
+             "starodubov.pro", head=100)
+    c.line([(1030, 650), (1580, 650)], LINE, 3)
+    # стол с ноутбуком и камерой
+    c.line([(1080, 560), (1420, 560)], (150, 120, 90), 10, amp=0.6)
+    for lx in (1100, 1400):
+        c.line([(lx, 560), (lx, 650)], (150, 120, 90), 8, amp=0.4)
+    c.rrect(1130, 440, 1300, 548, (30, 34, 42), outline=(84, 92, 108), width=4, r=8)
+    c.line([(1110, 556), (1320, 556)], (84, 92, 108), 8, amp=0.3)
+    c.line([(1156, 470), (1236, 470)], ACC, 4, amp=0.2)
+    c.line([(1156, 494), (1270, 494)], (110, 118, 132), 4, amp=0.2)
+    c.line([(1156, 518), (1214, 518)], (110, 118, 132), 4, amp=0.2)
+    c.rrect(1330, 500, 1400, 552, (40, 40, 44), outline=(90, 90, 96), width=3, r=8)
+    c.blob(1365, 526, 16, 16, (90, 96, 108), outline=(150, 156, 166), width=3)
+    # человек машет
+    px, py = 1500, 650
+    c.person(px, py, shirt=TITLE_ACC, hairstyle="short", hair=(60, 44, 36),
+             lhand=(px - 58, py - 120), rhand=(px + 40, py - 290), look=-1)
+    c.bubble(1380, 330, 120, 56, "Привет!", tail=(10, 0))
+    c.save("welcome-blog-cover-v2.png")
+
 if __name__ == "__main__":
     import sys
     prepare_fonts()
     scenes = (cover_mama, cover_benzin, cover_vpn, cover_split, cover_openapi, cover_agents,
               cover_risk, cover_openclaw, cover_sprut, cover_biometria, cover_research, cover_jedi,
-              cover_vault, cover_monitoring)
+              cover_vault, cover_monitoring, cover_fintech, cover_laws, cover_openclaw_month,
+              cover_wd60, cover_ted, cover_welcome)
     wanted = sys.argv[1:]                # напр.: make_covers.py openclaw
     for fn in scenes:
         if not wanted or any(w in fn.__name__ for w in wanted):

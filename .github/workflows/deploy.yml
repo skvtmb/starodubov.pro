@@ -1,0 +1,91 @@
+# Сборка и публикация сайта в Yandex Object Storage.
+#
+# PR в main: только сборка Hugo, без доступа к облаку.
+# push в main (в том числе слияние PR) и ручной запуск: ./deploy.sh.
+#
+# Вход без хранимых ключей: Workload Identity Federation.
+# GitHub выдаёт OIDC-токен (aud = https://github.com/<владелец>),
+# auth.yandex.cloud обменивает его на IAM-токен сервисного аккаунта.
+# Федерация доверяет только sub = repo:<владелец>/<репозиторий>:ref:refs/heads/main.
+# Нужна переменная репозитория YC_SA_ID (Settings → Secrets and variables → Actions → Variables).
+
+name: deploy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+env:
+  HUGO_VERSION: 0.170.0
+
+jobs:
+  build:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Установить Hugo extended
+        run: |
+          curl -fsSL -o /tmp/hugo.deb \
+            "https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.deb"
+          sudo dpkg -i /tmp/hugo.deb
+      - name: Собрать сайт
+        run: hugo --minify --cleanDestinationDir
+
+  deploy:
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # enableGitInfo: честный lastmod из истории
+
+      - name: Установить Hugo extended
+        run: |
+          curl -fsSL -o /tmp/hugo.deb \
+            "https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.deb"
+          sudo dpkg -i /tmp/hugo.deb
+
+      - name: Установить Yandex Cloud CLI
+        run: |
+          curl -fsSL https://storage.yandexcloud.net/yandexcloud-yc/install.sh | bash -s -- -i "$HOME/yandex-cloud" -n
+          echo "$HOME/yandex-cloud/bin" >> "$GITHUB_PATH"
+
+      - name: Получить IAM-токен через федерацию
+        env:
+          SA_ID: ${{ vars.YC_SA_ID }}
+          AUDIENCE: https://github.com/${{ github.repository_owner }}
+        run: |
+          test -n "$SA_ID" || { echo "::error::Не задана переменная репозитория YC_SA_ID"; exit 1; }
+          JWT=$(curl -fsS -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
+            "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=$AUDIENCE" | jq -r .value)
+          echo "::add-mask::$JWT"
+          IAM=$(curl -fsS -X POST https://auth.yandex.cloud/oauth/token \
+            -H 'Content-Type: application/x-www-form-urlencoded' \
+            --data-urlencode 'grant_type=urn:ietf:params:oauth:grant-type:token-exchange' \
+            --data-urlencode 'requested_token_type=urn:ietf:params:oauth:token-type:access_token' \
+            --data-urlencode "audience=$SA_ID" \
+            --data-urlencode "subject_token=$JWT" \
+            --data-urlencode 'subject_token_type=urn:ietf:params:oauth:token-type:id_token' \
+            | jq -r .access_token)
+          test -n "$IAM" && test "$IAM" != null || { echo "::error::Обмен токена не удался"; exit 1; }
+          echo "::add-mask::$IAM"
+          echo "YC_IAM_TOKEN=$IAM" >> "$GITHUB_ENV"
+
+      - name: Опубликовать
+        run: ./deploy.sh
