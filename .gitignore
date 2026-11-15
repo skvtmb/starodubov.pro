@@ -80,3 +80,18 @@ config.local.*
 
 # Impeccable: локальный кеш хука
 .impeccable/hook.cache.json
+
+# Файлы для ИИ-ассистентов и дизайн-инструментов: остаются локально, в GitHub не публикуются
+CLAUDE.md
+AGENTS.md
+GEMINI.md
+PRODUCT.md
+DESIGN.md
+.claude/
+.cursor/
+.codex/
+.gemini/
+.impeccable/
+.github/copilot-instructions.md
+*.prompt.txt
+generation-prompts.txt
