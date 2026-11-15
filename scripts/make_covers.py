@@ -843,13 +843,45 @@ def cover_cmr_smr():
     c.label(1320, 674, "DAS", (50, 52, 56), 20)
     c.save("cmr-smr-nas-cover.jpg")
 
+def cover_gh_deploy():
+    c = Canvas()
+    c.layout([], "Деплой из GitHub", "в облако без ключей",
+             "GitHub Actions, федерация удостоверений",
+             "и бакет Yandex Object Storage", head=84)
+    c.line([(1030, 640), (1500, 640)], LINE, 3)
+    # окно репозитория с веткой main
+    c.rrect(1030, 300, 1190, 440, PAPER, outline=(170, 172, 166), width=4, r=12)
+    c.line([(1060, 330), (1060, 410)], (90, 96, 108), 5, amp=0.4)
+    c.line([(1060, 360), (1110, 340), (1150, 340)], ACC, 5, amp=0.4)
+    for x, y, col in ((1060, 330, (90, 96, 108)), (1060, 410, (90, 96, 108)), (1150, 340, ACC)):
+        c.blob(x, y, 9, 9, col)
+    c.label(1080, 400, "main", (50, 52, 56), 20)
+    # обмен токена: жетон вместо ключа
+    c.arrow(1200, 370, 1270, 370, ACC, 5)
+    c.blob(1310, 370, 34, 34, AMB, outline=(150, 112, 40), width=4)
+    c.label(1292, 360, "JWT", (60, 44, 10), 16)
+    c.arrow(1352, 370, 1410, 370, ACC, 5)
+    # облако с бакетом
+    for cx, cy, r in ((1450, 360, 46), (1500, 330, 56), (1550, 365, 44), (1500, 385, 50)):
+        c.blob(cx, cy, r, r * 0.8, BLUE)
+    c.poly([(1460, 470), (1540, 470), (1528, 600), (1472, 600)], (214, 218, 222), (120, 124, 128), 4)
+    c.blob(1500, 470, 40, 10, (196, 200, 204), outline=(120, 124, 128), width=3)
+    c.arrow(1500, 410, 1500, 455, ACC, 5)
+    # перечёркнутый ключ
+    c.line([(1250, 560), (1330, 560)], (120, 124, 128), 7, amp=0.4)
+    c.blob(1235, 560, 22, 22, None, outline=(120, 124, 128), width=6)
+    c.line([(1312, 560), (1312, 578)], (120, 124, 128), 6, amp=0.3)
+    c.line([(1215, 600), (1345, 520)], CORAL, 6, amp=0.4)
+    c.save("github-yandex-deploy-cover.jpg")
+
+
 if __name__ == "__main__":
     import sys
     prepare_fonts()
     scenes = (cover_mama, cover_benzin, cover_vpn, cover_split, cover_openapi, cover_agents,
               cover_risk, cover_openclaw, cover_sprut, cover_biometria, cover_research, cover_jedi,
               cover_vault, cover_monitoring, cover_fintech, cover_laws, cover_openclaw_month,
-              cover_wd60, cover_ted, cover_welcome, cover_cmr_smr)
+              cover_wd60, cover_ted, cover_welcome, cover_cmr_smr, cover_gh_deploy)
     wanted = sys.argv[1:]                # напр.: make_covers.py openclaw
     for fn in scenes:
         if not wanted or any(w in fn.__name__ for w in wanted):
