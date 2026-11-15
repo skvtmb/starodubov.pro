@@ -43,7 +43,8 @@ if ! command -v yc &> /dev/null; then
     exit 1
 fi
 
-if ! yc config list &> /dev/null; then
+# В CI вход идёт по IAM-токену из окружения (YC_IAM_TOKEN), профиля yc там нет
+if [ -z "${YC_IAM_TOKEN:-}" ] && ! yc config list &> /dev/null; then
     echo -e "${RED}❌ Yandex CLI не настроен! Выполните: yc init${NC}"
     exit 1
 fi
