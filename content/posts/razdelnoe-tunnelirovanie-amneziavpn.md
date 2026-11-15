@@ -95,6 +95,6 @@ cover:
 
 ## Полезные ссылки
 
-* 📖 [Свой VPN на AmneziaWG и маршрутизация на Keenetic](/свой-vpn-на-amneziawg-и-выборочная-маршрутизация-на-keenetic/): первая часть: сервер, приложение, роутер
-* 📚 [Документация Amnezia](https://docs.amnezia.org/ru/): подробности про раздельное туннелирование и протоколы
-* 📋 [iplist.opencck.org](https://iplist.opencck.org/ru/): готовые списки доменов по категориям
+* [Документация Amnezia](https://docs.amnezia.org/ru/): подробности про раздельное туннелирование и протоколы
+* [iplist.opencck.org](https://iplist.opencck.org/ru/): готовые списки доменов по категориям
+* [Свой VPN на AmneziaWG и маршрутизация на Keenetic](/свой-vpn-на-amneziawg-и-выборочная-маршрутизация-на-keenetic/): первая часть: сервер, приложение, роутер

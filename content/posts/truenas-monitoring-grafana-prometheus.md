@@ -319,10 +319,10 @@ promtool test rules rules-tests.yml
 
 ## Полезные ссылки
 
-* 📚 [Grafana Community в каталоге TrueNAS Apps](https://apps.truenas.com/catalog/grafana_community/)
-* 📚 [Развёртывание Prometheus в TrueNAS Apps](https://apps.truenas.com/resources/deploy-prometheus/)
-* 📚 [Хранение данных в Prometheus](https://prometheus.io/docs/prometheus/latest/storage/): retention и запас места
-* 📚 [Функции PromQL](https://prometheus.io/docs/prometheus/latest/querying/functions/): `rate`, `increase`, `min_over_time`
-* 📖 [Как я перешёл с KeePass на Vaultwarden](/как-я-перешёл-с-keepass-на-vaultwarden-свой-сервер-паролей-на-truenas/): сервис, за которым тоже следит этот мониторинг
-* 📖 [OpenClaw дома](/openclaw-дома-личный-ии-агент-в-виртуалке-на-nas-и-куда-уходят-токены/): личный агент из раздела выше
-* 📖 [GEEKOM A5 Pro: как мини-ПК заменил мне сервер](/geekom-a5-как-мини-пк-заменил-мне-сервер/): железо под TrueNAS
+* [Grafana Community в каталоге TrueNAS Apps](https://apps.truenas.com/catalog/grafana_community/)
+* [Развёртывание Prometheus в TrueNAS Apps](https://apps.truenas.com/resources/deploy-prometheus/)
+* [Хранение данных в Prometheus](https://prometheus.io/docs/prometheus/latest/storage/): retention и запас места
+* [Функции PromQL](https://prometheus.io/docs/prometheus/latest/querying/functions/): `rate`, `increase`, `min_over_time`
+* [Как я перешёл с KeePass на Vaultwarden](/как-я-перешёл-с-keepass-на-vaultwarden-свой-сервер-паролей-на-truenas/): сервис, за которым тоже следит этот мониторинг
+* [OpenClaw дома](/openclaw-дома-личный-ии-агент-в-виртуалке-на-nas-и-куда-уходят-токены/): личный агент из раздела выше
+* [GEEKOM A5 Pro: как мини-ПК заменил мне сервер](/geekom-a5-как-мини-пк-заменил-мне-сервер/): железо под TrueNAS

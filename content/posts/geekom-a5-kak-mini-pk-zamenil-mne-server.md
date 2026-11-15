@@ -180,11 +180,11 @@ cover: "/images/geekom-a5-cover.jpg"
 * **Цифровая вывеска**: из-за размеров удобно ставить к рекламным экранам
 * **Лёгкий гейминг**: инди и старые игры
 
-**Полезные ссылки:**
+## Полезные ссылки
 
-* 🌐 [Официальная страница устройства](https://www.geekompc.com/geekom-a5-pro-mini-pc/)
-* 📊 [Обзор характеристик Ryzen в мини-ПК](https://www.amd.com/ru/products/ryzen-processors)
-* 🌐 [Официальный сайт GEEKOM](https://www.geekompc.com/)
+* [Официальная страница устройства](https://www.geekompc.com/geekom-a5-pro-mini-pc/)
+* [Обзор характеристик Ryzen в мини-ПК](https://www.amd.com/ru/products/ryzen-processors)
+* [Официальный сайт GEEKOM](https://www.geekompc.com/)
 
 ---
 

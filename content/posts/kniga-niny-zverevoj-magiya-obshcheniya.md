@@ -41,8 +41,10 @@ cover:
 
 ## Полезные ссылки
 
-* 📚 **Официальный сайт Нины Зверевой**: [zvereva-online.ru](https://zvereva-online.ru/), онлайн-школа: курсы по публичным выступлениям и общению
-* 💰 **Где купить книгу**:
+* [Сайт Нины Зверевой](https://zvereva-online.ru/): онлайн-школа, курсы по публичным выступлениям и общению
+* [Книга в «Читай-городе»](https://www.chitai-gorod.ru/product/magiya-obshcheniya-etomu-mozhno-nauchitsya-2851115)
+* [Книга в «Республике»](https://www.respublica.ru/knigi/psihologiya/populyarnaya-psihologiya/1390772-zvereva-n-magiya-obscheniya-myagk)
+* [Книга на ЛитРес](https://www.litres.ru/): электронная версия
   * [Читай-город](https://www.chitai-gorod.ru/product/magiya-obshcheniya-etomu-mozhno-nauchitsya-2851115)
   * [Республика](https://www.respublica.ru/knigi/psihologiya/populyarnaya-psihologiya/1390772-zvereva-n-magiya-obscheniya-myagk)
   * [ЛитРес](https://www.litres.ru/) (электронная версия)

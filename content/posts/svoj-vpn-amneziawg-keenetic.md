@@ -325,8 +325,8 @@ PersistentKeepalive = 25
 
 ## Полезные ссылки
 
-* 📖 [Часть 2: раздельное туннелирование в AmneziaVPN](/раздельное-туннелирование-в-amneziavpn-vpn-только-для-нужных-сайтов/): та же выборочная логика для ноутбука и телефона вне дома
-* 🌐 [AmneziaVPN](https://amnezia.org/downloads): клиент для всех платформ
-* 📚 [Документация Amnezia](https://docs.amnezia.org/ru/): протоколы и тонкая настройка
-* 📋 [iplist.opencck.org](https://iplist.opencck.org/ru/): готовые списки доменов в формате Keenetic
-* 📖 [Мой разбор MikroTik hAP ax3](/mikrotik-hap-ax3-с-нуля-полный-разбор-конфигурации-на-routeros-7/): если у вас MikroTik, а не Keenetic
+* [AmneziaVPN](https://amnezia.org/downloads): клиент для всех платформ
+* [Документация Amnezia](https://docs.amnezia.org/ru/): протоколы и тонкая настройка
+* [iplist.opencck.org](https://iplist.opencck.org/ru/): готовые списки доменов в формате Keenetic
+* [Часть 2: раздельное туннелирование в AmneziaVPN](/раздельное-туннелирование-в-amneziavpn-vpn-только-для-нужных-сайтов/): та же выборочная логика для ноутбука и телефона вне дома
+* [Мой разбор MikroTik hAP ax3](/mikrotik-hap-ax3-с-нуля-полный-разбор-конфигурации-на-routeros-7/): если у вас MikroTik, а не Keenetic

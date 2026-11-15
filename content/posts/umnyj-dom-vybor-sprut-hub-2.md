@@ -52,16 +52,16 @@ Sprut.Hub 2 представляет собой локальный контро�
 4. **Удалённый доступ.** Как он устроен и что именно при этом уходит наружу: этот вопрос я как безопасник задаю любому устройству в своей сети.
 5. **Hub 2 или Hub 2 DIN.** Разница не только в корпусе; у DIN-версии отдельно описаны нюансы совместимости с Wiren Board, Modbus и MQTT.
 
-## Что почитать
+## Полезные ссылки
 
 Независимых обзоров именно второй версии пока мало: большинство публикаций посвящено раннему Sprut.hub CE или установке на Wiren Board. Так что характеристики Hub 2 лучше сверять с официальными страницами, а обзоры читать ради подхода и опыта пользователей.
 
-* 🏠 [Официальная страница Sprut.Hub 2](https://spruthub.ru/sprut-hub-2/sprut-hub-2.php): позиционирование, протоколы, заявленная совместимость
-* 📋 [Спецификация Sprut.Hub 2](https://spruthub.ru/device/sprut-hub-2.html) и [Sprut.Hub 2 DIN](https://spruthub.ru/device/sprut-hub-2-din.html): железо без маркетинга
-* 📰 [Обзор на iPhones.ru](https://www.iphones.ru/iNotes/sprut-hub-review): история проекта и опыт использования; про раннюю версию CE, характеристики на Hub 2 не переносить
-* 📰 [DTF: «Sprut.hub: умный дом для всех»](https://dtf.ru/hard/1339092-sprut-hub-umnyy-dom-dlya-vseh-ot-rossiyskih-razrabotchikov): знакомство с концепцией
-* 🛠 [Habr: Sprut.hub на Wiren Board](https://habr.com/ru/companies/wirenboard/articles/692754/): MQTT, Zigbee, сценарии и отладка на практике
-* 📚 [Раздел обзоров на сайте производителя](https://spruthub.ru/news/obzory/): остальные публикации
+* [Официальная страница Sprut.Hub 2](https://spruthub.ru/sprut-hub-2/sprut-hub-2.php): позиционирование, протоколы, заявленная совместимость
+* [Спецификация Sprut.Hub 2](https://spruthub.ru/device/sprut-hub-2.html) и [Sprut.Hub 2 DIN](https://spruthub.ru/device/sprut-hub-2-din.html): железо без маркетинга
+* [Обзор на iPhones.ru](https://www.iphones.ru/iNotes/sprut-hub-review): история проекта и опыт использования; про раннюю версию CE, характеристики на Hub 2 не переносить
+* [DTF: «Sprut.hub: умный дом для всех»](https://dtf.ru/hard/1339092-sprut-hub-umnyy-dom-dlya-vseh-ot-rossiyskih-razrabotchikov): знакомство с концепцией
+* [Habr: Sprut.hub на Wiren Board](https://habr.com/ru/companies/wirenboard/articles/692754/): MQTT, Zigbee, сценарии и отладка на практике
+* [Раздел обзоров на сайте производителя](https://spruthub.ru/news/obzory/): остальные публикации
 
 ## Итог
 

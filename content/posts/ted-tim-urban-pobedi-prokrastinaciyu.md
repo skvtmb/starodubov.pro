@@ -61,9 +61,9 @@ cover:
 
 ## Полезные ссылки
 
-* 🎬 [«Победи прокрастинацию!» в русской озвучке](https://www.youtube.com/watch?v=--OKf5YRiIQ): то самое видео с YouTube
-* 🌐 [Страница выступления на TED.com](https://www.ted.com/talks/tim_urban_inside_the_mind_of_a_master_procrastinator): оригинал с субтитрами на десятках языков
-* ✍️ [Wait But Why: Why Procrastinators Procrastinate](https://waitbutwhy.com/2013/10/why-procrastinators-procrastinate.html): статья Урбана, с которой всё началось
-* 🗓 [Your Life in Weeks](https://waitbutwhy.com/2014/05/life-weeks.html): тот самый календарь жизни в неделях
+* [«Победи прокрастинацию!» в русской озвучке](https://www.youtube.com/watch?v=--OKf5YRiIQ): то самое видео с YouTube
+* [Страница выступления на TED.com](https://www.ted.com/talks/tim_urban_inside_the_mind_of_a_master_procrastinator): оригинал с субтитрами на десятках языков
+* [Wait But Why: Why Procrastinators Procrastinate](https://waitbutwhy.com/2013/10/why-procrastinators-procrastinate.html): статья Урбана, с которой всё началось
+* [Your Life in Weeks](https://waitbutwhy.com/2014/05/life-weeks.html): тот самый календарь жизни в неделях
 
 *Кадры в статье взяты из записи выступления на TED.com, © TED Conferences.*

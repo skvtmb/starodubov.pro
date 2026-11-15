@@ -82,11 +82,11 @@ Anthropic представляет собой американскую ИИ-ла
 
 Этот отчёт я заберу в свой курс по безопасности ИИ в ВШЭ. Инциденты случаются у всех, а вот рассказать о них так подробно решаются немногие. На этом примере и покажу студентам, как выглядит зрелость.
 
-## Источники
+## Полезные ссылки
 
-* 📄 [Risk Report: August 2026](https://www.anthropic.com/aug-2026-risk-report): оригинал отчёта на сайте Anthropic
-* 📄 [Responsible Scaling Policy](https://www.anthropic.com/responsible-scaling-policy): политика, в рамках которой выходит отчёт
-* ✍️ [Zvi Mowshowitz: разбор отчёта](https://thezvi.substack.com/p/anthropic-risk-report-august-2026): самый подробный критический анализ
-* ✍️ [RockCyber: Anthropic's 186-Page Blind Spot](https://www.rockcybermusings.com/p/ai-risk-assessment-anthropic-report): взгляд специалиста по кибербезопасности
-* 📰 [The Decoder](https://the-decoder.com/anthropics-bio-weapons-filter-was-down-for-nearly-a-year-exposing-133-million-requests/), [The Next Web](https://thenextweb.com/news/anthropic-risk-report-bio-classifiers-human-feedback-gap), [Unite.AI](https://www.unite.ai/anthropic-raises-misalignment-risk-to-low-and-shelves-internal-model-2/): новостное освещение
-* 📖 [Моя статья про безопасную автоматизацию с ИИ-агентами](/как-я-задумался-о-безопасной-автоматизации-рутины-с-помощью-ии-агентов/): практическая сторона тех же рисков
+* [Risk Report: August 2026](https://www.anthropic.com/aug-2026-risk-report): оригинал отчёта на сайте Anthropic
+* [Responsible Scaling Policy](https://www.anthropic.com/responsible-scaling-policy): политика, в рамках которой выходит отчёт
+* [Zvi Mowshowitz: разбор отчёта](https://thezvi.substack.com/p/anthropic-risk-report-august-2026): самый подробный критический анализ
+* [RockCyber: Anthropic's 186-Page Blind Spot](https://www.rockcybermusings.com/p/ai-risk-assessment-anthropic-report): взгляд специалиста по кибербезопасности
+* [The Decoder](https://the-decoder.com/anthropics-bio-weapons-filter-was-down-for-nearly-a-year-exposing-133-million-requests/), [The Next Web](https://thenextweb.com/news/anthropic-risk-report-bio-classifiers-human-feedback-gap), [Unite.AI](https://www.unite.ai/anthropic-raises-misalignment-risk-to-low-and-shelves-internal-model-2/): новостное освещение
+* [Моя статья про безопасную автоматизацию с ИИ-агентами](/как-я-задумался-о-безопасной-автоматизации-рутины-с-помощью-ии-агентов/): практическая сторона тех же рисков

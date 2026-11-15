@@ -117,10 +117,10 @@ KeePass остаётся разумным выбором для автономн
 
 ## Полезные ссылки
 
-* 📚 [Vaultwarden на GitHub](https://github.com/dani-garcia/vaultwarden): описание проекта и совместимость с клиентами Bitwarden
-* 📚 [Vaultwarden в каталоге TrueNAS Apps](https://apps.truenas.com/catalog/vaultwarden_community/)
-* 📚 [Импорт из KeePass в Bitwarden](https://bitwarden.com/help/import-from-keepass/)
-* 📚 [Резервное копирование Vaultwarden](https://github.com/dani-garcia/vaultwarden/wiki/Backing-up-your-vault)
-* 📖 [GEEKOM A5 Pro: как мини-ПК заменил мне сервер](/geekom-a5-как-мини-пк-заменил-мне-сервер/): железо, на котором работает TrueNAS
-* 📖 [OpenClaw дома](/openclaw-дома-личный-ии-агент-в-виртуалке-на-nas-и-куда-уходят-токены/): ещё один сервис на том же NAS
-* 📖 [Установленные приложения на моём MacBook](/установленные-приложения-на-моём-macbook/): там KeePassXC и Bitwarden в общем списке
+* [Vaultwarden на GitHub](https://github.com/dani-garcia/vaultwarden): описание проекта и совместимость с клиентами Bitwarden
+* [Vaultwarden в каталоге TrueNAS Apps](https://apps.truenas.com/catalog/vaultwarden_community/)
+* [Импорт из KeePass в Bitwarden](https://bitwarden.com/help/import-from-keepass/)
+* [Резервное копирование Vaultwarden](https://github.com/dani-garcia/vaultwarden/wiki/Backing-up-your-vault)
+* [GEEKOM A5 Pro: как мини-ПК заменил мне сервер](/geekom-a5-как-мини-пк-заменил-мне-сервер/): железо, на котором работает TrueNAS
+* [OpenClaw дома](/openclaw-дома-личный-ии-агент-в-виртуалке-на-nas-и-куда-уходят-токены/): ещё один сервис на том же NAS
+* [Установленные приложения на моём MacBook](/установленные-приложения-на-моём-macbook/): там KeePassXC и Bitwarden в общем списке
