@@ -4,7 +4,7 @@
 Стиль (редизайн 14.11.2026): светлое спокойное поле, подходящее к светлой и тёмной
 теме сайта; без сетки, без полосы слева, без моно-подписи капсом над заголовком.
 Каталог вывода можно переопределить переменной COVERS_OUT (для пробных образцов)."""
-import os, re, math, random, tempfile
+import os, re, math, random, tempfile, inspect
 from PIL import Image, ImageDraw, ImageFont
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -47,6 +47,32 @@ rnd = random.Random(7)
 
 def F(name, size):
     return ImageFont.truetype(os.path.join(SC, name + ".ttf"), size * S)
+
+def _impeccable_bin():
+    """Утилита impeccable для записи происхождения: из IMPECCABLE_BIN или из кеша плагина Claude Code."""
+    import glob
+    env = os.environ.get("IMPECCABLE_BIN")
+    if env and os.path.exists(env):
+        return env
+    found = sorted(glob.glob(os.path.expanduser(
+        "~/.claude/plugins/cache/impeccable/impeccable/*/skills/impeccable/scripts/impeccable")))
+    return found[-1] if found else None
+
+
+def embed_provenance(path, fn):
+    """Записывает в файл, чем и как он сделан. Без утилиты молча пропускает:
+    обложка остаётся валидной, просто без встроенного описания."""
+    import subprocess
+    tool = _impeccable_bin()
+    if not tool:
+        return
+    prompt = (f"Procedural illustration rendered by scripts/make_covers.py, function {fn} "
+              "(light calm ground, composition centred by content with even margins, "
+              "no grid/stripe/mono kicker; Geologica title, Manrope subtitle). "
+              f"Regenerate: python scripts/make_covers.py {fn.removeprefix('cover_')}")
+    subprocess.run([tool, "embed-prompt", path, "--prompt", prompt],
+                   stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=False)
+
 
 class Canvas:
     def __init__(self):
@@ -218,7 +244,9 @@ class Canvas:
         inner = full.resize((int(full.width * k), int(full.height * k)), Image.LANCZOS)
         out = Image.new("RGB", (W, H), BG)
         out.paste(inner, ((W - inner.width) // 2, (H - inner.height) // 2))
-        out.save(os.path.join(OUT, name), quality=90)
+        path = os.path.join(OUT, name)
+        out.save(path, quality=90)
+        embed_provenance(path, inspect.stack()[1].function)
         print("saved", name)
 
 

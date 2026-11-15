@@ -32,18 +32,12 @@
       {{ $alt := $p.alt | default $p.caption | default "" }}
       {{ $caption := $p.caption | default "" }}
       {{ with $p.meta }}{{ $caption = printf "%s · %s" $caption . }}{{ end }}
-      {{ $path := strings.TrimPrefix "/" $src }}
-      {{ $img := resources.Get $path }}
-      {{ $href := $src | relURL }}
-      {{ if and $img (in (slice "jpeg" "png") $img.MediaType.SubType) }}
-        {{ if gt $img.Width 1600 }}{{ $href = ($img.Process "resize 1600x webp q82").RelPermalink }}
-        {{ else }}{{ $href = ($img.Process "webp q82").RelPermalink }}{{ end }}
-      {{ end }}
+      {{ $href := partial "img-url.html" (dict "src" $src "width" 1600) }}
       <a class="gal-item" href="{{ $href }}"
          data-caption="{{ $caption }}"
          data-alt="{{ $alt }}"
          {{ if eq $i 0 }}data-eager{{ end }}>
-        {{ partial "gallery-img.html" (dict "src" $src "alt" $alt "eager" (lt $i 3) "sizes" "(max-width: 640px) 100vw, (max-width: 1000px) 50vw, 33vw") }}
+        {{ partial "img.html" (dict "src" $src "alt" $alt "role" "gallery" "eager" (lt $i 3)) }}
         {{ with $caption }}<span class="gal-cap">{{ . }}</span>{{ end }}
       </a>
       {{ end }}

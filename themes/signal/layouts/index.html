@@ -2,7 +2,6 @@
 {{ $p := .Params }}
 {{ $hero := $p.hero }}
 {{ $about := $p.about }}
-{{ $svc := $p.services }}
 
 <section class="hero">
   <div class="wrap hero-in">
@@ -12,19 +11,19 @@
       {{ with $hero.chips }}<p class="hero-facts">{{ delimit . " ·\u00a0" }}</p>{{ end }}
       {{ with $hero.topics }}<p class="hero-topics">{{ delimit . " ·\u00a0" }}</p>{{ end }}
       <div class="hero-cta">
-        {{ with $hero.primaryCta }}{{ if hasPrefix .url "mailto:" }}{{ $p := split (strings.TrimPrefix "mailto:" .url) "@" }}<a class="btn-pri js-mail" href="#contacts" data-user="{{ index $p 0 }}" data-host="{{ index $p 1 }}">{{ .label }} </a>{{ else }}<a class="btn-pri" href="{{ .url }}">{{ .label }}</a>{{ end }}{{ end }}
+        {{ with $hero.primaryCta }}{{ if hasPrefix .url "mailto:" }}{{ partial "mail-link.html" (dict "label" .label "class" "btn-pri" "email" (strings.TrimPrefix "mailto:" .url)) }}{{ else }}<a class="btn-pri" href="{{ .url }}">{{ .label }}</a>{{ end }}{{ end }}
         {{ with $hero.secondaryCta }}<a class="btn-sec" href="{{ .url }}">{{ .label }}</a>{{ end }}
       </div>
       {{ with site.Params.socials }}
       <div class="socials">
         {{ range . }}<a href="{{ .url }}"{{ if .external | default true }} target="_blank" rel="me noopener"{{ end }}>{{ with .icon }}{{ partial "icon.html" . }}{{ end }}<span>{{ .name }}</span></a>{{ end }}
-        {{ with site.Params.contactEmail }}{{ $p := split . "@" }}<a href="#contacts" class="js-mail" data-user="{{ index $p 0 }}" data-host="{{ index $p 1 }}">{{ partial "icon.html" "mail" }}<span>Email</span></a>{{ end }}
+        {{ partial "mail-link.html" (dict "label" (printf "%s<span>Email</span>" (partial "icon.html" "mail"))) }}
       </div>
       {{ end }}
     </div>
     <div class="portrait-card">
       <div class="frame">
-        {{ with $hero.portrait }}<img src="{{ partial "cover-url.html" (dict "src" . "width" 760) }}" alt="{{ site.Params.author.name | default site.Title }}" fetchpriority="high" onerror="this.style.display='none'">{{ end }}
+        {{ with $hero.portrait }}<img src="{{ partial "img-url.html" (dict "src" . "width" 760) }}" alt="{{ site.Params.author.name | default site.Title }}" fetchpriority="high" onerror="this.style.display='none'">{{ end }}
         {{ with $hero.portraitTag }}<span class="pc-tag">{{ . }}</span>{{ end }}
       </div>
     </div>
@@ -47,32 +46,6 @@
       </div>
       {{ end }}
     </div>
-  </div>
-</section>
-{{ end }}
-
-{{ with $svc }}
-<section class="svc">
-  <div class="wrap">
-    <div class="sec-head">
-      <h2 class="sec-title">{{ .title | default "Сильные стороны" }}</h2>
-      {{ with .subtitle }}<span class="sec-sub">{{ . }}</span>{{ end }}
-    </div>
-    <div class="svc-grid">
-      {{ range $i, $s := .items }}
-      <div class="svc-card">
-        <h3>{{ $s.title }}</h3>
-        <p>{{ $s.body }}</p>
-        {{ with $s.tags }}<div class="svc-tags">{{ range . }}<span>{{ . }}</span>{{ end }}</div>{{ end }}
-      </div>
-      {{ end }}
-    </div>
-    {{ with .cta }}
-    <div class="svc-foot">
-      {{ with .note }}<p>{{ . | markdownify }}</p>{{ end }}
-      <a class="btn-pri" href="{{ .url }}">{{ .label | default "Написать мне" }}</a>
-    </div>
-    {{ end }}
   </div>
 </section>
 {{ end }}

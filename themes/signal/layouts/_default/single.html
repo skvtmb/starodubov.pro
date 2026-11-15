@@ -17,7 +17,7 @@
       {{ with .Description | default .Params.summary }}<p class="dek">{{ . }}</p>{{ end }}
       <div class="art-meta">
         <div class="au">
-          <span class="av">{{ with $author.photo }}<img src="{{ partial "cover-url.html" (dict "src" . "width" 96) }}" width="42" height="42" alt="" onerror="this.remove()">{{ else }}<span>{{ $author.avatarText | default "АА" }}</span>{{ end }}</span>
+          <span class="av">{{ with $author.photo }}<img src="{{ partial "img-url.html" (dict "src" . "width" 96) }}" width="42" height="42" alt="" onerror="this.remove()">{{ else }}<span>{{ $author.avatarText | default "АА" }}</span>{{ end }}</span>
           <div>
             <div class="nm">{{ $author.name | default site.Title }}</div>
             {{ with $author.role }}<div class="rl">{{ . }}</div>{{ end }}
@@ -35,29 +35,12 @@
 <div class="wrap">
   <div class="art-wrap">
     <article class="art-body">
-      {{- $cover := .Params.cover -}}
-      {{- $coverAlt := .Title -}}{{- $coverCap := "" -}}
-      {{- if reflect.IsMap $cover }}{{ $coverAlt = $cover.alt | default .Title }}{{ $coverCap = $cover.caption | default "" }}{{ $cover = $cover.image }}{{ end -}}
+      {{- $cover := partial "cover.html" . -}}
       {{- /* обложка под заголовком, если она не повторяет картинку из текста */ -}}
-      {{- if and $cover (not (in .RawContent (printf "](%s" $cover))) }}
+      {{- if and $cover.src (not $cover.inText) }}
       <figure class="art-cover">
-        {{- /* адаптивная обложка: 700 и 1400 px в WebP, с реальными размерами против сдвига вёрстки */ -}}
-        {{- $res := resources.Get (strings.TrimPrefix "/" $cover) -}}
-        {{- if and $res (in (slice "jpeg" "png") $res.MediaType.SubType) -}}
-          {{- $img := "" -}}{{- $set := slice -}}
-          {{- range slice 700 1400 -}}
-            {{- if ge $res.Width . -}}
-              {{- $r := $res.Process (printf "resize %dx webp q82" .) -}}
-              {{- $set = $set | append (printf "%s %dw" $r.Permalink .) -}}
-              {{- $img = $r -}}
-            {{- end -}}
-          {{- end -}}
-          {{- if not $img }}{{ $img = $res.Process "webp q82" }}{{ end }}
-        <img src="{{ $img.Permalink }}"{{ with $set }} srcset="{{ delimit . ", " }}" sizes="(max-width: 640px) calc(100vw - 40px), (max-width: 1000px) calc(100vw - 64px), 752px"{{ end }} width="{{ $img.Width }}" height="{{ $img.Height }}" alt="{{ $coverAlt }}" fetchpriority="high" decoding="async">
-        {{- else }}
-        <img src="{{ partial "cover-url.html" (dict "src" $cover "width" 1400) }}" alt="{{ $coverAlt }}" fetchpriority="high" decoding="async">
-        {{- end }}
-        {{- with $coverCap }}<figcaption>{{ . }}</figcaption>{{ end }}
+        {{ partial "img.html" (dict "src" $cover.src "alt" $cover.alt "role" "cover") }}
+        {{- with $cover.caption }}<figcaption>{{ . }}</figcaption>{{ end }}
       </figure>
       {{- end }}
       {{ with .TableOfContents }}
@@ -104,12 +87,12 @@
 <section class="author">
   <div class="wrap">
     <div class="author-in">
-      <span class="big-av">{{ with $author.photo }}<img src="{{ partial "cover-url.html" (dict "src" . "width" 160) }}" width="74" height="74" alt="" loading="lazy" onerror="this.remove()">{{ else }}<span>{{ $author.avatarText | default "АА" }}</span>{{ end }}</span>
+      <span class="big-av">{{ with $author.photo }}<img src="{{ partial "img-url.html" (dict "src" . "width" 160) }}" width="74" height="74" alt="" loading="lazy" onerror="this.remove()">{{ else }}<span>{{ $author.avatarText | default "АА" }}</span>{{ end }}</span>
       <div>
         <div class="nm">{{ $author.name | default site.Title }}</div>
         {{ with $author.bio }}<p class="bio">{{ . | markdownify }}</p>{{ end }}
       </div>
-      {{ with site.Params.contactEmail }}{{ $p := split . "@" }}<a class="cta-sm js-mail" href="#contacts" data-user="{{ index $p 0 }}" data-host="{{ index $p 1 }}">{{ site.Params.contactLabel | default "Написать мне" }}</a>{{ end }}
+      {{ partial "mail-link.html" (dict "class" "cta-sm") }}
     </div>
   </div>
 </section>
