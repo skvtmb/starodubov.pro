@@ -805,13 +805,51 @@ def cover_welcome():
     c.bubble(1380, 330, 120, 56, "Привет!", tail=(10, 0))
     c.save("welcome-blog-cover-v2.png")
 
+def cover_cmr_smr():
+    c = Canvas()
+    c.layout([], "CMR или SMR", "и почему DAS не NAS",
+             "Какие диски ставить в NAS и чем рискует",
+             "хранилище на USB-корпусе", head=84)
+    c.line([(1030, 660), (1500, 660)], LINE, 3)
+    # пластины: дорожки CMR с промежутками и SMR внахлёст
+    for cx, smr in ((1120, False), (1380, True)):
+        cy = 330
+        c.blob(cx, cy, 110, 110, (214, 218, 222), outline=(130, 136, 142), width=4)
+        if smr:
+            for i in range(7):
+                r = 96 - i * 9
+                c.arc(cx, cy, r, r, 200, 340, AMB if i % 2 else CORAL, 11)
+        else:
+            for i in range(5):
+                r = 96 - i * 14
+                c.arc(cx, cy, r, r, 200, 340, ACC, 7)
+        c.blob(cx, cy, 15, 15, (120, 126, 132))
+        c.label(cx - 22, cy + 126, "SMR" if smr else "CMR", (50, 52, 56), 22)
+    # NAS: диски прямо в корпусе, сеть
+    c.rrect(1050, 530, 1190, 650, (30, 34, 42), outline=(84, 92, 108), width=4, r=10)
+    for i in range(2):
+        y = 548 + i * 48
+        c.rrect(1066, y, 1174, y + 36, (44, 50, 60), outline=(70, 78, 92), width=3, r=6)
+        c.blob(1160, y + 18, 5, 5, ACC)
+    c.label(1092, 674, "NAS", (50, 52, 56), 20)
+    # DAS: корпус на USB-кабеле к мини-ПК
+    c.rrect(1280, 530, 1420, 650, (196, 200, 204), outline=(120, 124, 128), width=4, r=10)
+    for i in range(2):
+        y = 548 + i * 48
+        c.rrect(1296, y, 1404, y + 36, (170, 174, 178), outline=(120, 124, 128), width=3, r=6)
+        c.blob(1390, y + 18, 5, 5, CORAL if i == 0 else AMB)
+    c.line([(1420, 610), (1452, 622), (1470, 600), (1486, 612)], (90, 96, 108), 6, amp=1.2)
+    c.rrect(1480, 590, 1540, 650, (60, 66, 78), outline=(90, 96, 108), width=3, r=8)
+    c.label(1320, 674, "DAS", (50, 52, 56), 20)
+    c.save("cmr-smr-nas-cover.jpg")
+
 if __name__ == "__main__":
     import sys
     prepare_fonts()
     scenes = (cover_mama, cover_benzin, cover_vpn, cover_split, cover_openapi, cover_agents,
               cover_risk, cover_openclaw, cover_sprut, cover_biometria, cover_research, cover_jedi,
               cover_vault, cover_monitoring, cover_fintech, cover_laws, cover_openclaw_month,
-              cover_wd60, cover_ted, cover_welcome)
+              cover_wd60, cover_ted, cover_welcome, cover_cmr_smr)
     wanted = sys.argv[1:]                # напр.: make_covers.py openclaw
     for fn in scenes:
         if not wanted or any(w in fn.__name__ for w in wanted):
