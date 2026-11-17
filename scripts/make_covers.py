@@ -874,6 +874,41 @@ def cover_gh_deploy():
     c.line([(1215, 600), (1345, 520)], CORAL, 6, amp=0.4)
     c.save("github-yandex-deploy-cover.jpg")
 
+def cover_homelab():
+    c = Canvas()
+    c.layout([], "Пересобрал home lab:", "данные отдельно",
+             "Synology с зеркалом под файлы,",
+             "Proxmox на мини-ПК под сервисы", head=84)
+    # NAS на четыре отсека: два диска в зеркале, два отсека свободны
+    c.rrect(1090, 150, 1270, 380, (30, 34, 42), outline=(84, 92, 108), width=4, r=14)
+    for i in range(4):
+        x = 1106 + i * 40
+        filled = i < 2
+        c.rrect(x, 170, x + 32, 330, (52, 58, 70) if filled else (40, 45, 54),
+                outline=(70, 78, 92), width=3, r=6)
+        if filled:
+            c.blob(x + 16, 314, 5, 5, ACC)
+    c.arc(1142, 150, 40, 24, 200, 340, ACC, 5)
+    c.label(1158, 400, "NAS", (50, 52, 56), 20)
+    # сеть между узлами
+    c.line([(1270, 300), (1330, 300)], (90, 96, 108), 5, amp=0.6)
+    c.blob(1300, 300, 8, 8, ACC)
+    # мини-ПК с контейнерами Proxmox
+    c.rrect(1330, 260, 1530, 350, (196, 200, 204), outline=(120, 124, 128), width=4, r=14)
+    for i, col in enumerate((ACC, BLUE, AMB, ACC)):
+        x = 1344 + i * 46
+        c.rrect(x, 200 - (i % 2) * 16, x + 36, 238 - (i % 2) * 16, col, outline=(70, 78, 92), width=3, r=5)
+    c.blob(1510, 332, 5, 5, ACC)
+    c.label(1384, 370, "Proxmox", (50, 52, 56), 20)
+    # ИБП под обоими узлами
+    c.rrect(1260, 450, 1380, 540, (60, 66, 78), outline=(90, 96, 108), width=3, r=8)
+    c.line([(1312, 468), (1300, 496), (1324, 496), (1310, 524)], AMB, 5, amp=0.3)
+    c.line([(1110, 380), (1110, 495), (1260, 495)], (90, 96, 108), 4, amp=0.5)
+    c.line([(1380, 495), (1500, 495), (1500, 350)], (90, 96, 108), 4, amp=0.5)
+    c.label(1300, 560, "ИБП", (50, 52, 56), 20)
+    c.line([(1060, 620), (1540, 620)], LINE, 3)
+    c.save("homelab-rebuild-cover.jpg")
+
 
 if __name__ == "__main__":
     import sys
@@ -881,7 +916,7 @@ if __name__ == "__main__":
     scenes = (cover_mama, cover_benzin, cover_vpn, cover_split, cover_openapi, cover_agents,
               cover_risk, cover_openclaw, cover_sprut, cover_biometria, cover_research, cover_jedi,
               cover_vault, cover_monitoring, cover_fintech, cover_laws, cover_openclaw_month,
-              cover_wd60, cover_ted, cover_welcome, cover_cmr_smr, cover_gh_deploy)
+              cover_wd60, cover_ted, cover_welcome, cover_cmr_smr, cover_gh_deploy, cover_homelab)
     wanted = sys.argv[1:]                # напр.: make_covers.py openclaw
     for fn in scenes:
         if not wanted or any(w in fn.__name__ for w in wanted):
