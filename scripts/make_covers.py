@@ -910,13 +910,80 @@ def cover_homelab():
     c.save("homelab-rebuild-cover.jpg")
 
 
+def cover_ssh_keys():
+    c = Canvas()
+    c.layout([], "Вход по SSH", "по ключу",
+             "Зачем он нужен, как настроить",
+             "и как входить одним словом", head=84)
+    c.line([(1040, 640), (1550, 640)], LINE, 3)
+    # ноутбук: экран с приглашением командной строки
+    c.rrect(1050, 330, 1250, 470, (30, 34, 42), outline=(84, 92, 108), width=4, r=12)
+    c.line([(1074, 366), (1092, 380), (1074, 394)], ACC, 5, amp=0.3)
+    c.line([(1104, 394), (1150, 394)], (200, 204, 210), 5, amp=0.3)
+    c.label(1074, 420, "ssh media", (170, 176, 186), 18)
+    c.poly([(1030, 470), (1270, 470), (1290, 500), (1010, 500)], (196, 200, 204), (120, 124, 128), 4)
+    # ключ летит к серверу
+    c.blob(1310, 300, 24, 24, None, outline=AMB, width=7)
+    c.line([(1334, 300), (1404, 300)], AMB, 7, amp=0.3)
+    c.line([(1380, 300), (1380, 320)], AMB, 6, amp=0.2)
+    c.line([(1400, 300), (1400, 316)], AMB, 6, amp=0.2)
+    c.arrow(1290, 400, 1410, 400, ACC, 5)
+    # сервер из трёх блоков с индикаторами
+    for i in range(3):
+        y = 300 + i * 64
+        c.rrect(1420, y, 1550, y + 52, (52, 58, 70), outline=(84, 92, 108), width=4, r=8)
+        c.blob(1444, y + 26, 6, 6, ACC)
+        c.line([(1470, y + 26), (1530, y + 26)], (96, 104, 120), 4, amp=0.3)
+    # замок на сервере
+    c.arc(1485, 268, 22, 22, 180, 360, (90, 96, 108), 6)
+    c.rrect(1458, 266, 1512, 300, AMB, outline=(150, 112, 40), width=4, r=6)
+    c.blob(1485, 283, 5, 5, (90, 66, 20))
+    # зачёркнутое поле пароля
+    c.rrect(1090, 540, 1290, 596, PAPER, outline=(170, 172, 166), width=4, r=10)
+    for i in range(5):
+        c.blob(1118 + i * 34, 568, 7, 7, (120, 124, 128))
+    c.line([(1076, 606), (1304, 530)], CORAL, 6, amp=0.4)
+    c.save("ssh-keys-cover.jpg")
+
+
+def cover_finder_grid():
+    c = Canvas()
+    c.layout([], "Значки в macOS", "по сетке",
+             "Finder и рабочий стол",
+             "без уехавших за край файлов", head=84)
+    c.line([(1000, 640), (1560, 640)], LINE, 3)
+
+    def window(x0, y0, x1, y1):
+        c.rrect(x0, y0, x1, y1, PAPER, outline=(150, 154, 150), width=4, r=14)
+        c.line([(x0 + 4, y0 + 40), (x1 - 4, y0 + 40)], (200, 202, 198), 3, amp=0.3)
+        for i, col in enumerate((CORAL, AMB, ACC)):
+            c.blob(x0 + 24 + i * 22, y0 + 20, 7, 7, col)
+
+    def icon(x, y, col):
+        c.rrect(x, y, x + 36, y + 30, col, outline=(90, 96, 108), width=3, r=5)
+        c.line([(x + 2, y + 44), (x + 34, y + 44)], (150, 154, 150), 3, amp=0.3)
+
+    cols = (BLUE, AMB, ACC, LILAC, BLUE, CORAL)
+    # слева: беспорядок, один значок вылез за край окна
+    window(1000, 250, 1220, 500)
+    for (x, y), col in zip(((1030, 310), (1120, 300), (1060, 410), (1150, 380), (1210, 330), (1020, 440)), cols):
+        icon(x, y, col)
+    c.arrow(1250, 440, 1312, 440, ACC, 5)
+    # справа: те же значки ровной сеткой
+    window(1330, 250, 1550, 500)
+    for i, col in enumerate(cols):
+        icon(1356 + (i % 3) * 64, 318 + (i // 3) * 82, col)
+    c.save("finder-grid-cover.jpg")
+
+
 if __name__ == "__main__":
     import sys
     prepare_fonts()
     scenes = (cover_mama, cover_benzin, cover_vpn, cover_split, cover_openapi, cover_agents,
               cover_risk, cover_openclaw, cover_sprut, cover_biometria, cover_research, cover_jedi,
               cover_vault, cover_monitoring, cover_fintech, cover_laws, cover_openclaw_month,
-              cover_wd60, cover_ted, cover_welcome, cover_cmr_smr, cover_gh_deploy, cover_homelab)
+              cover_wd60, cover_ted, cover_welcome, cover_cmr_smr, cover_gh_deploy, cover_homelab,
+              cover_ssh_keys, cover_finder_grid)
     wanted = sys.argv[1:]                # напр.: make_covers.py openclaw
     for fn in scenes:
         if not wanted or any(w in fn.__name__ for w in wanted):
